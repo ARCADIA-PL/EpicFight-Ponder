@@ -171,6 +171,7 @@ dependencies {
     implementation fg.deobf("maven.modrinth:epic-fight:${epicfight_version}")
     implementation fg.deobf("curse.maven:weapons-of-miracles-epicfight-918614:7477498")
     implementation fg.deobf("curse.maven:epic-fight-invincible-1184379:7679941")
+    implementation fg.deobf("curse.maven:weapons-of-miracles-epicfight-918614:7477498")
     implementation fg.deobf('libs:efx:1.1.4')
 
     //俺寻思

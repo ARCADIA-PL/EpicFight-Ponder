@@ -2,7 +2,8 @@
   "required": true,
   "minVersion": "0.8",
   "package": "org.com.efp.mixin",
-  "compatibilityLevel": "JAVA_8",
+  "plugin": "org.com.efp.mixinloader.CompatMixinPlugin",
+  "compatibilityLevel": "JAVA_17",
   "refmap": "efp.refmap.json",
   "mixins": [
     "epicfight.AnimationPlayerMixin",
@@ -11,6 +12,7 @@
     "epicfight.client.RenderEngineEventsMixin"
   ],
   "client": [
+    "compat.epicfightx.MixinRenderUchigatanaX"
   ],
   "injectors": {
     "defaultRequire": 1

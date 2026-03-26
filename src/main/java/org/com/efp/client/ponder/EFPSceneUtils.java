@@ -18,6 +18,7 @@ import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.capabilities.item.Style;
 import yesman.epicfight.world.capabilities.item.WeaponCapability;
+import yesman.epicfight.world.item.UchigatanaItem;
 
 import java.util.List;
 import java.util.Map;
@@ -31,7 +32,7 @@ public class EFPSceneUtils {
         builder.title(sceneId, title);
         builder.configureBasePlate(0, 0, size);
         builder.showBasePlate();
-        builder.scaleSceneView(1F);
+        builder.scaleSceneView(1.0F);
         builder.idle(5);
     }
 
@@ -87,7 +88,21 @@ public class EFPSceneUtils {
     }
 
     /**
-     * 4. 动作派生的时间过渡
+     * 专用于更新武器 NBT (如打刀的收鞘状态)
+     */
+    public static void updateSheathState(EpicFightSceneBuilder builder, ElementLink<EntityElement> attacker, int state) {
+        builder.world().modifyEntity(attacker, entity -> {
+            if (entity instanceof LivingEntity living) {
+                ItemStack stack = living.getMainHandItem();
+                if (!stack.isEmpty()) {
+                    stack.getOrCreateTag().putInt("sheath", state);
+                }
+            }
+        });
+    }
+
+    /**
+     * 4. 动作派生的时间过渡 (时间缓动系统)
      */
     public enum WaitType { CAN_BASIC_ATTACK, CAN_USE_SKILL, INACTION }
 
@@ -123,7 +138,6 @@ public class EFPSceneUtils {
 
         EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
         int originalSize = comboMotions.size();
-
         int dashIndex = originalSize - 2;
         int jumpIndex = originalSize - 1;
 
@@ -137,8 +151,7 @@ public class EFPSceneUtils {
                 if (dashTextKey != null && !dashTextKey.isEmpty()) {
                     showTextAtTop(builder, util, dashTextKey, 30, (int)centerX, (int)centerY - 1, (int)centerZ);
                 }
-            }
-            else if (i == jumpIndex) {
+            } else if (i == jumpIndex) {
                 world.setPosition(attacker, centerX, centerY, centerZ);
                 builder.idle(5);
                 world.simulateJump(attacker);
@@ -159,6 +172,63 @@ public class EFPSceneUtils {
                 world.waitForInaction(attacker);
             }
         }
+    }
+
+    /**
+     * EFX打刀专用
+     */
+    public static void playUchigatanaStandardCombo(
+            EpicFightSceneBuilder builder, SceneBuildingUtil util,
+            ElementLink<EntityElement> attacker,
+            List<AnimationManager.AnimationAccessor<? extends AttackAnimation>> comboMotions,
+            double centerX, double centerY, double centerZ,
+            String dashTextKey, String jumpTextKey, boolean enableDash, boolean enableJump) {
+
+        if (comboMotions == null || comboMotions.isEmpty()) return;
+
+        EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
+        int originalSize = comboMotions.size();
+        int dashIndex = originalSize - 2;
+        int jumpIndex = originalSize - 1;
+
+        updateSheathState(builder, attacker, 0);
+
+        for (int i = 0; i < originalSize; i++) {
+            if (i == dashIndex && !enableDash) continue;
+            if (i == jumpIndex && !enableJump) continue;
+
+            if (i == dashIndex) {
+                updateSheathState(builder, attacker, 1);
+                world.simulateSpring(attacker, 1.5F, 10);
+                builder.idle(10);
+                if (dashTextKey != null && !dashTextKey.isEmpty()) {
+                    showTextAtTop(builder, util, dashTextKey, 30, (int)centerX, (int)centerY - 1, (int)centerZ);
+                }
+            } else if (i == jumpIndex) {
+                updateSheathState(builder, attacker, 1);
+                world.setPosition(attacker, centerX, centerY, centerZ);
+                builder.idle(5);
+                world.simulateJump(attacker);
+                builder.idle(8);
+                if (jumpTextKey != null && !jumpTextKey.isEmpty()) {
+                    showTextAtTop(builder, util, jumpTextKey, 40, (int)centerX, (int)centerY + 1, (int)centerZ);
+                }
+            }
+
+            updateSheathState(builder, attacker, 0);
+            world.playAnimation(attacker, comboMotions.get(i), 0.0F);
+
+            boolean isBasicAttack = i < dashIndex;
+            boolean isLastBasicAttack = i == (dashIndex - 1);
+
+            if (isBasicAttack && !isLastBasicAttack) {
+                world.waitForCanBasicAttack(attacker);
+            } else {
+                world.waitForInaction(attacker);
+            }
+        }
+
+        updateSheathState(builder, attacker, 1);
     }
 
     /**
@@ -184,41 +254,77 @@ public class EFPSceneUtils {
         CapabilityItem cap = EpicFightCapabilities.getItemStackCapability(mainHandItem);
 
         if (cap instanceof WeaponCapability weaponCap) {
-            Map<Style, List<AnimationManager.AnimationAccessor<? extends AttackAnimation>>> motionsMap =
-                    ((WeaponCapabilityAccessor) weaponCap).getAutoAttackMotions();
-
+            Map<Style, List<AnimationManager.AnimationAccessor<? extends AttackAnimation>>> motionsMap = ((WeaponCapabilityAccessor) weaponCap).getAutoAttackMotions();
             comboMotions = motionsMap.getOrDefault(showcaseStyle, motionsMap.get(CapabilityItem.Styles.COMMON));
         } else {
             comboMotions = CapabilityItem.getBasicAutoAttackMotion();
         }
 
-        playStandardCombo(
-                builder, util, attacker, comboMotions,
-                center, centerY, center,
-                "epic_fight_ponder.ponder." + sceneId + ".text_2",
-                "epic_fight_ponder.ponder." + sceneId + ".text_3",
-                enableDash, enableJump
-        );
+        String dashText = "epic_fight_ponder.ponder." + sceneId + ".text_2";
+        String jumpText = "epic_fight_ponder.ponder." + sceneId + ".text_3";
+
+        playStandardCombo(builder, util, attacker, comboMotions, center, centerY, center, dashText, jumpText, enableDash, enableJump);
 
         builder.idle(20);
         builder.markAsFinished();
     }
 
-    public static void showcaseStandardWeaponCombo(
-            SceneBuilder baseScene, SceneBuildingUtil util,
-            int size, String sceneId, ItemStack mainHandItem, ItemStack offHandItem, Style showcaseStyle) {
+    public static void showcaseStandardWeaponCombo(SceneBuilder baseScene, SceneBuildingUtil util, int size, String sceneId, ItemStack mainHandItem, ItemStack offHandItem, Style showcaseStyle) {
         showcaseStandardWeaponCombo(baseScene, util, size, sceneId, mainHandItem, offHandItem, showcaseStyle, true, true);
     }
 
-    public static void showcaseStandardWeaponCombo(
-            SceneBuilder baseScene, SceneBuildingUtil util,
-            int size, String sceneId, ItemStack weapon, Style showcaseStyle) {
+    public static void showcaseStandardWeaponCombo(SceneBuilder baseScene, SceneBuildingUtil util, int size, String sceneId, ItemStack weapon, Style showcaseStyle) {
         showcaseStandardWeaponCombo(baseScene, util, size, sceneId, weapon, ItemStack.EMPTY, showcaseStyle, true, true);
     }
 
-    public static void showcaseStandardWeaponCombo(
-            SceneBuilder baseScene, SceneBuildingUtil util,
-            int size, String sceneId, ItemStack weapon) {
+    public static void showcaseStandardWeaponCombo(SceneBuilder baseScene, SceneBuildingUtil util, int size, String sceneId, ItemStack weapon) {
         showcaseStandardWeaponCombo(baseScene, util, size, sceneId, weapon, ItemStack.EMPTY, CapabilityItem.Styles.TWO_HAND, true, true);
+    }
+
+    public static void showcaseUchigatanaStandardWeaponCombo(
+            SceneBuilder baseScene, SceneBuildingUtil util,
+            int size, String sceneId, ItemStack mainHandItem, ItemStack offHandItem, Style showcaseStyle, boolean enableDash, boolean enableJump) {
+
+        EpicFightSceneBuilder builder = new EpicFightSceneBuilder(baseScene);
+        double center = size / 2.0D;
+        double centerY = 1.0;
+
+        setupStandardScene(builder, size, sceneId, "epic_fight_ponder.ponder." + sceneId + ".title");
+
+        ElementLink<EntityElement> attacker = spawnDummyActor(builder, center, centerY, center, 180, mainHandItem, offHandItem, showcaseStyle);
+        builder.idle(10);
+
+        showTextAtTop(builder, util, "epic_fight_ponder.ponder." + sceneId + ".text_1", 40, (int) center, (int)centerY + 1, (int) center);
+        builder.idle(20);
+
+        List<AnimationManager.AnimationAccessor<? extends AttackAnimation>> comboMotions = null;
+        CapabilityItem cap = EpicFightCapabilities.getItemStackCapability(mainHandItem);
+
+        if (cap instanceof WeaponCapability weaponCap) {
+            Map<Style, List<AnimationManager.AnimationAccessor<? extends AttackAnimation>>> motionsMap = ((WeaponCapabilityAccessor) weaponCap).getAutoAttackMotions();
+            comboMotions = motionsMap.getOrDefault(showcaseStyle, motionsMap.get(CapabilityItem.Styles.COMMON));
+        } else {
+            comboMotions = CapabilityItem.getBasicAutoAttackMotion();
+        }
+
+        String dashText = "epic_fight_ponder.ponder." + sceneId + ".text_2";
+        String jumpText = "epic_fight_ponder.ponder." + sceneId + ".text_3";
+
+        playUchigatanaStandardCombo(builder, util, attacker, comboMotions, center, centerY, center, dashText, jumpText, enableDash, enableJump);
+
+        builder.idle(20);
+        builder.markAsFinished();
+    }
+
+    public static void showcaseUchigatanaStandardWeaponCombo(SceneBuilder baseScene, SceneBuildingUtil util, int size, String sceneId, ItemStack mainHandItem, ItemStack offHandItem, Style showcaseStyle) {
+        showcaseUchigatanaStandardWeaponCombo(baseScene, util, size, sceneId, mainHandItem, offHandItem, showcaseStyle, true, true);
+    }
+
+    public static void showcaseUchigatanaStandardWeaponCombo(SceneBuilder baseScene, SceneBuildingUtil util, int size, String sceneId, ItemStack weapon, Style showcaseStyle) {
+        showcaseUchigatanaStandardWeaponCombo(baseScene, util, size, sceneId, weapon, ItemStack.EMPTY, showcaseStyle, true, true);
+    }
+
+    public static void showcaseUchigatanaStandardWeaponCombo(SceneBuilder baseScene, SceneBuildingUtil util, int size, String sceneId, ItemStack weapon) {
+        showcaseUchigatanaStandardWeaponCombo(baseScene, util, size, sceneId, weapon, ItemStack.EMPTY, CapabilityItem.Styles.TWO_HAND, true, true);
     }
 }

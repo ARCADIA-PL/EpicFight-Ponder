@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.com.efp.compat.EFPCompatManager;
 import org.com.efp.registry.EFPEntities;
 import org.slf4j.Logger;
 
@@ -35,6 +36,7 @@ public class EpicFightPonder {
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
+            event.enqueueWork(EFPCompatManager::setup);
         }
     }
 }

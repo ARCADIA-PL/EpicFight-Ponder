@@ -1,7 +1,5 @@
 package org.com.efp.client.ponder;
 
-import com.asanginxst.epicfightx.gameassets.animations.AnimationsX;
-import com.asanginxst.epicfightx.gameassets.animations.ExtraAnimations;
 import net.createmod.ponder.api.element.ElementLink;
 import net.createmod.ponder.api.element.EntityElement;
 import net.createmod.ponder.api.scene.SceneBuilder;
@@ -9,6 +7,7 @@ import net.createmod.ponder.api.scene.SceneBuildingUtil;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.com.efp.api.ponder.EpicFightSceneBuilder;
+import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.item.EpicFightItems;
 
@@ -25,8 +24,10 @@ public class EFPWeaponScenes {
     }
 
     public static void showcaseUchigatanaBasicAttackCombo_Sheath(SceneBuilder baseScene, SceneBuildingUtil util) {
-        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "uchigatana_basic_attack_combo_sheath",
-                EpicFightItems.UCHIGATANA.get().getDefaultInstance(), CapabilityItem.Styles.SHEATH);
+        ItemStack sheathStack = EpicFightItems.UCHIGATANA.get().getDefaultInstance();
+        sheathStack.getOrCreateTag().putInt("sheath", 1);
+        EFPSceneUtils.showcaseUchigatanaStandardWeaponCombo(baseScene, util, 11, "uchigatana_basic_attack_combo_sheath",
+                sheathStack, CapabilityItem.Styles.SHEATH);
     }
 
     public static void showcaseLongSwordBasicAttackCombo(SceneBuilder baseScene, SceneBuildingUtil util) {
@@ -66,8 +67,7 @@ public class EFPWeaponScenes {
 
     public static void showcaseSwordBasicAttackCombo_Dual(SceneBuilder baseScene, SceneBuildingUtil util) {
         EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "sword_basic_attack_combo_dual",
-                Items.DIAMOND_SWORD.getDefaultInstance(),
-                Items.DIAMOND_SWORD.getDefaultInstance(), CapabilityItem.Styles.TWO_HAND);
+                Items.DIAMOND_SWORD.getDefaultInstance(), Items.DIAMOND_SWORD.getDefaultInstance(), CapabilityItem.Styles.TWO_HAND);
     }
 
     public static void showcaseDaggerBasicAttackCombo(SceneBuilder baseScene, SceneBuildingUtil util) {
@@ -77,10 +77,12 @@ public class EFPWeaponScenes {
 
     public static void showcaseDaggerBasicAttackCombo_Dual(SceneBuilder baseScene, SceneBuildingUtil util) {
         EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "dagger_basic_attack_combo_dual",
-                EpicFightItems.DIAMOND_DAGGER.get().getDefaultInstance(),
-                EpicFightItems.DIAMOND_DAGGER.get().getDefaultInstance(), CapabilityItem.Styles.TWO_HAND);
+                EpicFightItems.DIAMOND_DAGGER.get().getDefaultInstance(), EpicFightItems.DIAMOND_DAGGER.get().getDefaultInstance(), CapabilityItem.Styles.TWO_HAND);
     }
 
+    /**
+     * 技能展示：RushingTempo
+     */
     public static void showcaseRushingTempo(SceneBuilder baseScene, SceneBuildingUtil util) {
         EpicFightSceneBuilder builder = new EpicFightSceneBuilder(baseScene);
         EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
@@ -92,46 +94,29 @@ public class EFPWeaponScenes {
         EFPSceneUtils.showTextAtTop(builder, util, "epic_fight_ponder.ponder.tachi_rushing_tempo.text_1", 40, 5, 1, 5);
         builder.idle(50);
 
-        world.playAnimation(attacker, AnimationsX.TACHI_AUTO1, 0.0F);
+        // 普攻起手
+        world.playAnimation(attacker, Animations.TACHI_AUTO1, 0.0F);
 
+        // 第一个派生慢动作提示
         world.waitForCanUseSkill(attacker);
         world.modifyEntityPlaySpeed(attacker, 0.05F);
         EFPSceneUtils.showTextAtTop(builder, util, "epic_fight_ponder.ponder.tachi_rushing_tempo.text_2", 40, 5, 2, 5);
         builder.idle(50);
-        world.modifyEntityPlaySpeed(attacker, 1.0F);
-        world.playAnimation(attacker, AnimationsX.RUSHING_TEMPO1, 0.0F);
 
+        world.modifyEntityPlaySpeed(attacker, 1.0F);
+        world.playAnimation(attacker, Animations.RUSHING_TEMPO1, 0.0F);
+
+        //微时缓增加打击感
         world.waitForCanBasicAttack(attacker);
         world.modifyEntityPlaySpeed(attacker, 0.25F);
         EFPSceneUtils.showTextAtTop(builder, util, "epic_fight_ponder.ponder.tachi_rushing_tempo.text_3", 100, 5, 2, 5);
         builder.idle(20);
 
-        EFPSceneUtils.playDerivationWithSlowMo(builder, attacker, EFPSceneUtils.WaitType.CAN_USE_SKILL, AnimationsX.TACHI_AUTO2, 0.25F, 10);
-        EFPSceneUtils.playDerivationWithSlowMo(builder, attacker, EFPSceneUtils.WaitType.CAN_BASIC_ATTACK, AnimationsX.RUSHING_TEMPO2, 0.25F, 10);
-        EFPSceneUtils.playDerivationWithSlowMo(builder, attacker, EFPSceneUtils.WaitType.CAN_USE_SKILL, AnimationsX.TACHI_AUTO3, 0.25F, 10);
-        EFPSceneUtils.playDerivationWithSlowMo(builder, attacker, EFPSceneUtils.WaitType.CAN_BASIC_ATTACK, AnimationsX.RUSHING_TEMPO3, 0.25F, 10);
-        EFPSceneUtils.playDerivationWithSlowMo(builder, attacker, EFPSceneUtils.WaitType.CAN_USE_SKILL, ExtraAnimations.TACHI_AUTO4, 0.25F, 10);
-        EFPSceneUtils.playDerivationWithSlowMo(builder, attacker, EFPSceneUtils.WaitType.CAN_BASIC_ATTACK, ExtraAnimations.RUSHING_TEMPO4, 0.25F, 10);
-        EFPSceneUtils.playDerivationWithSlowMo(builder, attacker, EFPSceneUtils.WaitType.CAN_USE_SKILL, ExtraAnimations.TACHI_AUTO5, 0.25F, 10);
-        EFPSceneUtils.playDerivationWithSlowMo(builder, attacker, EFPSceneUtils.WaitType.INACTION, ExtraAnimations.RUSHING_TEMPO5, 0.25F, 10);
+        EFPSceneUtils.playDerivationWithSlowMo(builder, attacker, EFPSceneUtils.WaitType.CAN_USE_SKILL, Animations.TACHI_AUTO2, 0.2F, 5);
+        EFPSceneUtils.playDerivationWithSlowMo(builder, attacker, EFPSceneUtils.WaitType.CAN_BASIC_ATTACK, Animations.RUSHING_TEMPO2, 0.2F, 5);
+        EFPSceneUtils.playDerivationWithSlowMo(builder, attacker, EFPSceneUtils.WaitType.CAN_USE_SKILL, Animations.TACHI_AUTO3, 0.2F, 5);
+        EFPSceneUtils.playDerivationWithSlowMo(builder, attacker, EFPSceneUtils.WaitType.CAN_BASIC_ATTACK, Animations.RUSHING_TEMPO3, 0.2F, 5);
 
-        world.modifyEntityPlaySpeed(attacker, 1.0F);
-        world.simulateSpring(attacker, 2, 10);
-        builder.idle(10);
-        EFPSceneUtils.showTextAtTop(builder, util, "epic_fight_ponder.ponder.tachi_rushing_tempo.text_4", 80, 5, 2, 5);
-
-        world.playAnimation(attacker, AnimationsX.TACHI_DASH, 0.0F);
-        EFPSceneUtils.playDerivationWithSlowMo(builder, attacker, EFPSceneUtils.WaitType.CAN_USE_SKILL, ExtraAnimations.RUSHING_DASH, 0.25F, 10);
-
-        world.waitForInaction(attacker);
-        world.modifyEntityPlaySpeed(attacker, 1.0F);
-        world.setPosition(attacker, 5.5, 1, 5.5);
-        builder.idle(5);
-        world.simulateJump(attacker);
-        builder.idle(8);
-
-        world.playAnimation(attacker, ExtraAnimations.TACHI_AIR_SLASH, 0.0F);
-        EFPSceneUtils.playDerivationWithSlowMo(builder, attacker, EFPSceneUtils.WaitType.CAN_USE_SKILL, ExtraAnimations.RUSHING_AIR_SLASH, 0.25F, 10);
         world.waitForInaction(attacker);
 
         builder.idle(30);

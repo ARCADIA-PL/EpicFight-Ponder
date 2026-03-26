@@ -10,6 +10,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SwordItem;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.com.efp.EpicFightPonder;
+import org.com.efp.compat.EFPCompatManager;
+import org.com.efp.compat.EFXCompat;
 import org.jetbrains.annotations.NotNull;
 import yesman.epicfight.world.item.*;
 
@@ -29,7 +31,12 @@ public class EFPPonderPlugin implements PonderPlugin {
         ForgeRegisteredObjectsHelper forgeObjectsHelper = new ForgeRegisteredObjectsHelper();
         PonderSceneRegistrationHelper<Item> itemHelper = helper.withKeyFunction(forgeObjectsHelper::getKeyOrThrow);
 
-        registerWeaponGroup(itemHelper, TachiItem.class, EFPWeaponScenes::showcaseTachiBasicAttackCombo, EFPWeaponScenes::showcaseRushingTempo);
+        if (EFPCompatManager.isEFXLoaded) {
+            registerWeaponGroup(itemHelper, TachiItem.class, EFPWeaponScenes::showcaseTachiBasicAttackCombo, EFXCompat::showcaseRushingTempo_EFX);
+        } else {
+            registerWeaponGroup(itemHelper, TachiItem.class, EFPWeaponScenes::showcaseTachiBasicAttackCombo, EFPWeaponScenes::showcaseRushingTempo);
+        }
+
         registerWeaponGroup(itemHelper, UchigatanaItem.class, EFPWeaponScenes::showcaseUchigatanaBasicAttackCombo, EFPWeaponScenes::showcaseUchigatanaBasicAttackCombo_Sheath);
         registerWeaponGroup(itemHelper, GreatswordItem.class, EFPWeaponScenes::showcaseGreatSwordBasicAttackCombo);
         registerWeaponGroup(itemHelper, LongswordItem.class, EFPWeaponScenes::showcaseLongSwordBasicAttackCombo, EFPWeaponScenes::showcaseLongSwordBasicAttackCombo_Ochs, EFPWeaponScenes::showcaseLongSwordBasicAttackCombo_OneHand);

@@ -1,6 +1,5 @@
 package org.com.efp.entity;
 
-import com.asanginxst.epicfightx.gameassets.animations.AnimationsX;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.PathfinderMob;
@@ -40,10 +39,10 @@ public class DummyPlayerEntityPatch<T extends PathfinderMob> extends HumanoidMob
     public void initAnimator(Animator animator) {
         super.initAnimator(animator);
         animator.addLivingAnimation(LivingMotions.IDLE, Animations.BIPED_IDLE);
-        animator.addLivingAnimation(LivingMotions.JUMP, AnimationsX.BIPED_JUMP);
+        animator.addLivingAnimation(LivingMotions.JUMP, Animations.BIPED_JUMP);
         animator.addLivingAnimation(LivingMotions.WALK, Animations.BIPED_WALK);
-        animator.addLivingAnimation(LivingMotions.CHASE, AnimationsX.BIPED_RUN);
-        animator.addLivingAnimation(LivingMotions.RUN, AnimationsX.BIPED_RUN);
+        animator.addLivingAnimation(LivingMotions.CHASE, Animations.BIPED_RUN);
+        animator.addLivingAnimation(LivingMotions.RUN, Animations.BIPED_RUN);
         animator.addLivingAnimation(LivingMotions.FALL, Animations.BIPED_FALL);
         animator.addLivingAnimation(LivingMotions.MOUNT, Animations.BIPED_MOUNT);
         animator.addLivingAnimation(LivingMotions.DEATH, Animations.BIPED_DEATH);

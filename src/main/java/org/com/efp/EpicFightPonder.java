@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.com.efp.registry.EFPEntities;
 import org.slf4j.Logger;
 
 @Mod(EpicFightPonder.MOD_ID)
@@ -19,6 +20,7 @@ public class EpicFightPonder {
     public EpicFightPonder(FMLJavaModLoadingContext context) {
         IEventBus bus = context.getModEventBus();
         bus.addListener(this::commonSetup);
+        EFPEntities.register(bus);
         MinecraftForge.EVENT_BUS.register(this);
     }
 

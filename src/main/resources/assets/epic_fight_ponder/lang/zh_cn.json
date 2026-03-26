@@ -1,0 +1,12 @@
+{
+  "epic_fight_ponder.ponder.tachi_basic_attack_combo.header": "太刀基础连段演示",
+  "epic_fight_ponder.ponder.tachi_basic_attack_combo.text_1": "太刀普通攻击",
+  "epic_fight_ponder.ponder.tachi_basic_attack_combo.text_2": "太刀冲刺攻击",
+  "epic_fight_ponder.ponder.tachi_basic_attack_combo.text_3": "太刀跳跃攻击",
+
+  "epic_fight_ponder.ponder.tachi_rushing_tempo.header": "太刀专属技能：急速连斩",
+  "epic_fight_ponder.ponder.tachi_rushing_tempo.text_1": "急速连斩 (Rushing Tempo) 允许你在普攻后摇中穿插派生",
+  "epic_fight_ponder.ponder.tachi_rushing_tempo.text_2": "在普攻挥出的后摇，立刻按下技能键！",
+  "epic_fight_ponder.ponder.tachi_rushing_tempo.text_3": "成功派生！只要掌握节奏，后续便可无限交替...",
+  "epic_fight_ponder.ponder.tachi_rushing_tempo.text_4": "疾跑，跳跃攻击后也可派生"
+}

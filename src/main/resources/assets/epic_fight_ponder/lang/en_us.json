@@ -1,0 +1,12 @@
+{
+  "epic_fight_ponder.ponder.tachi_basic_attack_combo.header": "Tachi Basic Attack Combos",
+  "epic_fight_ponder.ponder.tachi_basic_attack_combo.text_1": "Tachi Basic Attack",
+  "epic_fight_ponder.ponder.tachi_basic_attack_combo.text_2": "Tachi Dash Attack",
+  "epic_fight_ponder.ponder.tachi_basic_attack_combo.text_3": "Tachi Jump Attack",
+
+  "epic_fight_ponder.ponder.tachi_rushing_tempo.header": "Tachi Innate Skill: Rushing Tempo",
+  "epic_fight_ponder.ponder.tachi_rushing_tempo.text_1": "Rushing Tempo allows you to weave follow-up attacks during the recovery of basic attacks.",
+  "epic_fight_ponder.ponder.tachi_rushing_tempo.text_2": "Press the skill key immediately during the basic attack's recovery animation!",
+  "epic_fight_ponder.ponder.tachi_rushing_tempo.text_3": "Successful chain! Master the rhythm to alternate attacks infinitely...",
+  "epic_fight_ponder.ponder.tachi_rushing_tempo.text_4": "Can also be chained after dash or jump attacks."
+}

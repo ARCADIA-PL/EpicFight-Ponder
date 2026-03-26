@@ -5,6 +5,8 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "efp.refmap.json",
   "mixins": [
+    "epicfight.AnimationPlayerMixin",
+    "epicfight.client.RenderEngineEventsMixin"
   ],
   "client": [
   ],

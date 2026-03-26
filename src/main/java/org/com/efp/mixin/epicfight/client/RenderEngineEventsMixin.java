@@ -17,7 +17,7 @@ import yesman.epicfight.config.ClientConfig;
 public class RenderEngineEventsMixin {
 
     @WrapMethod(method = "renderLivingEvent", remap = false)
-    private static void mef$wrapRenderLivingEvent(RenderLivingEvent.Pre<? extends LivingEntity, ? extends EntityModel<? extends LivingEntity>> event, Operation<Void> original) {
+    private static void efp$wrapRenderLivingEvent(RenderLivingEvent.Pre<? extends LivingEntity, ? extends EntityModel<? extends LivingEntity>> event, Operation<Void> original) {
         LivingEntity living = event.getEntity();
         if (living.level() instanceof PonderLevel) {
             boolean computeShaderSetting = ClientConfig.activateComputeShader;

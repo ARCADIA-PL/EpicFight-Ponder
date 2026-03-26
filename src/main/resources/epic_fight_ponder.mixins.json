@@ -6,6 +6,7 @@
   "refmap": "efp.refmap.json",
   "mixins": [
     "epicfight.AnimationPlayerMixin",
+    "epicfight.MixinCapabilityItem",
     "epicfight.WeaponCapabilityAccessor",
     "epicfight.client.RenderEngineEventsMixin"
   ],

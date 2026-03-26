@@ -110,29 +110,35 @@ public class EFPSceneUtils {
     }
 
     /**
-     * 5. 全自动播放标准武器连段
+     * 5. 全自动播放标准武器连段 (分离 Dash 和 Jump 开关)
      */
-    public static void playStandardComboWithDashAndJump(
+    public static void playStandardCombo(
             EpicFightSceneBuilder builder, SceneBuildingUtil util,
             ElementLink<EntityElement> attacker,
             List<AnimationManager.AnimationAccessor<? extends AttackAnimation>> comboMotions,
             double centerX, double centerY, double centerZ,
-            String dashTextKey, String jumpTextKey) {
+            String dashTextKey, String jumpTextKey, boolean enableDash, boolean enableJump) {
 
         if (comboMotions == null || comboMotions.isEmpty()) return;
 
         EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
-        int size = comboMotions.size();
+        int originalSize = comboMotions.size();
 
-        for (int i = 0; i < size; i++) {
-            if (i == size - 2) {
+        int dashIndex = originalSize - 2;
+        int jumpIndex = originalSize - 1;
+
+        for (int i = 0; i < originalSize; i++) {
+            if (i == dashIndex && !enableDash) continue;
+            if (i == jumpIndex && !enableJump) continue;
+
+            if (i == dashIndex) {
                 world.simulateSpring(attacker, 1.5F, 10);
                 builder.idle(10);
                 if (dashTextKey != null && !dashTextKey.isEmpty()) {
                     showTextAtTop(builder, util, dashTextKey, 30, (int)centerX, (int)centerY - 1, (int)centerZ);
                 }
             }
-            else if (i == size - 1) {
+            else if (i == jumpIndex) {
                 world.setPosition(attacker, centerX, centerY, centerZ);
                 builder.idle(5);
                 world.simulateJump(attacker);
@@ -144,20 +150,23 @@ public class EFPSceneUtils {
 
             world.playAnimation(attacker, comboMotions.get(i), 0.0F);
 
-            if (i >= size - 3) {
-                world.waitForInaction(attacker);
-            } else {
+            boolean isBasicAttack = i < dashIndex;
+            boolean isLastBasicAttack = i == (dashIndex - 1);
+
+            if (isBasicAttack && !isLastBasicAttack) {
                 world.waitForCanBasicAttack(attacker);
+            } else {
+                world.waitForInaction(attacker);
             }
         }
     }
 
     /**
-     * 标准武器基础连段展示 (完整重载：带副手和指定姿势)
+     * 标准武器基础连段展示
      */
     public static void showcaseStandardWeaponCombo(
             SceneBuilder baseScene, SceneBuildingUtil util,
-            int size, String sceneId, ItemStack mainHandItem, ItemStack offHandItem, Style showcaseStyle) {
+            int size, String sceneId, ItemStack mainHandItem, ItemStack offHandItem, Style showcaseStyle, boolean enableDash, boolean enableJump) {
 
         EpicFightSceneBuilder builder = new EpicFightSceneBuilder(baseScene);
         double center = size / 2.0D;
@@ -183,11 +192,12 @@ public class EFPSceneUtils {
             comboMotions = CapabilityItem.getBasicAutoAttackMotion();
         }
 
-        playStandardComboWithDashAndJump(
+        playStandardCombo(
                 builder, util, attacker, comboMotions,
                 center, centerY, center,
                 "epic_fight_ponder.ponder." + sceneId + ".text_2",
-                "epic_fight_ponder.ponder." + sceneId + ".text_3"
+                "epic_fight_ponder.ponder." + sceneId + ".text_3",
+                enableDash, enableJump
         );
 
         builder.idle(20);
@@ -196,13 +206,19 @@ public class EFPSceneUtils {
 
     public static void showcaseStandardWeaponCombo(
             SceneBuilder baseScene, SceneBuildingUtil util,
+            int size, String sceneId, ItemStack mainHandItem, ItemStack offHandItem, Style showcaseStyle) {
+        showcaseStandardWeaponCombo(baseScene, util, size, sceneId, mainHandItem, offHandItem, showcaseStyle, true, true);
+    }
+
+    public static void showcaseStandardWeaponCombo(
+            SceneBuilder baseScene, SceneBuildingUtil util,
             int size, String sceneId, ItemStack weapon, Style showcaseStyle) {
-        showcaseStandardWeaponCombo(baseScene, util, size, sceneId, weapon, ItemStack.EMPTY, showcaseStyle);
+        showcaseStandardWeaponCombo(baseScene, util, size, sceneId, weapon, ItemStack.EMPTY, showcaseStyle, true, true);
     }
 
     public static void showcaseStandardWeaponCombo(
             SceneBuilder baseScene, SceneBuildingUtil util,
             int size, String sceneId, ItemStack weapon) {
-        showcaseStandardWeaponCombo(baseScene, util, size, sceneId, weapon, ItemStack.EMPTY, CapabilityItem.Styles.TWO_HAND);
+        showcaseStandardWeaponCombo(baseScene, util, size, sceneId, weapon, ItemStack.EMPTY, CapabilityItem.Styles.TWO_HAND, true, true);
     }
 }

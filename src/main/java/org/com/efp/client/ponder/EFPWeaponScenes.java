@@ -15,55 +15,70 @@ import yesman.epicfight.world.item.EpicFightItems;
 public class EFPWeaponScenes {
 
     public static void showcaseTachiBasicAttackCombo(SceneBuilder baseScene, SceneBuildingUtil util) {
-        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "tachi_basic_attack_combo", EpicFightItems.DIAMOND_TACHI.get().getDefaultInstance());
+        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "tachi_basic_attack_combo",
+                EpicFightItems.DIAMOND_TACHI.get().getDefaultInstance());
     }
 
     public static void showcaseUchigatanaBasicAttackCombo(SceneBuilder baseScene, SceneBuildingUtil util) {
-        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "uchigatana_basic_attack_combo", EpicFightItems.UCHIGATANA.get().getDefaultInstance());
+        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "uchigatana_basic_attack_combo",
+                EpicFightItems.UCHIGATANA.get().getDefaultInstance());
     }
 
     public static void showcaseUchigatanaBasicAttackCombo_Sheath(SceneBuilder baseScene, SceneBuildingUtil util) {
-        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "uchigatana_basic_attack_combo_sheath", EpicFightItems.UCHIGATANA.get().getDefaultInstance(), CapabilityItem.Styles.SHEATH);
+        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "uchigatana_basic_attack_combo_sheath",
+                EpicFightItems.UCHIGATANA.get().getDefaultInstance(), CapabilityItem.Styles.SHEATH);
     }
 
     public static void showcaseLongSwordBasicAttackCombo(SceneBuilder baseScene, SceneBuildingUtil util) {
-        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "longsword_basic_attack_combo", EpicFightItems.DIAMOND_LONGSWORD.get().getDefaultInstance(), CapabilityItem.Styles.TWO_HAND);
+        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "longsword_basic_attack_combo",
+                EpicFightItems.DIAMOND_LONGSWORD.get().getDefaultInstance(), CapabilityItem.Styles.TWO_HAND);
     }
 
     public static void showcaseLongSwordBasicAttackCombo_OneHand(SceneBuilder baseScene, SceneBuildingUtil util) {
-        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "longsword_basic_attack_combo_onehand", EpicFightItems.DIAMOND_LONGSWORD.get().getDefaultInstance(), Items.SHIELD.getDefaultInstance(), CapabilityItem.Styles.ONE_HAND);
+        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "longsword_basic_attack_combo_onehand",
+                EpicFightItems.DIAMOND_LONGSWORD.get().getDefaultInstance(), Items.SHIELD.getDefaultInstance(), CapabilityItem.Styles.ONE_HAND);
     }
 
     public static void showcaseLongSwordBasicAttackCombo_Ochs(SceneBuilder baseScene, SceneBuildingUtil util) {
-        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "longsword_basic_attack_combo_ochs", EpicFightItems.DIAMOND_LONGSWORD.get().getDefaultInstance(), CapabilityItem.Styles.OCHS);
+        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "longsword_basic_attack_combo_ochs",
+                EpicFightItems.DIAMOND_LONGSWORD.get().getDefaultInstance(), ItemStack.EMPTY, CapabilityItem.Styles.OCHS, false, true);
     }
 
     public static void showcaseSpearBasicAttackCombo(SceneBuilder baseScene, SceneBuildingUtil util) {
-        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "spear_basic_attack_combo", EpicFightItems.DIAMOND_SPEAR.get().getDefaultInstance());
+        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "spear_basic_attack_combo",
+                EpicFightItems.DIAMOND_SPEAR.get().getDefaultInstance());
     }
 
     public static void showcaseSpearBasicAttackCombo_OneHand(SceneBuilder baseScene, SceneBuildingUtil util) {
-        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "spear_basic_attack_combo_onehand", EpicFightItems.DIAMOND_SPEAR.get().getDefaultInstance(), Items.SHIELD.getDefaultInstance(), CapabilityItem.Styles.ONE_HAND);
+        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "spear_basic_attack_combo_onehand",
+                EpicFightItems.DIAMOND_SPEAR.get().getDefaultInstance(), Items.SHIELD.getDefaultInstance(), CapabilityItem.Styles.ONE_HAND);
     }
 
     public static void showcaseGreatSwordBasicAttackCombo(SceneBuilder baseScene, SceneBuildingUtil util) {
-        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "greatsword_basic_attack_combo", EpicFightItems.DIAMOND_GREATSWORD.get().getDefaultInstance());
+        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "greatsword_basic_attack_combo",
+                EpicFightItems.DIAMOND_GREATSWORD.get().getDefaultInstance());
     }
 
     public static void showcaseSwordBasicAttackCombo(SceneBuilder baseScene, SceneBuildingUtil util) {
-        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "sword_basic_attack_combo", Items.DIAMOND_SWORD.getDefaultInstance(), CapabilityItem.Styles.ONE_HAND);
+        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "sword_basic_attack_combo",
+                Items.DIAMOND_SWORD.getDefaultInstance(), CapabilityItem.Styles.ONE_HAND);
     }
 
     public static void showcaseSwordBasicAttackCombo_Dual(SceneBuilder baseScene, SceneBuildingUtil util) {
-        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "sword_basic_attack_combo_dual", Items.DIAMOND_SWORD.getDefaultInstance(), Items.DIAMOND_SWORD.getDefaultInstance(), CapabilityItem.Styles.TWO_HAND);
+        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "sword_basic_attack_combo_dual",
+                Items.DIAMOND_SWORD.getDefaultInstance(),
+                Items.DIAMOND_SWORD.getDefaultInstance(), CapabilityItem.Styles.TWO_HAND);
     }
 
     public static void showcaseDaggerBasicAttackCombo(SceneBuilder baseScene, SceneBuildingUtil util) {
-        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "dagger_basic_attack_combo", EpicFightItems.DIAMOND_DAGGER.get().getDefaultInstance(), CapabilityItem.Styles.ONE_HAND);
+        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "dagger_basic_attack_combo",
+                EpicFightItems.DIAMOND_DAGGER.get().getDefaultInstance(), CapabilityItem.Styles.ONE_HAND);
     }
 
     public static void showcaseDaggerBasicAttackCombo_Dual(SceneBuilder baseScene, SceneBuildingUtil util) {
-        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "dagger_basic_attack_combo_dual", EpicFightItems.DIAMOND_DAGGER.get().getDefaultInstance(), EpicFightItems.DIAMOND_DAGGER.get().getDefaultInstance(), CapabilityItem.Styles.TWO_HAND);
+        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "dagger_basic_attack_combo_dual",
+                EpicFightItems.DIAMOND_DAGGER.get().getDefaultInstance(),
+                EpicFightItems.DIAMOND_DAGGER.get().getDefaultInstance(), CapabilityItem.Styles.TWO_HAND);
     }
 
     public static void showcaseRushingTempo(SceneBuilder baseScene, SceneBuildingUtil util) {
@@ -79,7 +94,6 @@ public class EFPWeaponScenes {
 
         world.playAnimation(attacker, AnimationsX.TACHI_AUTO1, 0.0F);
 
-        // 第一次派生：附带文字说明的时缓
         world.waitForCanUseSkill(attacker);
         world.modifyEntityPlaySpeed(attacker, 0.05F);
         EFPSceneUtils.showTextAtTop(builder, util, "epic_fight_ponder.ponder.tachi_rushing_tempo.text_2", 40, 5, 2, 5);
@@ -87,7 +101,6 @@ public class EFPWeaponScenes {
         world.modifyEntityPlaySpeed(attacker, 1.0F);
         world.playAnimation(attacker, AnimationsX.RUSHING_TEMPO1, 0.0F);
 
-        // 第二次：提示后续连段
         world.waitForCanBasicAttack(attacker);
         world.modifyEntityPlaySpeed(attacker, 0.25F);
         EFPSceneUtils.showTextAtTop(builder, util, "epic_fight_ponder.ponder.tachi_rushing_tempo.text_3", 100, 5, 2, 5);

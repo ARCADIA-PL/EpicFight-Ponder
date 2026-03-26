@@ -18,7 +18,7 @@ public class AnimationPlayerMixin {
             at = @At(value = "FIELD", target = "Lyesman/epicfight/api/animation/AnimationPlayer;elapsedTime:F", opcode = Opcodes.GETFIELD, ordinal = 2),
             ordinal = 0
     )
-    private float mef$applyAnimationSpeed(float playbackSpeed, LivingEntityPatch<?> entityPatch) {
+    private float efp$applyAnimationSpeed(float playbackSpeed, LivingEntityPatch<?> entityPatch) {
         if(entityPatch.isLogicalClient()) {
             if(entityPatch.getOriginal().level() instanceof PonderLevel) {
                 CompoundTag data = entityPatch.getOriginal().getPersistentData();

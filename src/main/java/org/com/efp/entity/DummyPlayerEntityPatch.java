@@ -36,6 +36,7 @@ public class DummyPlayerEntityPatch<T extends PathfinderMob> extends HumanoidMob
         return Armatures.BIPED.get();
     }
 
+    @Override
     public void initAnimator(Animator animator) {
         super.initAnimator(animator);
         animator.addLivingAnimation(LivingMotions.IDLE, Animations.BIPED_IDLE);
@@ -72,20 +73,16 @@ public class DummyPlayerEntityPatch<T extends PathfinderMob> extends HumanoidMob
     }
 
     public void updateLivingMotionsForPonder() {
-
         CapabilityItem mainHandCap = this.getHoldingItemCapability(InteractionHand.MAIN_HAND);
         CapabilityItem offHandCap = this.getAdvancedHoldingItemCapability(InteractionHand.OFF_HAND);
 
-        Map<LivingMotion, AssetAccessor<? extends StaticAnimation>> livingMotionModifiers = new HashMap<>(mainHandCap.getLivingMotionModifier(this, InteractionHand.MAIN_HAND));
-        livingMotionModifiers.putAll(offHandCap.getLivingMotionModifier(this, InteractionHand.OFF_HAND));
-
-        Map<LivingMotion, AssetAccessor<? extends StaticAnimation>> newLivingAnimations = new HashMap<>(livingMotionModifiers);
+        Map<LivingMotion, AssetAccessor<? extends StaticAnimation>> newLivingAnimations = new HashMap<>(mainHandCap.getLivingMotionModifier(this, InteractionHand.MAIN_HAND));
+        newLivingAnimations.putAll(offHandCap.getLivingMotionModifier(this, InteractionHand.OFF_HAND));
 
         if (this.weaponLivingMotions != null && this.weaponLivingMotions.containsKey(mainHandCap.getWeaponCategory())) {
-
             Map<Style, Set<Pair<LivingMotion, AnimationManager.AnimationAccessor<? extends StaticAnimation>>>> byStyle = this.weaponLivingMotions.get(mainHandCap.getWeaponCategory());
 
-            Style style = this.forcedStyle != null ? this.forcedStyle : mainHandCap.getStyle(this);
+            Style style = mainHandCap.getStyle(this);
 
             if (byStyle.containsKey(style) || byStyle.containsKey(CapabilityItem.Styles.COMMON)) {
                 Set<Pair<LivingMotion, AnimationManager.AnimationAccessor<? extends StaticAnimation>>> animModifierSet = byStyle.getOrDefault(style, byStyle.get(CapabilityItem.Styles.COMMON));

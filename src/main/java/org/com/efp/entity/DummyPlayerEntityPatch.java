@@ -25,6 +25,8 @@ import java.util.Set;
 
 public class DummyPlayerEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<T> {
 
+    private Style forcedStyle = null;
+
     public DummyPlayerEntityPatch() {
         super(Factions.NEUTRAL);
     }
@@ -44,6 +46,14 @@ public class DummyPlayerEntityPatch<T extends PathfinderMob> extends HumanoidMob
         animator.addLivingAnimation(LivingMotions.FALL, Animations.BIPED_FALL);
         animator.addLivingAnimation(LivingMotions.MOUNT, Animations.BIPED_MOUNT);
         animator.addLivingAnimation(LivingMotions.DEATH, Animations.BIPED_DEATH);
+    }
+
+    public void setForcedStyle(Style style) {
+        this.forcedStyle = style;
+    }
+
+    public Style getForcedStyle() {
+        return this.forcedStyle;
     }
 
     public AnimationManager.AnimationAccessor<? extends StaticAnimation> getHitAnimation(StunType stunType) {
@@ -74,7 +84,8 @@ public class DummyPlayerEntityPatch<T extends PathfinderMob> extends HumanoidMob
         if (this.weaponLivingMotions != null && this.weaponLivingMotions.containsKey(mainHandCap.getWeaponCategory())) {
 
             Map<Style, Set<Pair<LivingMotion, AnimationManager.AnimationAccessor<? extends StaticAnimation>>>> byStyle = this.weaponLivingMotions.get(mainHandCap.getWeaponCategory());
-            Style style = mainHandCap.getStyle(this);
+
+            Style style = this.forcedStyle != null ? this.forcedStyle : mainHandCap.getStyle(this);
 
             if (byStyle.containsKey(style) || byStyle.containsKey(CapabilityItem.Styles.COMMON)) {
                 Set<Pair<LivingMotion, AnimationManager.AnimationAccessor<? extends StaticAnimation>>> animModifierSet = byStyle.getOrDefault(style, byStyle.get(CapabilityItem.Styles.COMMON));
@@ -93,12 +104,4 @@ public class DummyPlayerEntityPatch<T extends PathfinderMob> extends HumanoidMob
     public void modifyLivingMotionByCurrentItem(boolean onStartTracking) {
         this.updateLivingMotionsForPonder();
     }
-
-    /*@Override
-    public boolean shouldMoveOnCurrentSide(ActionAnimation actionAnimation) {
-        if (this.original.level().isClientSide() && this.original.level() instanceof PonderLevel ponderLevel) {
-            return true;
-        }
-        return super.shouldMoveOnCurrentSide(actionAnimation);
-    }*/
 }

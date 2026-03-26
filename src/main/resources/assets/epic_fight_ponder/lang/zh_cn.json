@@ -1,12 +1,72 @@
 {
-  "epic_fight_ponder.ponder.tachi_basic_attack_combo.header": "太刀基础连段演示",
-  "epic_fight_ponder.ponder.tachi_basic_attack_combo.text_1": "太刀普通攻击",
-  "epic_fight_ponder.ponder.tachi_basic_attack_combo.text_2": "太刀冲刺攻击",
-  "epic_fight_ponder.ponder.tachi_basic_attack_combo.text_3": "太刀跳跃攻击",
-
-  "epic_fight_ponder.ponder.tachi_rushing_tempo.header": "太刀专属技能：急速连斩",
+  "epic_fight_ponder.ponder.tachi_rushing_tempo.header": "太刀固有技能：急速连斩",
   "epic_fight_ponder.ponder.tachi_rushing_tempo.text_1": "急速连斩 (Rushing Tempo) 允许你在普攻后摇中穿插派生",
-  "epic_fight_ponder.ponder.tachi_rushing_tempo.text_2": "在普攻挥出的后摇，立刻按下技能键！",
+  "epic_fight_ponder.ponder.tachi_rushing_tempo.text_2": "在普攻挥出的后摇阶段，立刻按下技能键！",
   "epic_fight_ponder.ponder.tachi_rushing_tempo.text_3": "成功派生！只要掌握节奏，后续便可无限交替...",
-  "epic_fight_ponder.ponder.tachi_rushing_tempo.text_4": "疾跑，跳跃攻击后也可派生"
+  "epic_fight_ponder.ponder.tachi_rushing_tempo.text_4": "疾跑、跳跃攻击后也可进行派生",
+
+  "epic_fight_ponder.ponder.tachi_basic_attack_combo.header": "太刀 基础连段演示",
+  "epic_fight_ponder.ponder.tachi_basic_attack_combo.text_1": "太刀 普通攻击连段",
+  "epic_fight_ponder.ponder.tachi_basic_attack_combo.text_2": "太刀 冲刺攻击派生",
+  "epic_fight_ponder.ponder.tachi_basic_attack_combo.text_3": "太刀 跳跃攻击派生",
+
+  "epic_fight_ponder.ponder.uchigatana_basic_attack_combo.header": "打刀 基础连段演示",
+  "epic_fight_ponder.ponder.uchigatana_basic_attack_combo.text_1": "打刀 普通攻击连段",
+  "epic_fight_ponder.ponder.uchigatana_basic_attack_combo.text_2": "打刀 冲刺攻击派生",
+  "epic_fight_ponder.ponder.uchigatana_basic_attack_combo.text_3": "打刀 跳跃攻击派生",
+
+  "epic_fight_ponder.ponder.uchigatana_basic_attack_combo_sheath.header": "打刀 (纳刀流) 基础连段演示",
+  "epic_fight_ponder.ponder.uchigatana_basic_attack_combo_sheath.text_1": "打刀 (纳刀流) 普通攻击连段",
+  "epic_fight_ponder.ponder.uchigatana_basic_attack_combo_sheath.text_2": "打刀 (纳刀流) 冲刺攻击派生",
+  "epic_fight_ponder.ponder.uchigatana_basic_attack_combo_sheath.text_3": "打刀 (纳刀流) 跳跃攻击派生",
+
+  "epic_fight_ponder.ponder.greatsword_basic_attack_combo.header": "大剑 基础连段演示",
+  "epic_fight_ponder.ponder.greatsword_basic_attack_combo.text_1": "大剑 普通攻击连段",
+  "epic_fight_ponder.ponder.greatsword_basic_attack_combo.text_2": "大剑 冲刺攻击派生",
+  "epic_fight_ponder.ponder.greatsword_basic_attack_combo.text_3": "大剑 跳跃攻击派生",
+
+  "epic_fight_ponder.ponder.longsword_basic_attack_combo.header": "长剑 基础连段演示",
+  "epic_fight_ponder.ponder.longsword_basic_attack_combo.text_1": "长剑 普通攻击连段",
+  "epic_fight_ponder.ponder.longsword_basic_attack_combo.text_2": "长剑 冲刺攻击派生",
+  "epic_fight_ponder.ponder.longsword_basic_attack_combo.text_3": "长剑 跳跃攻击派生",
+
+  "epic_fight_ponder.ponder.longsword_basic_attack_combo_onehand.header": "长剑 (剑盾) 基础连段演示",
+  "epic_fight_ponder.ponder.longsword_basic_attack_combo_onehand.text_1": "长剑 (剑盾) 普通攻击连段",
+  "epic_fight_ponder.ponder.longsword_basic_attack_combo_onehand.text_2": "长剑 (剑盾) 冲刺攻击派生",
+  "epic_fight_ponder.ponder.longsword_basic_attack_combo_onehand.text_3": "长剑 (剑盾) 跳跃攻击派生",
+
+  "epic_fight_ponder.ponder.longsword_basic_attack_combo_ochs.header": "长剑 (格挡式) 基础连段演示",
+  "epic_fight_ponder.ponder.longsword_basic_attack_combo_ochs.text_1": "长剑 (格挡式) 普通攻击连段",
+  "epic_fight_ponder.ponder.longsword_basic_attack_combo_ochs.text_2": "长剑 (格挡式) 冲刺攻击派生",
+  "epic_fight_ponder.ponder.longsword_basic_attack_combo_ochs.text_3": "长剑 (格挡式) 跳跃攻击派生",
+
+  "epic_fight_ponder.ponder.spear_basic_attack_combo.header": "长枪 基础连段演示",
+  "epic_fight_ponder.ponder.spear_basic_attack_combo.text_1": "长枪 普通攻击连段",
+  "epic_fight_ponder.ponder.spear_basic_attack_combo.text_2": "长枪 冲刺攻击派生",
+  "epic_fight_ponder.ponder.spear_basic_attack_combo.text_3": "长枪 跳跃攻击派生",
+
+  "epic_fight_ponder.ponder.spear_basic_attack_combo_onehand.header": "长枪 (枪盾) 基础连段演示",
+  "epic_fight_ponder.ponder.spear_basic_attack_combo_onehand.text_1": "长枪 (枪盾) 普通攻击连段",
+  "epic_fight_ponder.ponder.spear_basic_attack_combo_onehand.text_2": "长枪 (枪盾) 冲刺攻击派生",
+  "epic_fight_ponder.ponder.spear_basic_attack_combo_onehand.text_3": "长枪 (枪盾) 跳跃攻击派生",
+
+  "epic_fight_ponder.ponder.sword_basic_attack_combo.header": "单手剑 基础连段演示",
+  "epic_fight_ponder.ponder.sword_basic_attack_combo.text_1": "单手剑 普通攻击连段",
+  "epic_fight_ponder.ponder.sword_basic_attack_combo.text_2": "单手剑 冲刺攻击派生",
+  "epic_fight_ponder.ponder.sword_basic_attack_combo.text_3": "单手剑 跳跃攻击派生",
+
+  "epic_fight_ponder.ponder.sword_basic_attack_combo_dual.header": "单手剑 (双持) 基础连段演示",
+  "epic_fight_ponder.ponder.sword_basic_attack_combo_dual.text_1": "单手剑 (双持) 普通攻击连段",
+  "epic_fight_ponder.ponder.sword_basic_attack_combo_dual.text_2": "单手剑 (双持) 冲刺攻击派生",
+  "epic_fight_ponder.ponder.sword_basic_attack_combo_dual.text_3": "单手剑 (双持) 跳跃攻击派生",
+
+  "epic_fight_ponder.ponder.dagger_basic_attack_combo.header": "匕首 基础连段演示",
+  "epic_fight_ponder.ponder.dagger_basic_attack_combo.text_1": "匕首 普通攻击连段",
+  "epic_fight_ponder.ponder.dagger_basic_attack_combo.text_2": "匕首 冲刺攻击派生",
+  "epic_fight_ponder.ponder.dagger_basic_attack_combo.text_3": "匕首 跳跃攻击派生",
+
+  "epic_fight_ponder.ponder.dagger_basic_attack_combo_dual.header": "匕首 (双持) 基础连段演示",
+  "epic_fight_ponder.ponder.dagger_basic_attack_combo_dual.text_1": "匕首 (双持) 普通攻击连段",
+  "epic_fight_ponder.ponder.dagger_basic_attack_combo_dual.text_2": "匕首 (双持) 冲刺攻击派生",
+  "epic_fight_ponder.ponder.dagger_basic_attack_combo_dual.text_3": "匕首 (双持) 跳跃攻击派生"
 }

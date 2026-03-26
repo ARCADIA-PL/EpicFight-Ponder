@@ -6,254 +6,122 @@ import net.createmod.ponder.api.element.ElementLink;
 import net.createmod.ponder.api.element.EntityElement;
 import net.createmod.ponder.api.scene.SceneBuilder;
 import net.createmod.ponder.api.scene.SceneBuildingUtil;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import org.com.efp.api.ponder.EpicFightSceneBuilder;
-import org.com.efp.entity.DummyPlayerEntity;
-import org.com.efp.entity.DummyPlayerEntityPatch;
-import org.com.efp.registry.EFPEntities;
-import yesman.epicfight.api.animation.AnimationManager;
-import yesman.epicfight.api.animation.types.AttackAnimation;
-import yesman.epicfight.world.capabilities.EpicFightCapabilities;
-import yesman.epicfight.world.capabilities.item.WeaponCapability;
+import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.item.EpicFightItems;
-
-import java.util.List;
 
 public class EFPWeaponScenes {
 
     public static void showcaseTachiBasicAttackCombo(SceneBuilder baseScene, SceneBuildingUtil util) {
-        EpicFightSceneBuilder epicFightSceneBuilder = new EpicFightSceneBuilder(baseScene);
-        EpicFightSceneBuilder.EpicFightWorldInstructions epicFightWorldInstructions = epicFightSceneBuilder.world();
+        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "tachi_basic_attack_combo", EpicFightItems.DIAMOND_TACHI.get().getDefaultInstance());
+    }
 
-        epicFightSceneBuilder.title("tachi_basic_attack_combo", "epic_fight_ponder.ponder.tachi_basic_attack_combo.title");
-        epicFightSceneBuilder.configureBasePlate(0, 0, 11);
-        epicFightSceneBuilder.showBasePlate();
-        epicFightSceneBuilder.scaleSceneView(1F);
+    public static void showcaseUchigatanaBasicAttackCombo(SceneBuilder baseScene, SceneBuildingUtil util) {
+        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "uchigatana_basic_attack_combo", EpicFightItems.UCHIGATANA.get().getDefaultInstance());
+    }
 
-        epicFightSceneBuilder.idle(5);
+    public static void showcaseUchigatanaBasicAttackCombo_Sheath(SceneBuilder baseScene, SceneBuildingUtil util) {
+        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "uchigatana_basic_attack_combo_sheath", EpicFightItems.UCHIGATANA.get().getDefaultInstance(), CapabilityItem.Styles.SHEATH);
+    }
 
-        ItemStack displayItem = new ItemStack(EpicFightItems.NETHERITE_TACHI.get());
+    public static void showcaseLongSwordBasicAttackCombo(SceneBuilder baseScene, SceneBuildingUtil util) {
+        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "longsword_basic_attack_combo", EpicFightItems.DIAMOND_LONGSWORD.get().getDefaultInstance(), CapabilityItem.Styles.TWO_HAND);
+    }
 
-        List<AnimationManager.AnimationAccessor<? extends AttackAnimation>> comboMotions = null;
-        var itemCap = EpicFightCapabilities.getItemStackCapability(displayItem);
-        if (itemCap instanceof WeaponCapability weaponCap) {
-            comboMotions = weaponCap.getAutoAttackMotion(null);
-        }
+    public static void showcaseLongSwordBasicAttackCombo_OneHand(SceneBuilder baseScene, SceneBuildingUtil util) {
+        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "longsword_basic_attack_combo_onehand", EpicFightItems.DIAMOND_LONGSWORD.get().getDefaultInstance(), Items.SHIELD.getDefaultInstance(), CapabilityItem.Styles.ONE_HAND);
+    }
 
-        ElementLink<EntityElement> attackerLink = epicFightSceneBuilder.world().createEntity(level -> {
-            LivingEntity attackPerformer = EFPEntities.DUMMY_PLAYER.get().create(level);
-            if (attackPerformer != null) {
-                attackPerformer.setPos(5.5, 1, 5.5);
-                attackPerformer.setYRot(180);
-                attackPerformer.yBodyRot = 180;
-                attackPerformer.yHeadRot = 180;
-                attackPerformer.setItemInHand(InteractionHand.MAIN_HAND, displayItem);
+    public static void showcaseLongSwordBasicAttackCombo_Ochs(SceneBuilder baseScene, SceneBuildingUtil util) {
+        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "longsword_basic_attack_combo_ochs", EpicFightItems.DIAMOND_LONGSWORD.get().getDefaultInstance(), CapabilityItem.Styles.OCHS);
+    }
 
-                EpicFightCapabilities.getUnparameterizedEntityPatch(attackPerformer, DummyPlayerEntityPatch.class).ifPresent(dummyPlayerEntityPatch -> {
-                    dummyPlayerEntityPatch.setYRot(180);
-                    dummyPlayerEntityPatch.setYRotO(180);
-                    dummyPlayerEntityPatch.updateLivingMotionsForPonder();
-                });
-            }
-            return attackPerformer;
-        });
+    public static void showcaseSpearBasicAttackCombo(SceneBuilder baseScene, SceneBuildingUtil util) {
+        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "spear_basic_attack_combo", EpicFightItems.DIAMOND_SPEAR.get().getDefaultInstance());
+    }
 
-        epicFightSceneBuilder.idle(10);
+    public static void showcaseSpearBasicAttackCombo_OneHand(SceneBuilder baseScene, SceneBuildingUtil util) {
+        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "spear_basic_attack_combo_onehand", EpicFightItems.DIAMOND_SPEAR.get().getDefaultInstance(), Items.SHIELD.getDefaultInstance(), CapabilityItem.Styles.ONE_HAND);
+    }
 
-        epicFightSceneBuilder.overlay().showText(40)
-                .text("epic_fight_ponder.ponder.tachi_basic_attack_combo.text_1")
-                .pointAt(util.vector().topOf(5, 2, 5))
-                .placeNearTarget();
+    public static void showcaseGreatSwordBasicAttackCombo(SceneBuilder baseScene, SceneBuildingUtil util) {
+        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "greatsword_basic_attack_combo", EpicFightItems.DIAMOND_GREATSWORD.get().getDefaultInstance());
+    }
 
-        epicFightSceneBuilder.idle(20);
+    public static void showcaseSwordBasicAttackCombo(SceneBuilder baseScene, SceneBuildingUtil util) {
+        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "sword_basic_attack_combo", Items.DIAMOND_SWORD.getDefaultInstance(), CapabilityItem.Styles.ONE_HAND);
+    }
 
-        if (comboMotions != null) {
-            int size = comboMotions.size();
-            for (int i = 0; i < size; i++) {
+    public static void showcaseSwordBasicAttackCombo_Dual(SceneBuilder baseScene, SceneBuildingUtil util) {
+        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "sword_basic_attack_combo_dual", Items.DIAMOND_SWORD.getDefaultInstance(), Items.DIAMOND_SWORD.getDefaultInstance(), CapabilityItem.Styles.TWO_HAND);
+    }
 
-                if (i == size - 2) {
-                    epicFightWorldInstructions.simulateSpring(attackerLink, 2, 10);
-                    epicFightSceneBuilder.idle(10);
-                    epicFightSceneBuilder.overlay().showText(30)
-                            .text("epic_fight_ponder.ponder.tachi_basic_attack_combo.text_2")
-                            .pointAt(util.vector().centerOf(5, 0, 5))
-                            .placeNearTarget();
-                } else if (i == size - 1) {
-                    epicFightWorldInstructions.setPosition(attackerLink, 5.5, 1, 5.5);
-                    epicFightSceneBuilder.idle(5);
-                    epicFightWorldInstructions.simulateJump(attackerLink);
-                    epicFightSceneBuilder.idle(8);
-                    epicFightSceneBuilder.overlay().showText(40)
-                            .text("epic_fight_ponder.ponder.tachi_basic_attack_combo.text_3")
-                            .pointAt(util.vector().topOf(5, 2, 5))
-                            .placeNearTarget();
-                }
+    public static void showcaseDaggerBasicAttackCombo(SceneBuilder baseScene, SceneBuildingUtil util) {
+        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "dagger_basic_attack_combo", EpicFightItems.DIAMOND_DAGGER.get().getDefaultInstance(), CapabilityItem.Styles.ONE_HAND);
+    }
 
-                AnimationManager.AnimationAccessor<? extends AttackAnimation> currentMotion = comboMotions.get(i);
-                epicFightSceneBuilder.world().playEntitiesAnimation(DummyPlayerEntity.class, currentMotion, 0.0F);
-
-                if (i >= size - 3) {
-                    epicFightWorldInstructions.waitForInaction(attackerLink);
-                } else {
-                    epicFightWorldInstructions.waitForCanBasicAttack(attackerLink);
-                }
-            }
-        }
-
-        epicFightSceneBuilder.idle(20);
-        epicFightSceneBuilder.markAsFinished();
+    public static void showcaseDaggerBasicAttackCombo_Dual(SceneBuilder baseScene, SceneBuildingUtil util) {
+        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "dagger_basic_attack_combo_dual", EpicFightItems.DIAMOND_DAGGER.get().getDefaultInstance(), EpicFightItems.DIAMOND_DAGGER.get().getDefaultInstance(), CapabilityItem.Styles.TWO_HAND);
     }
 
     public static void showcaseRushingTempo(SceneBuilder baseScene, SceneBuildingUtil util) {
-        EpicFightSceneBuilder epicFightSceneBuilder = new EpicFightSceneBuilder(baseScene);
-        EpicFightSceneBuilder.EpicFightWorldInstructions epicFightWorldInstructions = epicFightSceneBuilder.world();
+        EpicFightSceneBuilder builder = new EpicFightSceneBuilder(baseScene);
+        EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
 
-        epicFightSceneBuilder.title("tachi_rushing_tempo", "epic_fight_ponder.ponder.tachi_rushing_tempo.title");
-        epicFightSceneBuilder.configureBasePlate(0, 0, 11);
-        epicFightSceneBuilder.showBasePlate();
-        epicFightSceneBuilder.scaleSceneView(1F);
+        EFPSceneUtils.setupStandardScene(builder, 11, "tachi_rushing_tempo", "epic_fight_ponder.ponder.tachi_rushing_tempo.title");
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.DIAMOND_TACHI.get()));
+        builder.idle(20);
 
-        epicFightSceneBuilder.idle(5);
+        EFPSceneUtils.showTextAtTop(builder, util, "epic_fight_ponder.ponder.tachi_rushing_tempo.text_1", 40, 5, 1, 5);
+        builder.idle(50);
 
-        ItemStack displayItem = new ItemStack(EpicFightItems.NETHERITE_TACHI.get());
+        world.playAnimation(attacker, AnimationsX.TACHI_AUTO1, 0.0F);
 
-        ElementLink<EntityElement> attackerLink = epicFightSceneBuilder.world().createEntity(level -> {
-            LivingEntity attackPerformer = EFPEntities.DUMMY_PLAYER.get().create(level);
-            if (attackPerformer != null) {
-                attackPerformer.setPos(5.5, 1, 5.5);
-                attackPerformer.setYRot(180);
-                attackPerformer.yBodyRot = 180;
-                attackPerformer.yHeadRot = 180;
-                attackPerformer.setItemInHand(InteractionHand.MAIN_HAND, displayItem);
+        // 第一次派生：附带文字说明的时缓
+        world.waitForCanUseSkill(attacker);
+        world.modifyEntityPlaySpeed(attacker, 0.05F);
+        EFPSceneUtils.showTextAtTop(builder, util, "epic_fight_ponder.ponder.tachi_rushing_tempo.text_2", 40, 5, 2, 5);
+        builder.idle(50);
+        world.modifyEntityPlaySpeed(attacker, 1.0F);
+        world.playAnimation(attacker, AnimationsX.RUSHING_TEMPO1, 0.0F);
 
-                EpicFightCapabilities.getUnparameterizedEntityPatch(attackPerformer, DummyPlayerEntityPatch.class).ifPresent(dummyPlayerEntityPatch -> {
-                    dummyPlayerEntityPatch.setYRot(180);
-                    dummyPlayerEntityPatch.setYRotO(180);
-                    dummyPlayerEntityPatch.updateLivingMotionsForPonder();
-                });
-            }
-            return attackPerformer;
-        });
+        // 第二次：提示后续连段
+        world.waitForCanBasicAttack(attacker);
+        world.modifyEntityPlaySpeed(attacker, 0.25F);
+        EFPSceneUtils.showTextAtTop(builder, util, "epic_fight_ponder.ponder.tachi_rushing_tempo.text_3", 100, 5, 2, 5);
+        builder.idle(20);
 
-        epicFightSceneBuilder.idle(20);
+        EFPSceneUtils.playDerivationWithSlowMo(builder, attacker, EFPSceneUtils.WaitType.CAN_USE_SKILL, AnimationsX.TACHI_AUTO2, 0.25F, 10);
+        EFPSceneUtils.playDerivationWithSlowMo(builder, attacker, EFPSceneUtils.WaitType.CAN_BASIC_ATTACK, AnimationsX.RUSHING_TEMPO2, 0.25F, 10);
+        EFPSceneUtils.playDerivationWithSlowMo(builder, attacker, EFPSceneUtils.WaitType.CAN_USE_SKILL, AnimationsX.TACHI_AUTO3, 0.25F, 10);
+        EFPSceneUtils.playDerivationWithSlowMo(builder, attacker, EFPSceneUtils.WaitType.CAN_BASIC_ATTACK, AnimationsX.RUSHING_TEMPO3, 0.25F, 10);
+        EFPSceneUtils.playDerivationWithSlowMo(builder, attacker, EFPSceneUtils.WaitType.CAN_USE_SKILL, ExtraAnimations.TACHI_AUTO4, 0.25F, 10);
+        EFPSceneUtils.playDerivationWithSlowMo(builder, attacker, EFPSceneUtils.WaitType.CAN_BASIC_ATTACK, ExtraAnimations.RUSHING_TEMPO4, 0.25F, 10);
+        EFPSceneUtils.playDerivationWithSlowMo(builder, attacker, EFPSceneUtils.WaitType.CAN_USE_SKILL, ExtraAnimations.TACHI_AUTO5, 0.25F, 10);
+        EFPSceneUtils.playDerivationWithSlowMo(builder, attacker, EFPSceneUtils.WaitType.INACTION, ExtraAnimations.RUSHING_TEMPO5, 0.25F, 10);
 
-        epicFightSceneBuilder.overlay().showText(40)
-                .text("epic_fight_ponder.ponder.tachi_rushing_tempo.text_1")
-                .pointAt(util.vector().topOf(5, 1, 5))
-                .placeNearTarget();
+        world.modifyEntityPlaySpeed(attacker, 1.0F);
+        world.simulateSpring(attacker, 2, 10);
+        builder.idle(10);
+        EFPSceneUtils.showTextAtTop(builder, util, "epic_fight_ponder.ponder.tachi_rushing_tempo.text_4", 80, 5, 2, 5);
 
-        epicFightSceneBuilder.idle(50);
+        world.playAnimation(attacker, AnimationsX.TACHI_DASH, 0.0F);
+        EFPSceneUtils.playDerivationWithSlowMo(builder, attacker, EFPSceneUtils.WaitType.CAN_USE_SKILL, ExtraAnimations.RUSHING_DASH, 0.25F, 10);
 
-        epicFightSceneBuilder.world().playEntitiesAnimation(DummyPlayerEntity.class, AnimationsX.TACHI_AUTO1, 0.0F);
-        epicFightWorldInstructions.waitForCanUseSkill(attackerLink);
+        world.waitForInaction(attacker);
+        world.modifyEntityPlaySpeed(attacker, 1.0F);
+        world.setPosition(attacker, 5.5, 1, 5.5);
+        builder.idle(5);
+        world.simulateJump(attacker);
+        builder.idle(8);
 
-        epicFightWorldInstructions.modifyEntityPlaySpeed(attackerLink, 0.05F);
+        world.playAnimation(attacker, ExtraAnimations.TACHI_AIR_SLASH, 0.0F);
+        EFPSceneUtils.playDerivationWithSlowMo(builder, attacker, EFPSceneUtils.WaitType.CAN_USE_SKILL, ExtraAnimations.RUSHING_AIR_SLASH, 0.25F, 10);
+        world.waitForInaction(attacker);
 
-        epicFightSceneBuilder.overlay().showText(40)
-                .text("epic_fight_ponder.ponder.tachi_rushing_tempo.text_2")
-                .pointAt(util.vector().topOf(5, 2, 5))
-                .placeNearTarget();
-
-        epicFightSceneBuilder.idle(50);
-
-        epicFightWorldInstructions.modifyEntityPlaySpeed(attackerLink, 1.0F);
-        epicFightSceneBuilder.world().playEntitiesAnimation(DummyPlayerEntity.class, AnimationsX.RUSHING_TEMPO1, 0.0F);
-        epicFightWorldInstructions.waitForCanBasicAttack(attackerLink);
-
-        epicFightWorldInstructions.modifyEntityPlaySpeed(attackerLink, 0.25F);
-
-        epicFightSceneBuilder.overlay().showText(100)
-                .text("epic_fight_ponder.ponder.tachi_rushing_tempo.text_3")
-                .pointAt(util.vector().topOf(5, 2, 5))
-                .placeNearTarget();
-
-        epicFightSceneBuilder.idle(20);
-
-        epicFightWorldInstructions.modifyEntityPlaySpeed(attackerLink, 1.0F);
-        epicFightSceneBuilder.world().playEntitiesAnimation(DummyPlayerEntity.class, AnimationsX.TACHI_AUTO2, 0.0F);
-        epicFightWorldInstructions.waitForCanUseSkill(attackerLink);
-        epicFightWorldInstructions.modifyEntityPlaySpeed(attackerLink, 0.25F);
-        epicFightSceneBuilder.idle(10);
-
-        epicFightWorldInstructions.modifyEntityPlaySpeed(attackerLink, 1.0F);
-        epicFightSceneBuilder.world().playEntitiesAnimation(DummyPlayerEntity.class, AnimationsX.RUSHING_TEMPO2, 0.0F);
-        epicFightWorldInstructions.waitForCanBasicAttack(attackerLink);
-        epicFightWorldInstructions.modifyEntityPlaySpeed(attackerLink, 0.25F);
-        epicFightSceneBuilder.idle(10);
-
-        epicFightWorldInstructions.modifyEntityPlaySpeed(attackerLink, 1.0F);
-        epicFightSceneBuilder.world().playEntitiesAnimation(DummyPlayerEntity.class, AnimationsX.TACHI_AUTO3, 0.0F);
-        epicFightWorldInstructions.waitForCanUseSkill(attackerLink);
-        epicFightWorldInstructions.modifyEntityPlaySpeed(attackerLink, 0.25F);
-        epicFightSceneBuilder.idle(10);
-
-        epicFightWorldInstructions.modifyEntityPlaySpeed(attackerLink, 1.0F);
-        epicFightSceneBuilder.world().playEntitiesAnimation(DummyPlayerEntity.class, AnimationsX.RUSHING_TEMPO3, 0.0F);
-        epicFightWorldInstructions.waitForCanBasicAttack(attackerLink);
-        epicFightWorldInstructions.modifyEntityPlaySpeed(attackerLink, 0.25F);
-        epicFightSceneBuilder.idle(10);
-
-        epicFightWorldInstructions.modifyEntityPlaySpeed(attackerLink, 1.0F);
-        epicFightSceneBuilder.world().playEntitiesAnimation(DummyPlayerEntity.class, ExtraAnimations.TACHI_AUTO4, 0.0F);
-        epicFightWorldInstructions.waitForCanUseSkill(attackerLink);
-        epicFightWorldInstructions.modifyEntityPlaySpeed(attackerLink, 0.25F);
-        epicFightSceneBuilder.idle(10);
-
-        epicFightWorldInstructions.modifyEntityPlaySpeed(attackerLink, 1.0F);
-        epicFightSceneBuilder.world().playEntitiesAnimation(DummyPlayerEntity.class, ExtraAnimations.RUSHING_TEMPO4, 0.0F);
-        epicFightWorldInstructions.waitForCanBasicAttack(attackerLink);
-        epicFightWorldInstructions.modifyEntityPlaySpeed(attackerLink, 0.25F);
-        epicFightSceneBuilder.idle(10);
-
-        epicFightWorldInstructions.modifyEntityPlaySpeed(attackerLink, 1.0F);
-        epicFightSceneBuilder.world().playEntitiesAnimation(DummyPlayerEntity.class, ExtraAnimations.TACHI_AUTO5, 0.0F);
-        epicFightWorldInstructions.waitForCanUseSkill(attackerLink);
-        epicFightWorldInstructions.modifyEntityPlaySpeed(attackerLink, 0.25F);
-        epicFightSceneBuilder.idle(10);
-
-        epicFightWorldInstructions.modifyEntityPlaySpeed(attackerLink, 1.0F);
-        epicFightSceneBuilder.world().playEntitiesAnimation(DummyPlayerEntity.class, ExtraAnimations.RUSHING_TEMPO5, 0.0F);
-        epicFightWorldInstructions.waitForInaction(attackerLink);
-        epicFightWorldInstructions.modifyEntityPlaySpeed(attackerLink, 0.25F);
-        epicFightSceneBuilder.idle(10);
-
-        epicFightWorldInstructions.modifyEntityPlaySpeed(attackerLink, 1.0F);
-        epicFightWorldInstructions.simulateSpring(attackerLink, 2, 10);
-        epicFightSceneBuilder.idle(10);
-        epicFightSceneBuilder.overlay().showText(80)
-                .text("epic_fight_ponder.ponder.tachi_rushing_tempo.text_4")
-                .pointAt(util.vector().topOf(5, 2, 5))
-                .placeNearTarget();
-
-        epicFightSceneBuilder.world().playEntitiesAnimation(DummyPlayerEntity.class, AnimationsX.TACHI_DASH, 0.0F);
-        epicFightWorldInstructions.waitForCanUseSkill(attackerLink);
-        epicFightWorldInstructions.modifyEntityPlaySpeed(attackerLink, 0.25F);
-        epicFightSceneBuilder.idle(10);
-
-        epicFightWorldInstructions.modifyEntityPlaySpeed(attackerLink, 1.0F);
-        epicFightSceneBuilder.world().playEntitiesAnimation(DummyPlayerEntity.class, ExtraAnimations.RUSHING_DASH, 0.0F);
-        epicFightWorldInstructions.waitForInaction(attackerLink);
-        epicFightWorldInstructions.modifyEntityPlaySpeed(attackerLink, 0.25F);
-        epicFightSceneBuilder.idle(10);
-
-        epicFightWorldInstructions.modifyEntityPlaySpeed(attackerLink, 1.0F);
-        epicFightWorldInstructions.setPosition(attackerLink, 5.5, 1, 5.5);
-        epicFightSceneBuilder.idle(5);
-        epicFightWorldInstructions.simulateJump(attackerLink);
-        epicFightSceneBuilder.idle(8);
-
-        epicFightSceneBuilder.world().playEntitiesAnimation(DummyPlayerEntity.class, ExtraAnimations.TACHI_AIR_SLASH, 0.0F);
-        epicFightWorldInstructions.waitForCanUseSkill(attackerLink);
-        epicFightWorldInstructions.modifyEntityPlaySpeed(attackerLink, 0.25F);
-        epicFightSceneBuilder.idle(10);
-
-        epicFightWorldInstructions.modifyEntityPlaySpeed(attackerLink, 1.0F);
-        epicFightSceneBuilder.world().playEntitiesAnimation(DummyPlayerEntity.class, ExtraAnimations.RUSHING_AIR_SLASH, 0.0F);
-        epicFightWorldInstructions.waitForInaction(attackerLink);
-
-        epicFightSceneBuilder.idle(30);
-        epicFightSceneBuilder.markAsFinished();
+        builder.idle(30);
+        builder.markAsFinished();
     }
 }

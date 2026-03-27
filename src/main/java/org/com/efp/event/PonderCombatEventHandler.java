@@ -12,7 +12,7 @@ import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 public class PonderCombatEventHandler {
 
     /**
-     * 当 Ponder 里的受害者被命中时，自动为其指派受击反馈（Stun Reaction）。
+     * 当 Ponder 里的假人被命中时触发
      */
     @SubscribeEvent
     public static void onBeHitDefaultReaction(PonderCombatEvent.BeHit event) {

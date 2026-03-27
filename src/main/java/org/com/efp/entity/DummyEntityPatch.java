@@ -26,6 +26,7 @@ import yesman.epicfight.client.ClientEngine;
 import yesman.epicfight.client.renderer.patched.item.RenderItemBase;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.gameasset.Armatures;
+import yesman.epicfight.main.EpicFightSharedConstants;
 import yesman.epicfight.model.armature.HumanoidArmature;
 import yesman.epicfight.particle.HitParticleType;
 import yesman.epicfight.world.capabilities.entitypatch.Factions;
@@ -253,7 +254,7 @@ public class DummyEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<
     private List<Entity> calculateHitsForPhase(AttackAnimation attackAnim, AttackAnimation.Phase phase, float prevTime, float time, EntityState prevState, EntityState state) {
         float prevPoseTime = prevState.attacking() ? prevTime : phase.preDelay;
         float poseTime = state.attacking() ? time : phase.contact;
-        if (poseTime <= prevPoseTime) poseTime = prevPoseTime + 0.05f;
+        if (poseTime <= prevPoseTime) poseTime = prevPoseTime + EpicFightSharedConstants.A_TICK;
 
         float playSpeed = attackAnim.getPlaySpeed(this, attackAnim);
         List<Entity> hits = new ArrayList<>();
@@ -284,13 +285,25 @@ public class DummyEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<
 
             currentPhaseHitMemory.add(target);
 
-            this.playHitEffects(phase, target);
+            switch (hitEvent.getAttackResult()) {
+                case SUCCESS -> {
+                    this.playHitEffects(phase, target);
 
-            PonderCombatEvent.BeHit beHitEvent = new PonderCombatEvent.BeHit(this.getOriginal(), target, attackAnim, phase, attackAnim.getPhaseOrderByTime(time));
-            MinecraftForge.EVENT_BUS.post(beHitEvent);
+                    PonderCombatEvent.BeHit beHitEvent = new PonderCombatEvent.BeHit(this.getOriginal(), target, attackAnim, phase, attackAnim.getPhaseOrderByTime(time));
+                    MinecraftForge.EVENT_BUS.post(beHitEvent);
 
-            if (this.currentAnimBeHitCallback != null) {
-                this.currentAnimBeHitCallback.accept(beHitEvent);
+                    if (this.currentAnimBeHitCallback != null) {
+                        this.currentAnimBeHitCallback.accept(beHitEvent);
+                    }
+                }
+                case FAIL_BLOCKED -> {
+                }
+                case FAIL_PARRIED -> {
+                }
+                case FAIL_DODGED -> {
+                }
+                case FAIL_CUSTOM -> {
+                }
             }
         }
     }

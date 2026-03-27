@@ -12,7 +12,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import org.com.efp.entity.DummyPlayerEntity;
-import org.com.efp.entity.DummyPlayerEntityPatch;
+import org.com.efp.entity.DummyEntityPatch;
 import org.jetbrains.annotations.NotNull;
 import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.AnimationPlayer;
@@ -74,8 +74,8 @@ public class EpicFightSceneBuilder extends PonderSceneBuilder {
             world().modifyEntity(link, entity -> {
                 if (entity instanceof DummyPlayerEntity dummyPlayerEntity) {
                     EpicFightCapabilities.getUnparameterizedEntityPatch(dummyPlayerEntity, LivingEntityPatch.class).ifPresent(livingEntityPatch -> {
-                        if (livingEntityPatch instanceof DummyPlayerEntityPatch<?> dummyPlayerEntityPatch) {
-                            dummyPlayerEntityPatch.updateLivingMotionsForPonder();
+                        if (livingEntityPatch instanceof DummyEntityPatch<?> dummyEntityPatch) {
+                            dummyEntityPatch.updateLivingMotionsForPonder();
                         }
                     });
                 }

@@ -9,9 +9,11 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.com.efp.EpicFightPonder;
 import org.com.efp.client.render.DummyPlayerRenderer;
+import org.com.efp.client.render.DummyVictimPlayerRenderer;
 import org.com.efp.client.render.patched.PDummyPlayerRenderer;
+import org.com.efp.client.render.patched.PDummyVictimPlayerRenderer;
 import org.com.efp.entity.DummyPlayerEntity;
-import org.com.efp.entity.DummyPlayerEntityPatch;
+import org.com.efp.entity.DummyEntityPatch;
 import org.com.efp.registry.EFPEntities;
 import yesman.epicfight.api.client.forgeevent.PatchedRenderersEvent;
 import yesman.epicfight.api.forgeevent.EntityPatchRegistryEvent;
@@ -22,17 +24,20 @@ public class ModEvents {
     @SubscribeEvent
     public static void entityAttributeEvent(EntityAttributeCreationEvent event) {
         event.put(EFPEntities.DUMMY_PLAYER.get(), DummyPlayerEntity.createAttributes());
+        event.put(EFPEntities.DUMMY_VICTIM_PLAYER.get(), DummyPlayerEntity.createAttributes());
     }
 
     @SubscribeEvent
     public static void setPatch(EntityPatchRegistryEvent event) {
-        event.getTypeEntry().put(EFPEntities.DUMMY_PLAYER.get(), (entity) -> DummyPlayerEntityPatch::new);
+        event.getTypeEntry().put(EFPEntities.DUMMY_PLAYER.get(), (entity) -> DummyEntityPatch::new);
+        event.getTypeEntry().put(EFPEntities.DUMMY_VICTIM_PLAYER.get(), (entity) -> DummyEntityPatch::new);
     }
 
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public static void rendererRegister(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(EFPEntities.DUMMY_PLAYER.get(), DummyPlayerRenderer::new);
+        event.registerEntityRenderer(EFPEntities.DUMMY_VICTIM_PLAYER.get(), DummyVictimPlayerRenderer::new);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -41,10 +46,14 @@ public class ModEvents {
         event.addPatchedEntityRenderer(EFPEntities.DUMMY_PLAYER.get(),
                 entityType -> new PDummyPlayerRenderer(event.getContext(), entityType)
                         .initLayerLast(event.getContext(), entityType));
+        event.addPatchedEntityRenderer(EFPEntities.DUMMY_VICTIM_PLAYER.get(),
+                entityType -> new PDummyVictimPlayerRenderer(event.getContext(), entityType)
+                        .initLayerLast(event.getContext(), entityType));
     }
 
     public static void registerArmatures() {
         Armatures.registerEntityTypeArmature(EFPEntities.DUMMY_PLAYER.get(), Armatures.BIPED);
+        Armatures.registerEntityTypeArmature(EFPEntities.DUMMY_VICTIM_PLAYER.get(), Armatures.BIPED);
     }
 
     @SubscribeEvent

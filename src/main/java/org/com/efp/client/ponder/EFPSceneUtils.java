@@ -8,7 +8,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import org.com.efp.api.ponder.EpicFightSceneBuilder;
-import org.com.efp.entity.DummyPlayerEntityPatch;
+import org.com.efp.entity.DummyEntityPatch;
 import org.com.efp.mixin.epicfight.WeaponCapabilityAccessor;
 import org.com.efp.registry.EFPEntities;
 import yesman.epicfight.api.animation.AnimationManager;
@@ -18,7 +18,6 @@ import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.capabilities.item.Style;
 import yesman.epicfight.world.capabilities.item.WeaponCapability;
-import yesman.epicfight.world.item.UchigatanaItem;
 
 import java.util.List;
 import java.util.Map;
@@ -56,7 +55,7 @@ public class EFPSceneUtils {
                     actor.setItemInHand(InteractionHand.OFF_HAND, offHandItem);
                 }
 
-                EpicFightCapabilities.getUnparameterizedEntityPatch(actor, DummyPlayerEntityPatch.class).ifPresent(patch -> {
+                EpicFightCapabilities.getUnparameterizedEntityPatch(actor, DummyEntityPatch.class).ifPresent(patch -> {
                     patch.setYRot(yRot);
                     patch.setYRotO(yRot);
                     if (forcedStyle != null) {

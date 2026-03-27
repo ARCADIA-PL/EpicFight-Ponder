@@ -13,12 +13,12 @@ import net.minecraftforge.common.ForgeHooks;
 import yesman.epicfight.api.animation.LivingMotions;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 
-public class DummyPlayerEntity extends PathfinderMob {
+public class DummyVictimPlayerEntity extends PathfinderMob {
 
     private int dashTicks = 0;
     private Vec3 dashVelocity = Vec3.ZERO;
 
-    public DummyPlayerEntity(EntityType<? extends PathfinderMob> type, Level level) {
+    public DummyVictimPlayerEntity(EntityType<? extends PathfinderMob> type, Level level) {
         super(type, level);
     }
 

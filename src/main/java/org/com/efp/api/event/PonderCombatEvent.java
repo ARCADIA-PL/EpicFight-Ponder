@@ -20,11 +20,25 @@ public class PonderCombatEvent extends Event {
         this.phaseOrder = phaseOrder;
     }
 
-    public LivingEntity getAttacker() { return attacker; }
-    public LivingEntity getTarget() { return target; }
-    public AttackAnimation getAnimation() { return animation; }
-    public AttackAnimation.Phase getAttackPhase() { return phase; }
-    public int getPhaseOrder() { return phaseOrder; }
+    public LivingEntity getAttacker() {
+        return attacker;
+    }
+
+    public LivingEntity getTarget() {
+        return target;
+    }
+
+    public AttackAnimation getAnimation() {
+        return animation;
+    }
+
+    public AttackAnimation.Phase getAttackPhase() {
+        return phase;
+    }
+
+    public int getPhaseOrder() {
+        return phaseOrder;
+    }
 
     /**
      * 动作引擎的攻击结算结果。
@@ -60,9 +74,13 @@ public class PonderCombatEvent extends Event {
             super(attacker, target, animation, phase, phaseOrder);
         }
 
-        public AttackResult getAttackResult() { return result; }
+        public AttackResult getAttackResult() {
+            return result;
+        }
 
-        public void setResult(AttackResult result) { this.result = result; }
+        public void setResult(AttackResult result) {
+            this.result = result;
+        }
     }
 
     /**

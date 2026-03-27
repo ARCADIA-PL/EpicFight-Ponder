@@ -19,10 +19,10 @@ public class AnimationPlayerMixin {
             ordinal = 0
     )
     private float efp$applyAnimationSpeed(float playbackSpeed, LivingEntityPatch<?> entityPatch) {
-        if(entityPatch.isLogicalClient()) {
-            if(entityPatch.getOriginal().level() instanceof PonderLevel) {
+        if (entityPatch.isLogicalClient()) {
+            if (entityPatch.getOriginal().level() instanceof PonderLevel) {
                 CompoundTag data = entityPatch.getOriginal().getPersistentData();
-                if(data.contains(EpicFightSceneBuilder.PLAY_SPEED)) {
+                if (data.contains(EpicFightSceneBuilder.PLAY_SPEED)) {
                     return data.getFloat(EpicFightSceneBuilder.PLAY_SPEED);
                 }
             }

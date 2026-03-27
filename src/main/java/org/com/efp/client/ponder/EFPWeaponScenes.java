@@ -24,7 +24,6 @@ public class EFPWeaponScenes {
 
     public static void showcaseUchigatanaBasicAttackCombo_Sheath(SceneBuilder baseScene, SceneBuildingUtil util) {
         ItemStack sheathStack = EpicFightItems.UCHIGATANA.get().getDefaultInstance();
-        sheathStack.getOrCreateTag().putInt("sheath", 1);
         EFPSceneUtils.showcaseUchigatanaStandardWeaponCombo(baseScene, util, 11, "uchigatana_basic_attack_combo_sheath",
                 sheathStack, CapabilityItem.Styles.SHEATH);
     }

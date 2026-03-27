@@ -17,7 +17,10 @@ import org.com.efp.client.ponder.trail.EFPPonderTrailParticle;
 import org.joml.Vector3d;
 import yesman.epicfight.api.animation.*;
 import yesman.epicfight.api.animation.property.AnimationProperty;
-import yesman.epicfight.api.animation.types.*;
+import yesman.epicfight.api.animation.types.AttackAnimation;
+import yesman.epicfight.api.animation.types.DynamicAnimation;
+import yesman.epicfight.api.animation.types.EntityState;
+import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.api.asset.AssetAccessor;
 import yesman.epicfight.api.client.animation.property.ClientAnimationProperties;
 import yesman.epicfight.api.client.animation.property.TrailInfo;
@@ -40,35 +43,27 @@ import java.util.function.Supplier;
 
 public class DummyEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<T> {
 
+    public final List<EFPPonderTrailParticle> activeTrails = new ArrayList<>();
     private final Map<AttackAnimation.Phase, Set<Entity>> phaseHitMemory = new HashMap<>();
     private final Set<AttackAnimation.Phase> playedSwingPhases = new HashSet<>();
-
-    public final List<EFPPonderTrailParticle> activeTrails = new ArrayList<>();
+    private final List<DelayedTask> delayedTasks = new ArrayList<>();
     private AssetAccessor<? extends StaticAnimation> lastPlayedAnimation = null;
     private DynamicAnimation lastCheckedAnim = null;
     private Style forcedStyle = null;
-
     private Consumer<PonderCombatEvent.Hit> currentAnimHitCallback = null;
     private Consumer<PonderCombatEvent.BeHit> currentAnimBeHitCallback = null;
-
-    private static class DelayedTask {
-        int ticksRemaining;
-        Runnable action;
-
-        DelayedTask(int ticks, Runnable action) {
-            this.ticksRemaining = ticks;
-            this.action = action;
-        }
-    }
-
-    private final List<DelayedTask> delayedTasks = new ArrayList<>();
 
     public DummyEntityPatch() {
         super(Factions.NEUTRAL);
     }
 
-    public void setCurrentAnimHitCallback(Consumer<PonderCombatEvent.Hit> callback) { this.currentAnimHitCallback = callback; }
-    public void setCurrentAnimBeHitCallback(Consumer<PonderCombatEvent.BeHit> callback) { this.currentAnimBeHitCallback = callback; }
+    public void setCurrentAnimHitCallback(Consumer<PonderCombatEvent.Hit> callback) {
+        this.currentAnimHitCallback = callback;
+    }
+
+    public void setCurrentAnimBeHitCallback(Consumer<PonderCombatEvent.BeHit> callback) {
+        this.currentAnimBeHitCallback = callback;
+    }
 
     public boolean hasHitTarget(Entity target) {
         for (Set<Entity> hits : this.phaseHitMemory.values()) {
@@ -95,11 +90,17 @@ public class DummyEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<
         animator.addLivingAnimation(LivingMotions.DEATH, Animations.BIPED_DEATH);
     }
 
-    public void setForcedStyle(Style style) { this.forcedStyle = style; }
-    public Style getForcedStyle() { return this.forcedStyle; }
+    public Style getForcedStyle() {
+        return this.forcedStyle;
+    }
+
+    public void setForcedStyle(Style style) {
+        this.forcedStyle = style;
+    }
 
     @Override
-    public void updateMotion(boolean considerInaction) { }
+    public void updateMotion(boolean considerInaction) {
+    }
 
     public void updateLivingMotionsForPonder() {
         CapabilityItem mainHandCap = this.getHoldingItemCapability(InteractionHand.MAIN_HAND);
@@ -119,8 +120,8 @@ public class DummyEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<
                 }
             }
         }
-        this.getAnimator().resetLivingAnimations();
-        newLivingAnimations.forEach(this.getAnimator()::addLivingAnimation);
+        this.getClientAnimator().resetLivingAnimations();
+        newLivingAnimations.forEach(this.getClientAnimator()::addLivingAnimation);
     }
 
     @Override
@@ -279,7 +280,8 @@ public class DummyEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<
         if (!this.playedSwingPhases.contains(phase)) {
             this.playedSwingPhases.add(phase);
             SoundEvent swingSound = phase.getProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND).orElse(this.getSwingSound(phase.hand));
-            if (swingSound != null) Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(swingSound, 1, 1.0F));
+            if (swingSound != null)
+                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(swingSound, 1, 1.0F));
         }
     }
 
@@ -342,7 +344,8 @@ public class DummyEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<
 
     private void playHitEffects(AttackAnimation.Phase phase, LivingEntity target) {
         SoundEvent hitSound = phase.getProperty(AnimationProperty.AttackPhaseProperty.HIT_SOUND).orElse(this.getWeaponHitSound(phase.hand));
-        if (hitSound != null) Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(hitSound, 1, 1.0F));
+        if (hitSound != null)
+            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(hitSound, 1, 1.0F));
 
         HitParticleType particle = phase.getProperty(AnimationProperty.AttackPhaseProperty.PARTICLE)
                 .map(Supplier::get).orElse(this.getWeaponHitParticle(phase.hand));
@@ -357,5 +360,15 @@ public class DummyEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<
     public void clearPonderMemory() {
         this.phaseHitMemory.clear();
         this.playedSwingPhases.clear();
+    }
+
+    private static class DelayedTask {
+        int ticksRemaining;
+        Runnable action;
+
+        DelayedTask(int ticks, Runnable action) {
+            this.ticksRemaining = ticks;
+            this.action = action;
+        }
     }
 }

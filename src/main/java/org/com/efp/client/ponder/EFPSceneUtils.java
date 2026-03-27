@@ -13,17 +13,18 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import org.com.efp.api.event.PonderCombatEvent;
 import org.com.efp.api.ponder.EpicFightSceneBuilder;
 import org.com.efp.entity.DummyEntityPatch;
-import org.com.efp.entity.DummyPlayerEntity;
 import org.com.efp.mixin.epicfight.WeaponCapabilityAccessor;
 import org.com.efp.registry.EFPEntities;
 import org.joml.Vector3d;
 import yesman.epicfight.api.animation.AnimationManager;
-import yesman.epicfight.api.animation.LivingMotions;
 import yesman.epicfight.api.animation.types.AttackAnimation;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.gameasset.Animations;
+import yesman.epicfight.gameasset.EpicFightSounds;
+import yesman.epicfight.particle.EpicFightParticles;
 import yesman.epicfight.particle.HitParticleType;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
@@ -32,9 +33,10 @@ import yesman.epicfight.world.capabilities.item.Style;
 import yesman.epicfight.world.capabilities.item.WeaponCapability;
 
 import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class EFPSceneUtils {
 
@@ -64,7 +66,6 @@ public class EFPSceneUtils {
                 if (mainHandItem != null && !mainHandItem.isEmpty()) {
                     actor.setItemInHand(InteractionHand.MAIN_HAND, mainHandItem);
                 }
-
                 if (offHandItem != null && !offHandItem.isEmpty()) {
                     actor.setItemInHand(InteractionHand.OFF_HAND, offHandItem);
                 }
@@ -102,7 +103,6 @@ public class EFPSceneUtils {
                 if (mainHandItem != null && !mainHandItem.isEmpty()) {
                     victim.setItemInHand(InteractionHand.MAIN_HAND, mainHandItem);
                 }
-
                 if (offHandItem != null && !offHandItem.isEmpty()) {
                     victim.setItemInHand(InteractionHand.OFF_HAND, offHandItem);
                 }
@@ -152,11 +152,6 @@ public class EFPSceneUtils {
         });
     }
 
-    /**
-     * 4. 动作派生的时间过渡 (时间缓动系统)
-     */
-    public enum WaitType { CAN_BASIC_ATTACK, CAN_USE_SKILL, INACTION }
-
     public static <A extends StaticAnimation> void playDerivationWithSlowMo(
             EpicFightSceneBuilder builder, ElementLink<EntityElement> actor,
             WaitType waitType, AnimationManager.AnimationAccessor<A> nextAnim,
@@ -176,7 +171,247 @@ public class EFPSceneUtils {
     }
 
     /**
-     * 5. 全自动播放标准武器连段 (分离 Dash 和 Jump 开关)
+     * 安全获取武器连段数据
+     */
+    public static List<AnimationManager.AnimationAccessor<? extends AttackAnimation>> getSafeComboMotions(ItemStack weapon, Style style) {
+        CapabilityItem cap = EpicFightCapabilities.getItemStackCapability(weapon);
+        if (cap instanceof WeaponCapability weaponCap) {
+            Map<Style, List<AnimationManager.AnimationAccessor<? extends AttackAnimation>>> motionsMap = ((WeaponCapabilityAccessor) weaponCap).getAutoAttackMotions();
+            if (motionsMap.containsKey(style) && !motionsMap.get(style).isEmpty()) return motionsMap.get(style);
+            if (motionsMap.containsKey(CapabilityItem.Styles.TWO_HAND))
+                return motionsMap.get(CapabilityItem.Styles.TWO_HAND);
+            if (motionsMap.containsKey(CapabilityItem.Styles.ONE_HAND))
+                return motionsMap.get(CapabilityItem.Styles.ONE_HAND);
+            return motionsMap.getOrDefault(CapabilityItem.Styles.COMMON, CapabilityItem.getBasicAutoAttackMotion());
+        }
+        return CapabilityItem.getBasicAutoAttackMotion() != null ? CapabilityItem.getBasicAutoAttackMotion() : new ArrayList<>();
+    }
+
+    /**
+     * 通用双人交互攻击连段展示
+     */
+    public static void playInteractiveCombo(
+            EpicFightSceneBuilder builder,
+            ElementLink<EntityElement> attacker,
+            List<AnimationManager.AnimationAccessor<? extends AttackAnimation>> comboMotions,
+            int attacksToPlay,
+            Consumer<PonderCombatEvent.Hit> normalCallback,
+            Consumer<PonderCombatEvent.Hit> lastCallback) {
+
+        if (comboMotions == null || comboMotions.isEmpty()) return;
+        EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
+        int max = Math.min(attacksToPlay, comboMotions.size());
+
+        for (int i = 0; i < max; i++) {
+            AnimationManager.AnimationAccessor<? extends AttackAnimation> currentAttack = comboMotions.get(i);
+            boolean isLastAttack = (i == max - 1);
+
+            Consumer<PonderCombatEvent.Hit> activeCallback = isLastAttack ? lastCallback : normalCallback;
+
+            world.playAnimation(attacker, currentAttack, 0.0F, activeCallback, beHitEvent -> {
+            });
+
+            if (!isLastAttack) {
+                world.waitForCanBasicAttack(attacker);
+            } else {
+                world.waitForInaction(attacker);
+            }
+        }
+    }
+
+    /**
+     * 通用双人交互单次攻击展示 (带时缓与回调)
+     */
+    public static void playInteractiveStrike(
+            EpicFightSceneBuilder builder,
+            ElementLink<EntityElement> attacker,
+            AnimationManager.AnimationAccessor<? extends AttackAnimation> strikeMotion,
+            float playSpeed,
+            Consumer<PonderCombatEvent.Hit> onHitCallback) {
+
+        builder.world().modifyEntityPlaySpeed(attacker, playSpeed);
+        builder.world().playAnimation(attacker, strikeMotion, 0.0F, onHitCallback, beHitEvent -> {
+        });
+    }
+
+    public static void playInteractiveComboWithDefensiveSetup(
+            EpicFightSceneBuilder builder, SceneBuildingUtil util,
+            ElementLink<EntityElement> attacker, ElementLink<EntityElement> victim,
+            List<AnimationManager.AnimationAccessor<? extends AttackAnimation>> comboMotions,
+            int attacksToPlay, StaticAnimation defenseSetupAnim,
+            Consumer<PonderCombatEvent.Hit> normalCallback, Consumer<PonderCombatEvent.Hit> lastCallback,
+            String prepareHitTextKey, double prepareHitTextX, double prepareHitTextY, double prepareHitTextZ,
+            String firstHitTextKey, double firstHitTextX, double firstHitTextY, double firstHitTextZ) {
+
+        if (comboMotions == null || comboMotions.isEmpty()) return;
+        EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
+        int max = Math.min(attacksToPlay, comboMotions.size());
+
+        for (int i = 0; i < max; i++) {
+            AnimationManager.AnimationAccessor<? extends AttackAnimation> currentAttack = comboMotions.get(i);
+            boolean isFirst = (i == 0);
+            boolean isLast = (i == max - 1);
+            Consumer<PonderCombatEvent.Hit> activeCallback = isLast ? lastCallback : normalCallback;
+
+            if (isFirst) {
+                world.modifyEntityPlaySpeed(attacker, 0.3F);
+                world.modifyEntityPlaySpeed(victim, 0.3F);
+
+                world.playAnimation(attacker, currentAttack, 0.0F, activeCallback, beHit -> {
+                });
+
+                builder.idle(15);
+
+                if (defenseSetupAnim != null) {
+                    world.playAnimation(victim, defenseSetupAnim.getRealAnimation(), 0.1F);
+                    if (prepareHitTextKey != null && !prepareHitTextKey.isEmpty()) {
+                        showTextAtTop(builder, util, prepareHitTextKey, 60, (int) prepareHitTextX, (int) prepareHitTextY, (int) prepareHitTextZ);
+                    }
+                }
+
+                builder.idle(8);
+
+                world.modifyEntityPlaySpeed(attacker, 0.05F);
+                world.modifyEntityPlaySpeed(victim, 0.05F);
+
+                if (firstHitTextKey != null && !firstHitTextKey.isEmpty()) {
+                    showTextAtTop(builder, util, firstHitTextKey, 100, (int) firstHitTextX, (int) firstHitTextY, (int) firstHitTextZ);
+                }
+
+                builder.idle(20);
+
+                world.modifyEntityPlaySpeed(attacker, 1.0F);
+                world.modifyEntityPlaySpeed(victim, 1.0F);
+
+                world.waitForCanBasicAttack(attacker);
+            } else {
+                world.playAnimation(attacker, currentAttack, 0.0F, activeCallback, beHit -> {
+                });
+
+                builder.idle(10);
+
+                if (defenseSetupAnim != null) {
+                    world.playAnimation(victim, defenseSetupAnim.getRealAnimation(), 0.1F);
+                }
+
+                if (!isLast) world.waitForCanBasicAttack(attacker);
+                else world.waitForInaction(attacker);
+            }
+        }
+    }
+
+    /**
+     * 创建“成功格挡”事件 (支持 returnAnim 传 null，代表不再回正)
+     */
+    public static Consumer<PonderCombatEvent.Hit> createStandardGuardCallback(StaticAnimation hitAnim, @Nullable StaticAnimation returnAnim) {
+        return hitEvent -> {
+            hitEvent.setResult(PonderCombatEvent.AttackResult.FAIL_BLOCKED);
+            playSoundClientSide(EpicFightSounds.CLASH.get(), 1.0F, 1.0F);
+            spawnEfmHitParticleClientSide(
+                    hitEvent.getTarget().level(), EpicFightParticles.HIT_BLUNT.get(),
+                    hitEvent.getAttacker(), hitEvent.getTarget(), HitParticleType.FRONT_OF_EYES, HitParticleType.ZERO
+            );
+
+            LivingEntityPatch<?> rawPatch = EpicFightCapabilities.getEntityPatch(hitEvent.getTarget(), LivingEntityPatch.class);
+            if (rawPatch instanceof DummyEntityPatch<?> victimPatch && victimPatch.getClientAnimator() != null) {
+                victimPatch.getClientAnimator().playAnimation(hitAnim.getRealAnimation(), 0.0F);
+
+                if (returnAnim != null) {
+                    int delay = (int) (Objects.requireNonNull(victimPatch.getClientAnimator().getPlayerFor(hitAnim.getRealAnimation())).getAnimation().get().getTotalTime() / 20);
+                    victimPatch.scheduleDelayedTask(delay, () -> {
+                        victimPatch.getClientAnimator().playAnimation(returnAnim.getRealAnimation(), 0.3F);
+                    });
+                }
+            }
+        };
+    }
+
+    /**
+     * 创建“格挡破防”事件
+     */
+    public static Consumer<PonderCombatEvent.Hit> createGuardBreakCallback(StaticAnimation breakAnim) {
+        return hitEvent -> {
+            hitEvent.setResult(PonderCombatEvent.AttackResult.FAIL_BLOCKED);
+            playSoundClientSide(EpicFightSounds.NEUTRALIZE_MOBS.get(), 1.0F, 1F);
+            spawnEfmHitParticleClientSide(
+                    hitEvent.getTarget().level(), EpicFightParticles.HIT_BLUNT.get(),
+                    hitEvent.getTarget(), hitEvent.getAttacker(), HitParticleType.FRONT_OF_EYES, HitParticleType.ZERO
+            );
+
+            LivingEntityPatch<?> rawPatch = EpicFightCapabilities.getEntityPatch(hitEvent.getTarget(), LivingEntityPatch.class);
+            if (rawPatch instanceof DummyEntityPatch<?> victimPatch && victimPatch.getClientAnimator() != null) {
+                victimPatch.getClientAnimator().playAnimation(breakAnim.getRealAnimation(), 0.0F);
+            }
+            hitEvent.getAttacker().getPersistentData().putFloat(EpicFightSceneBuilder.PLAY_SPEED, 1.0F);
+        };
+    }
+
+    /**
+     * 创建“成功招架 (Parry)”事件
+     * 允许传入自定义逻辑 (Function)，根据具体的 Hit 事件(例如攻击者的位置、招式)来动态决定使用哪个招架动画。
+     */
+    public static Consumer<PonderCombatEvent.Hit> createCustomParryCallback(Function<PonderCombatEvent.Hit, StaticAnimation> animSelector) {
+        return hitEvent -> {
+            hitEvent.setResult(PonderCombatEvent.AttackResult.FAIL_PARRIED);
+            playSoundClientSide(EpicFightSounds.CLASH.get(), 1.0F, 1.0F);
+            spawnEfmHitParticleClientSide(
+                    hitEvent.getTarget().level(), EpicFightParticles.HIT_BLUNT.get(),
+                    hitEvent.getAttacker(), hitEvent.getTarget(), HitParticleType.FRONT_OF_EYES, HitParticleType.ZERO
+            );
+
+            LivingEntityPatch<?> rawPatch = EpicFightCapabilities.getEntityPatch(hitEvent.getTarget(), LivingEntityPatch.class);
+            if (rawPatch instanceof DummyEntityPatch<?> victimPatch && victimPatch.getClientAnimator() != null) {
+                StaticAnimation chosenAnim = animSelector.apply(hitEvent);
+                if (chosenAnim != null) {
+                    victimPatch.getClientAnimator().playAnimation(chosenAnim.getRealAnimation(), 0.0F);
+                }
+            }
+        };
+    }
+
+    /**
+     * 创建“成功招架 (Parry)”事件 - [随机选择动画]
+     */
+    public static Consumer<PonderCombatEvent.Hit> createParryCallback(StaticAnimation... parryAnims) {
+        if (parryAnims == null || parryAnims.length == 0) {
+            throw new IllegalArgumentException("Parry animations list cannot be empty!");
+        }
+        final Random random = new Random();
+        return createCustomParryCallback(hitEvent -> parryAnims[random.nextInt(parryAnims.length)]);
+    }
+
+    /**
+     * 创建“成功招架 (Parry)”事件 - [循环交替]
+     */
+    public static Consumer<PonderCombatEvent.Hit> createCyclicParryCallback(StaticAnimation... parryAnims) {
+        if (parryAnims == null || parryAnims.length == 0) {
+            throw new IllegalArgumentException("Parry animations list cannot be empty!");
+        }
+
+        final int[] currentIndex = {new Random().nextInt(parryAnims.length)};
+
+        return createCustomParryCallback(hitEvent -> {
+            StaticAnimation chosenAnim = parryAnims[currentIndex[0]];
+
+            currentIndex[0] = (currentIndex[0] + 1) % parryAnims.length;
+
+            return chosenAnim;
+        });
+    }
+
+    /**
+     * 重置假人状态为持刀待机
+     */
+    public static void resetToIdle(EpicFightSceneBuilder builder, ElementLink<EntityElement> entityLink) {
+        builder.world().modifyEntity(entityLink, entity -> {
+            if (entity instanceof LivingEntity living && EpicFightCapabilities.getEntityPatch(living, LivingEntityPatch.class) instanceof DummyEntityPatch<?> patch) {
+                patch.updateLivingMotionsForPonder();
+            }
+        });
+    }
+
+    /**
+     * 5. 全自动播放标准武器连段
      */
     public static void playStandardCombo(
             EpicFightSceneBuilder builder, SceneBuildingUtil util,
@@ -185,7 +420,10 @@ public class EFPSceneUtils {
             double centerX, double centerY, double centerZ,
             String dashTextKey, String jumpTextKey, boolean enableDash, boolean enableJump) {
 
-        if (comboMotions == null || comboMotions.isEmpty()) return;
+        if (comboMotions == null || comboMotions.isEmpty()) {
+            builder.idle(20);
+            return;
+        }
 
         EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
         int originalSize = comboMotions.size();
@@ -200,7 +438,7 @@ public class EFPSceneUtils {
                 world.simulateSpring(attacker, 1.5F, 10);
                 builder.idle(10);
                 if (dashTextKey != null && !dashTextKey.isEmpty()) {
-                    showTextAtTop(builder, util, dashTextKey, 30, (int)centerX, (int)centerY - 1, (int)centerZ);
+                    showTextAtTop(builder, util, dashTextKey, 30, (int) centerX, (int) centerY - 1, (int) centerZ);
                 }
             } else if (i == jumpIndex) {
                 world.setPosition(attacker, centerX, centerY, centerZ);
@@ -208,7 +446,7 @@ public class EFPSceneUtils {
                 world.simulateJump(attacker);
                 builder.idle(8);
                 if (jumpTextKey != null && !jumpTextKey.isEmpty()) {
-                    showTextAtTop(builder, util, jumpTextKey, 40, (int)centerX, (int)centerY + 1, (int)centerZ);
+                    showTextAtTop(builder, util, jumpTextKey, 40, (int) centerX, (int) centerY + 1, (int) centerZ);
                 }
             }
 
@@ -235,7 +473,10 @@ public class EFPSceneUtils {
             double centerX, double centerY, double centerZ,
             String dashTextKey, String jumpTextKey, boolean enableDash, boolean enableJump) {
 
-        if (comboMotions == null || comboMotions.isEmpty()) return;
+        if (comboMotions == null || comboMotions.isEmpty()) {
+            builder.idle(20);
+            return;
+        }
 
         EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
         int originalSize = comboMotions.size();
@@ -253,7 +494,7 @@ public class EFPSceneUtils {
                 world.simulateSpring(attacker, 1.5F, 10);
                 builder.idle(10);
                 if (dashTextKey != null && !dashTextKey.isEmpty()) {
-                    showTextAtTop(builder, util, dashTextKey, 30, (int)centerX, (int)centerY - 1, (int)centerZ);
+                    showTextAtTop(builder, util, dashTextKey, 30, (int) centerX, (int) centerY - 1, (int) centerZ);
                 }
             } else if (i == jumpIndex) {
                 updateSheathState(builder, attacker, 1);
@@ -262,7 +503,7 @@ public class EFPSceneUtils {
                 world.simulateJump(attacker);
                 builder.idle(8);
                 if (jumpTextKey != null && !jumpTextKey.isEmpty()) {
-                    showTextAtTop(builder, util, jumpTextKey, 40, (int)centerX, (int)centerY + 1, (int)centerZ);
+                    showTextAtTop(builder, util, jumpTextKey, 40, (int) centerX, (int) centerY + 1, (int) centerZ);
                 }
             }
 
@@ -282,17 +523,14 @@ public class EFPSceneUtils {
         updateSheathState(builder, attacker, 1);
     }
 
-
     public static void showcaseNoSkill(
             SceneBuilder baseScene, SceneBuildingUtil util,
             int size, String sceneId) {
-
         EpicFightSceneBuilder builder = new EpicFightSceneBuilder(baseScene);
         EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
         double center = size / 2.0D;
 
         setupStandardScene(builder, size, sceneId, "epic_fight_ponder.ponder." + sceneId + ".title");
-
         ElementLink<EntityElement> dummy = spawnDummyActor(builder, center, 0.5, center, 180, null, null);
 
         world.playAnimation(dummy, Animations.BIPED_SIT, 0.0F);
@@ -300,9 +538,6 @@ public class EFPSceneUtils {
         builder.markAsFinished();
     }
 
-    /**
-     * 标准武器基础连段展示
-     */
     public static void showcaseStandardWeaponCombo(
             SceneBuilder baseScene, SceneBuildingUtil util,
             int size, String sceneId, ItemStack mainHandItem, ItemStack offHandItem, Style showcaseStyle, boolean enableDash, boolean enableJump) {
@@ -316,18 +551,10 @@ public class EFPSceneUtils {
         ElementLink<EntityElement> attacker = spawnDummyActor(builder, center, centerY, center, 180, mainHandItem, offHandItem, showcaseStyle);
         builder.idle(10);
 
-        showTextAtTop(builder, util, "epic_fight_ponder.ponder." + sceneId + ".text_1", 40, (int) center, (int)centerY + 1, (int) center);
+        showTextAtTop(builder, util, "epic_fight_ponder.ponder." + sceneId + ".text_1", 40, (int) center, (int) centerY + 1, (int) center);
         builder.idle(20);
 
-        List<AnimationManager.AnimationAccessor<? extends AttackAnimation>> comboMotions = null;
-        CapabilityItem cap = EpicFightCapabilities.getItemStackCapability(mainHandItem);
-
-        if (cap instanceof WeaponCapability weaponCap) {
-            Map<Style, List<AnimationManager.AnimationAccessor<? extends AttackAnimation>>> motionsMap = ((WeaponCapabilityAccessor) weaponCap).getAutoAttackMotions();
-            comboMotions = motionsMap.getOrDefault(showcaseStyle, motionsMap.get(CapabilityItem.Styles.COMMON));
-        } else {
-            comboMotions = CapabilityItem.getBasicAutoAttackMotion();
-        }
+        List<AnimationManager.AnimationAccessor<? extends AttackAnimation>> comboMotions = getSafeComboMotions(mainHandItem, showcaseStyle);
 
         String dashText = "epic_fight_ponder.ponder." + sceneId + ".text_2";
         String jumpText = "epic_fight_ponder.ponder." + sceneId + ".text_3";
@@ -361,20 +588,13 @@ public class EFPSceneUtils {
         setupStandardScene(builder, size, sceneId, "epic_fight_ponder.ponder." + sceneId + ".title");
 
         ElementLink<EntityElement> attacker = spawnDummyActor(builder, center, centerY, center, 180, mainHandItem, offHandItem, showcaseStyle);
+        updateSheathState(builder, attacker, 1);
         builder.idle(10);
 
-        showTextAtTop(builder, util, "epic_fight_ponder.ponder." + sceneId + ".text_1", 40, (int) center, (int)centerY + 1, (int) center);
+        showTextAtTop(builder, util, "epic_fight_ponder.ponder." + sceneId + ".text_1", 40, (int) center, (int) centerY + 1, (int) center);
         builder.idle(20);
 
-        List<AnimationManager.AnimationAccessor<? extends AttackAnimation>> comboMotions = null;
-        CapabilityItem cap = EpicFightCapabilities.getItemStackCapability(mainHandItem);
-
-        if (cap instanceof WeaponCapability weaponCap) {
-            Map<Style, List<AnimationManager.AnimationAccessor<? extends AttackAnimation>>> motionsMap = ((WeaponCapabilityAccessor) weaponCap).getAutoAttackMotions();
-            comboMotions = motionsMap.getOrDefault(showcaseStyle, motionsMap.get(CapabilityItem.Styles.COMMON));
-        } else {
-            comboMotions = CapabilityItem.getBasicAutoAttackMotion();
-        }
+        List<AnimationManager.AnimationAccessor<? extends AttackAnimation>> comboMotions = getSafeComboMotions(mainHandItem, showcaseStyle);
 
         String dashText = "epic_fight_ponder.ponder." + sceneId + ".text_2";
         String jumpText = "epic_fight_ponder.ponder." + sceneId + ".text_3";
@@ -397,22 +617,15 @@ public class EFPSceneUtils {
         showcaseUchigatanaStandardWeaponCombo(baseScene, util, size, sceneId, weapon, ItemStack.EMPTY, CapabilityItem.Styles.TWO_HAND, true, true);
     }
 
-    /**
-     * @param sceneBuilder 当前的 SceneBuilder
-     * @param link  想要解析的实体链接
-     * @return 真实的 Entity 对象，如果实体不存在则返回 null
-     */
     @Nullable
     public static Entity resolveEntity(SceneBuilder sceneBuilder, ElementLink<EntityElement> link) {
         PonderScene scene = sceneBuilder.getScene();
         EntityElement element = scene.resolve(link);
         if (element != null) {
             final Entity[] extractedEntity = new Entity[1];
-
             element.ifPresent(entity -> {
                 extractedEntity[0] = entity;
             });
-
             return extractedEntity[0];
         }
         return null;
@@ -423,15 +636,13 @@ public class EFPSceneUtils {
     }
 
     public static void spawnEfmHitParticleClientSide(
-            Level level,
-            HitParticleType particle,
-            Entity target,
-            Entity attacker,
-            BiFunction<Entity, Entity, Vector3d> posFunc,
-            BiFunction<Entity, Entity, Vector3d> argFunc) {
+            Level level, HitParticleType particle, Entity target, Entity attacker,
+            BiFunction<Entity, Entity, Vector3d> posFunc, BiFunction<Entity, Entity, Vector3d> argFunc) {
 
-        org.joml.Vector3d pos = posFunc.apply(target, attacker);
-        org.joml.Vector3d args = argFunc.apply(target, attacker);
+        Vector3d pos = posFunc.apply(target, attacker);
+        Vector3d args = argFunc.apply(target, attacker);
         level.addParticle(particle, pos.x, pos.y, pos.z, args.x, args.y, args.z);
     }
+
+    public enum WaitType {CAN_BASIC_ATTACK, CAN_USE_SKILL, INACTION}
 }

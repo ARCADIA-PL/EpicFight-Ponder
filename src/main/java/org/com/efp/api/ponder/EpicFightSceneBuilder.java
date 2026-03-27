@@ -7,13 +7,11 @@ import net.createmod.ponder.api.scene.Selection;
 import net.createmod.ponder.foundation.PonderScene;
 import net.createmod.ponder.foundation.PonderSceneBuilder;
 import net.createmod.ponder.foundation.instruction.PonderInstruction;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import org.com.efp.api.event.PonderCombatEvent;
-import org.com.efp.entity.DummyPlayerEntity;
 import org.com.efp.entity.DummyEntityPatch;
+import org.com.efp.entity.DummyPlayerEntity;
 import org.jetbrains.annotations.NotNull;
 import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.AnimationPlayer;
@@ -26,7 +24,6 @@ import yesman.epicfight.particle.EpicFightParticles;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -104,10 +101,14 @@ public class EpicFightSceneBuilder extends PonderSceneBuilder {
                 private boolean complete = false;
 
                 @Override
-                public boolean isComplete() { return complete; }
+                public boolean isComplete() {
+                    return complete;
+                }
 
                 @Override
-                public boolean isBlocking() { return true; }
+                public boolean isBlocking() {
+                    return true;
+                }
 
                 @Override
                 public void reset(PonderScene scene) {
@@ -161,10 +162,14 @@ public class EpicFightSceneBuilder extends PonderSceneBuilder {
                 private boolean complete = false;
 
                 @Override
-                public boolean isComplete() { return complete; }
+                public boolean isComplete() {
+                    return complete;
+                }
 
                 @Override
-                public boolean isBlocking() { return true; }
+                public boolean isBlocking() {
+                    return true;
+                }
 
                 @Override
                 public void reset(PonderScene scene) {
@@ -216,10 +221,14 @@ public class EpicFightSceneBuilder extends PonderSceneBuilder {
                 private boolean complete = false;
 
                 @Override
-                public boolean isComplete() { return complete; }
+                public boolean isComplete() {
+                    return complete;
+                }
 
                 @Override
-                public boolean isBlocking() { return true; }
+                public boolean isBlocking() {
+                    return true;
+                }
 
                 @Override
                 public void reset(PonderScene scene) {
@@ -255,10 +264,14 @@ public class EpicFightSceneBuilder extends PonderSceneBuilder {
                 private boolean complete = false;
 
                 @Override
-                public boolean isComplete() { return complete; }
+                public boolean isComplete() {
+                    return complete;
+                }
 
                 @Override
-                public boolean isBlocking() { return true; }
+                public boolean isBlocking() {
+                    return true;
+                }
 
                 @Override
                 public void reset(PonderScene scene) {

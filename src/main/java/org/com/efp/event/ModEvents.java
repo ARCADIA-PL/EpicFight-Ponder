@@ -12,8 +12,8 @@ import org.com.efp.client.render.DummyPlayerRenderer;
 import org.com.efp.client.render.DummyVictimPlayerRenderer;
 import org.com.efp.client.render.patched.PDummyPlayerRenderer;
 import org.com.efp.client.render.patched.PDummyVictimPlayerRenderer;
-import org.com.efp.entity.DummyPlayerEntity;
 import org.com.efp.entity.DummyEntityPatch;
+import org.com.efp.entity.DummyPlayerEntity;
 import org.com.efp.registry.EFPEntities;
 import yesman.epicfight.api.client.forgeevent.PatchedRenderersEvent;
 import yesman.epicfight.api.forgeevent.EntityPatchRegistryEvent;
@@ -42,7 +42,7 @@ public class ModEvents {
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
-    public static void onPatchedRenderer(PatchedRenderersEvent.Add event){
+    public static void onPatchedRenderer(PatchedRenderersEvent.Add event) {
         event.addPatchedEntityRenderer(EFPEntities.DUMMY_PLAYER.get(),
                 entityType -> new PDummyPlayerRenderer(event.getContext(), entityType)
                         .initLayerLast(event.getContext(), entityType));

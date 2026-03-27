@@ -36,7 +36,7 @@ public class CompatInfos {
 
     public static boolean shouldMixin(String targetClassName, String mixinClassName_) {
         var mixinClassName = getClassName(mixinClassName_);
-        
+
         if (CompatMixins.containsKey(MixinClassName.of(mixinClassName))) {
             var should = CompatMixins.get(MixinClassName.of(mixinClassName)).shouldApplyMixin();
             if (should)

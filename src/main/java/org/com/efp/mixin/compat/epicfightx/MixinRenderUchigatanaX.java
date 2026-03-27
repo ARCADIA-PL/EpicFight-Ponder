@@ -23,8 +23,12 @@ import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 @Mixin(value = RenderUchigatanaX.class, remap = false)
 public abstract class MixinRenderUchigatanaX {
 
-    @Final @Shadow private ItemStack sheathStack;
-    @Final @Shadow private ItemStack alterSheathStack;
+    @Final
+    @Shadow
+    private ItemStack sheathStack;
+    @Final
+    @Shadow
+    private ItemStack alterSheathStack;
 
     @Inject(method = "renderItemInHand", at = @At("HEAD"), cancellable = true)
     private void renderForPonderDummy(ItemStack stack, LivingEntityPatch<?> entityPatch, InteractionHand hand, OpenMatrix4f[] poses, MultiBufferSource buffer, PoseStack poseStack, int packedLight, float partialTicks, CallbackInfo ci) {

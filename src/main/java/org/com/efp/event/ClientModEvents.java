@@ -13,8 +13,8 @@ public class ClientModEvents {
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
-       event.enqueueWork(() -> {
-           PonderIndex.addPlugin(new EFPPonderPlugin());
-       });
+        event.enqueueWork(() -> {
+            PonderIndex.addPlugin(new EFPPonderPlugin());
+        });
     }
 }

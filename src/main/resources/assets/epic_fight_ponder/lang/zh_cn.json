@@ -8,11 +8,15 @@
   "epic_fight_ponder.ponder.nothing.header": "无展示",
 
   "epic_fight_ponder.ponder.skill_guard.header": "防御",
-  "epic_fight_ponder.ponder.skill_guard.text_1": "按住[防御]进入防御架势\n可消耗[耐力]抵挡面前的近战伤害",
+  "epic_fight_ponder.ponder.skill_guard.text_1": "按住[防御]进入防御架势\n可消耗[耐力]抵挡面前的近战伤害\n \n连续格挡会使[耐力]消耗急剧增加",
 
-  "epic_fight_ponder.ponder.skill_guard_break.header": "防御崩溃",
-  "epic_fight_ponder.ponder.skill_guard_break.text_1": "太依赖防御并不是一个明智的选择.....",
-  "epic_fight_ponder.ponder.skill_guard_break.text_2": "[耐力]不足时承受高冲击的攻击\n将会进入[破防]的大硬直状态",
+  "epic_fight_ponder.ponder.skill_guard_break.header": "破防",
+  "epic_fight_ponder.ponder.skill_guard_break.text_1": "一味地死守绝非明智之举……",
+  "epic_fight_ponder.ponder.skill_guard_break.text_2": "[耐力]耗尽时承受重击，\n将陷入毫无防备的【破防】大硬直状态。",
+
+  "epic_fight_ponder.ponder.skill_parry.header": "招架——更高级的防御行为",
+  "epic_fight_ponder.ponder.skill_parry.text_1": "摆出防御姿态的瞬间，\n将获得短暂的【招架窗口】。",
+  "epic_fight_ponder.ponder.skill_parry.text_2": "在此窗口内接下攻击，\n仅需消耗极少耐力即可完美化解攻势。",
 
   "epic_fight_ponder.ponder.tachi_basic_attack_combo.header": "太刀 基础连段演示",
   "epic_fight_ponder.ponder.tachi_basic_attack_combo.text_1": "太刀 普通攻击连段",

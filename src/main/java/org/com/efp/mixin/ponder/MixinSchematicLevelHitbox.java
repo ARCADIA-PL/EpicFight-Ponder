@@ -16,7 +16,8 @@ import java.util.function.Predicate;
 @Mixin(value = SchematicLevel.class, remap = false)
 public abstract class MixinSchematicLevelHitbox {
 
-    @Shadow public abstract List<Entity> getEntityList();
+    @Shadow
+    public abstract List<Entity> getEntityList();
 
     @Inject(
             method = "getEntities(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/AABB;Ljava/util/function/Predicate;)Ljava/util/List;",

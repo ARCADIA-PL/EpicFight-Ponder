@@ -8,11 +8,15 @@
   "epic_fight_ponder.ponder.nothing.header": "No Performance",
 
   "epic_fight_ponder.ponder.skill_guard.header": "Guard",
-  "epic_fight_ponder.ponder.skill_guard.text_1": "Hold [Guard] to enter a defensive stance\nconsuming [Stamina] to block frontal melee attacks.",
+  "epic_fight_ponder.ponder.skill_guard.text_1": "Hold [Guard] to enter a defensive stance\nconsuming [Stamina] to block frontal melee attacks.\n \nConsecutive blocks will rapidly drain your [Stamina]",
 
   "epic_fight_ponder.ponder.skill_guard_break.header": "Guard Break",
-  "epic_fight_ponder.ponder.skill_guard_break.text_1": "Over-relying on your guard is rarely a wise choice...",
-  "epic_fight_ponder.ponder.skill_guard_break.text_2": "Taking heavy hits with insufficient [Stamina] will result in a [Guard Break]\nleaving you severely staggered.",
+  "epic_fight_ponder.ponder.skill_guard_break.text_1": "Relying purely on your guard\nis rarely a wise choice...",
+  "epic_fight_ponder.ponder.skill_guard_break.text_2": "Taking heavy blows when depleting your [Stamina]\nwill result in a devastating [Guard Break] stagger.",
+
+  "epic_fight_ponder.ponder.skill_parry.header": "Parry——Advanced Guard Action",
+  "epic_fight_ponder.ponder.skill_parry.text_1": "Raising your weapon to guard\ngrants a split-second [Parry Window].",
+  "epic_fight_ponder.ponder.skill_parry.text_2": "Blocking an attack within this window\nperfectly deflects the blow with minimal stamina cost.",
 
   "epic_fight_ponder.ponder.tachi_basic_attack_combo.header": "Tachi Basic Attack Combo",
   "epic_fight_ponder.ponder.tachi_basic_attack_combo.text_1": "Tachi Basic Attacks",

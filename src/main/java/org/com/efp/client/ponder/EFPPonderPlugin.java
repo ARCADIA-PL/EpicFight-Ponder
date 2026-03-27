@@ -17,10 +17,6 @@ import yesman.epicfight.world.item.*;
 
 public class EFPPonderPlugin implements PonderPlugin {
 
-    public interface PonderSceneMethod {
-        void build(SceneBuilder scene, SceneBuildingUtil util);
-    }
-
     @Override
     public @NotNull String getModId() {
         return EpicFightPonder.MOD_ID;
@@ -55,6 +51,7 @@ public class EFPPonderPlugin implements PonderPlugin {
         registerSkillBookFallback(itemHelper, EFPSKillScenes::showcaseNoSkill);
 
         registerSkill(skillHelper, "epicfight:guard", EFPSKillScenes::showcaseGuardSkill, EFPSKillScenes::showcaseGuardSkillBreak);
+        registerSkill(skillHelper, "epicfight:parrying", EFPSKillScenes::showcaseParrySkill);
     }
 
     private void registerWeaponGroup(PonderSceneRegistrationHelper<Item> helper, Class<? extends Item> weaponClass, PonderSceneMethod... scenes) {
@@ -93,9 +90,10 @@ public class EFPPonderPlugin implements PonderPlugin {
 
     /**
      * 为特定的技能注册专属思索场景
-     * @param helper 技能的 RegistrationHelper
+     *
+     * @param helper  技能的 RegistrationHelper
      * @param skillId 技能全名，例如 "epicfight:guard"
-     * @param scenes 该技能对应的展示场景
+     * @param scenes  该技能对应的展示场景
      */
     private void registerSkill(PonderSceneRegistrationHelper<String> helper, String skillId, PonderSceneMethod... scenes) {
         registerSkill(helper, skillId, "epicfight_showcase", scenes);
@@ -106,5 +104,9 @@ public class EFPPonderPlugin implements PonderPlugin {
         for (PonderSceneMethod scene : scenes) {
             component.addStoryBoard(structureId, scene::build);
         }
+    }
+
+    public interface PonderSceneMethod {
+        void build(SceneBuilder scene, SceneBuildingUtil util);
     }
 }

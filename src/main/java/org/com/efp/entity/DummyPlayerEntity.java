@@ -22,16 +22,16 @@ public class DummyPlayerEntity extends PathfinderMob {
         super(type, level);
     }
 
-    @Override
-    protected void registerGoals() {
-    }
-
     public static AttributeSupplier createAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 1000.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
                 .build();
+    }
+
+    @Override
+    protected void registerGoals() {
     }
 
     public void sprintForward(double blocks, int durationTicks) {

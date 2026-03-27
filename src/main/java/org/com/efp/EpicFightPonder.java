@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 public class EpicFightPonder {
     public static final String MOD_ID = "epic_fight_ponder";
     private static final Logger LOGGER = LogUtils.getLogger();
+
     public EpicFightPonder(FMLJavaModLoadingContext context) {
         IEventBus bus = context.getModEventBus();
         bus.addListener(this::commonSetup);

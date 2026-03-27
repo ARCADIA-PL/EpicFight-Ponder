@@ -163,7 +163,7 @@ public class EFPPonderTrailParticle extends AnimationTrailParticle {
 
         if (this.shouldRemove) {
             if (TrailInfo.isValidTime(this.trailInfo.fadeTime())) {
-                fading = ((float)this.lifetime / (float)this.trailInfo.trailLifetime());
+                fading = ((float) this.lifetime / (float) this.trailInfo.trailLifetime());
             } else {
                 fading = Mth.clamp((this.lifetime + (1.0F - partialTick)) / this.trailInfo.trailLifetime(), 0.0F, 1.0F);
             }
@@ -173,13 +173,13 @@ public class EFPPonderTrailParticle extends AnimationTrailParticle {
         float from = -partialStartEdge;
         float to = -partialStartEdge + interval;
 
-        int r = (int)(this.rCol * 255.0F);
-        int g = (int)(this.gCol * 255.0F);
-        int b = (int)(this.bCol * 255.0F);
+        int r = (int) (this.rCol * 255.0F);
+        int g = (int) (this.gCol * 255.0F);
+        int b = (int) (this.bCol * 255.0F);
         int overlay = net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY;
         int light = 15728880;
 
-        for (int i = (int)(startEdge); i < (int)endEdge + 1; i++) {
+        for (int i = (int) (startEdge); i < (int) endEdge + 1; i++) {
             if (i < 0 || i + 1 >= this.trailEdges.size()) continue;
 
             TrailEdge e1 = this.trailEdges.get(i);
@@ -188,19 +188,19 @@ public class EFPPonderTrailParticle extends AnimationTrailParticle {
             float alphaFrom = Mth.clamp(from, 0.0F, 1.0F);
             float alphaTo = Mth.clamp(to, 0.0F, 1.0F);
 
-            int a1 = (int)(this.alpha * alphaFrom * fading * 255.0F);
-            int a2 = (int)(this.alpha * alphaTo * fading * 255.0F);
+            int a1 = (int) (this.alpha * alphaFrom * fading * 255.0F);
+            int a2 = (int) (this.alpha * alphaTo * fading * 255.0F);
 
-            vertexConsumer.vertex(matrix4f, (float)e1.start.x, (float)e1.start.y, (float)e1.start.z)
+            vertexConsumer.vertex(matrix4f, (float) e1.start.x, (float) e1.start.y, (float) e1.start.z)
                     .color(r, g, b, a1).uv(from, 1.0F).overlayCoords(overlay).uv2(light).normal(matrix3f, 0, 1, 0).endVertex();
 
-            vertexConsumer.vertex(matrix4f, (float)e1.end.x, (float)e1.end.y, (float)e1.end.z)
+            vertexConsumer.vertex(matrix4f, (float) e1.end.x, (float) e1.end.y, (float) e1.end.z)
                     .color(r, g, b, a1).uv(from, 0.0F).overlayCoords(overlay).uv2(light).normal(matrix3f, 0, 1, 0).endVertex();
 
-            vertexConsumer.vertex(matrix4f, (float)e2.end.x, (float)e2.end.y, (float)e2.end.z)
+            vertexConsumer.vertex(matrix4f, (float) e2.end.x, (float) e2.end.y, (float) e2.end.z)
                     .color(r, g, b, a2).uv(to, 0.0F).overlayCoords(overlay).uv2(light).normal(matrix3f, 0, 1, 0).endVertex();
 
-            vertexConsumer.vertex(matrix4f, (float)e2.start.x, (float)e2.start.y, (float)e2.start.z)
+            vertexConsumer.vertex(matrix4f, (float) e2.start.x, (float) e2.start.y, (float) e2.start.z)
                     .color(r, g, b, a2).uv(to, 1.0F).overlayCoords(overlay).uv2(light).normal(matrix3f, 0, 1, 0).endVertex();
 
             from += interval;

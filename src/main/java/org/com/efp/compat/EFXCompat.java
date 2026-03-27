@@ -7,7 +7,6 @@ import net.createmod.ponder.api.element.EntityElement;
 import net.createmod.ponder.api.scene.SceneBuilder;
 import net.createmod.ponder.api.scene.SceneBuildingUtil;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import org.com.efp.api.ponder.EpicFightSceneBuilder;
 import org.com.efp.client.ponder.EFPSceneUtils;
 import yesman.epicfight.world.item.EpicFightItems;
@@ -44,7 +43,7 @@ public class EFXCompat {
         world.waitForCanBasicAttack(attacker);
         world.modifyEntityPlaySpeed(attacker, 0.25F);
         EFPSceneUtils.showTextAtTop(builder, util, "epic_fight_ponder.ponder.tachi_rushing_tempo.text_3", 100, 5, 2, 5);
-        builder.idle(20);
+        builder.idle(15);
 
         EFPSceneUtils.playDerivationWithSlowMo(builder, attacker, EFPSceneUtils.WaitType.CAN_USE_SKILL, AnimationsX.TACHI_AUTO2, 0.25F, 10);
         EFPSceneUtils.playDerivationWithSlowMo(builder, attacker, EFPSceneUtils.WaitType.CAN_BASIC_ATTACK, AnimationsX.RUSHING_TEMPO2, 0.25F, 10);

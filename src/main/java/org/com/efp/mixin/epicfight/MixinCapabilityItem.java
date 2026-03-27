@@ -1,14 +1,14 @@
 package org.com.efp.mixin.epicfight;
 
+import org.com.efp.entity.DummyEntityPatch;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
-import yesman.epicfight.world.capabilities.item.WeaponCapability;
-import org.com.efp.entity.DummyEntityPatch;
 import yesman.epicfight.world.capabilities.item.Style;
+import yesman.epicfight.world.capabilities.item.WeaponCapability;
 
 @Mixin(value = {CapabilityItem.class, WeaponCapability.class}, remap = false)
 public class MixinCapabilityItem {

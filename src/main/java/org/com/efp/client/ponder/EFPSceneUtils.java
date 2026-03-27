@@ -4,24 +4,36 @@ import net.createmod.ponder.api.element.ElementLink;
 import net.createmod.ponder.api.element.EntityElement;
 import net.createmod.ponder.api.scene.SceneBuilder;
 import net.createmod.ponder.api.scene.SceneBuildingUtil;
+import net.createmod.ponder.foundation.PonderScene;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import org.com.efp.api.ponder.EpicFightSceneBuilder;
 import org.com.efp.entity.DummyEntityPatch;
+import org.com.efp.entity.DummyPlayerEntity;
 import org.com.efp.mixin.epicfight.WeaponCapabilityAccessor;
 import org.com.efp.registry.EFPEntities;
+import org.joml.Vector3d;
 import yesman.epicfight.api.animation.AnimationManager;
+import yesman.epicfight.api.animation.LivingMotions;
 import yesman.epicfight.api.animation.types.AttackAnimation;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.gameasset.Animations;
+import yesman.epicfight.particle.HitParticleType;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
+import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.capabilities.item.Style;
 import yesman.epicfight.world.capabilities.item.WeaponCapability;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 
 public class EFPSceneUtils {
 
@@ -382,5 +394,43 @@ public class EFPSceneUtils {
 
     public static void showcaseUchigatanaStandardWeaponCombo(SceneBuilder baseScene, SceneBuildingUtil util, int size, String sceneId, ItemStack weapon) {
         showcaseUchigatanaStandardWeaponCombo(baseScene, util, size, sceneId, weapon, ItemStack.EMPTY, CapabilityItem.Styles.TWO_HAND, true, true);
+    }
+
+    /**
+     * @param sceneBuilder 当前的 SceneBuilder
+     * @param link  想要解析的实体链接
+     * @return 真实的 Entity 对象，如果实体不存在则返回 null
+     */
+    @Nullable
+    public static Entity resolveEntity(SceneBuilder sceneBuilder, ElementLink<EntityElement> link) {
+        PonderScene scene = sceneBuilder.getScene();
+        EntityElement element = scene.resolve(link);
+        if (element != null) {
+            final Entity[] extractedEntity = new Entity[1];
+
+            element.ifPresent(entity -> {
+                extractedEntity[0] = entity;
+            });
+
+            return extractedEntity[0];
+        }
+        return null;
+    }
+
+    public static void playSoundClientSide(net.minecraft.sounds.SoundEvent sound, float pitch, float volume) {
+        Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(sound, pitch, volume));
+    }
+
+    public static void spawnEfmHitParticleClientSide(
+            Level level,
+            HitParticleType particle,
+            Entity target,
+            Entity attacker,
+            BiFunction<Entity, Entity, Vector3d> posFunc,
+            BiFunction<Entity, Entity, Vector3d> argFunc) {
+
+        org.joml.Vector3d pos = posFunc.apply(target, attacker);
+        org.joml.Vector3d args = argFunc.apply(target, attacker);
+        level.addParticle(particle, pos.x, pos.y, pos.z, args.x, args.y, args.z);
     }
 }

@@ -3,6 +3,7 @@ package org.com.efp.client.ponder.trail;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix3f;
@@ -145,6 +146,10 @@ public class EFPPonderTrailParticle extends AnimationTrailParticle {
     public void renderForPonder(VertexConsumer vertexConsumer, PoseStack poseStack, float partialTick) {
         if (this.trailEdges.isEmpty()) return;
 
+        poseStack.pushPose();
+        float yaw = Mth.lerp(partialTick, this.entityPatch.getOriginal().yRotO, this.entityPatch.getOriginal().getYRot());
+        poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - yaw));
+
         Matrix4f matrix4f = poseStack.last().pose();
         Matrix3f matrix3f = poseStack.last().normal();
 
@@ -201,6 +206,8 @@ public class EFPPonderTrailParticle extends AnimationTrailParticle {
             from += interval;
             to += interval;
         }
+
+        poseStack.popPose();
     }
 
     public boolean isAlive() {

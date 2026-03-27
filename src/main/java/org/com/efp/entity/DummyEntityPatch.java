@@ -51,6 +51,18 @@ public class DummyEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<
     private Consumer<PonderCombatEvent.Hit> currentAnimHitCallback = null;
     private Consumer<PonderCombatEvent.BeHit> currentAnimBeHitCallback = null;
 
+    private static class DelayedTask {
+        int ticksRemaining;
+        Runnable action;
+
+        DelayedTask(int ticks, Runnable action) {
+            this.ticksRemaining = ticks;
+            this.action = action;
+        }
+    }
+
+    private final List<DelayedTask> delayedTasks = new ArrayList<>();
+
     public DummyEntityPatch() {
         super(Factions.NEUTRAL);
     }
@@ -125,11 +137,33 @@ public class DummyEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<
         }
     }
 
+    public void scheduleDelayedTask(int delayTicks, Runnable action) {
+        this.delayedTasks.add(new DelayedTask(delayTicks, action));
+    }
+
     @Override
     public void tick(LivingEvent.LivingTickEvent event) {
         super.tick(event);
 
+        if (!this.delayedTasks.isEmpty()) {
+            Iterator<DelayedTask> iterator = this.delayedTasks.iterator();
+            while (iterator.hasNext()) {
+                DelayedTask task = iterator.next();
+                task.ticksRemaining--;
+
+                if (task.ticksRemaining <= 0) {
+                    task.action.run();
+                    iterator.remove();
+                }
+            }
+        }
+
         if (this.original.level() instanceof PonderLevel) {
+            this.original.yBodyRot = this.original.getYRot();
+            this.original.yBodyRotO = this.original.yRotO;
+            this.original.yHeadRot = this.original.getYRot();
+            this.original.yHeadRotO = this.original.yRotO;
+
             this.updateActiveTrails();
             this.handleTrailSpawning();
             this.simulatePonderHitbox();
@@ -206,8 +240,6 @@ public class DummyEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<
 
         if (time < prevTime || playingAnim != this.lastCheckedAnim) {
             this.clearPonderMemory();
-            this.currentAnimHitCallback = null;
-            this.currentAnimBeHitCallback = null;
         }
         this.lastCheckedAnim = playingAnim;
 
@@ -322,7 +354,7 @@ public class DummyEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<
         }
     }
 
-    private void clearPonderMemory() {
+    public void clearPonderMemory() {
         this.phaseHitMemory.clear();
         this.playedSwingPhases.clear();
     }

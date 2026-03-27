@@ -407,7 +407,11 @@ public class EpicFightSceneBuilder extends PonderSceneBuilder {
         }
 
         public <A extends StaticAnimation> void playAnimation(ElementLink<EntityElement> link, AnimationManager.AnimationAccessor<A> animationAccessor, float transitionTimeModifier) {
-            this.modifyEntityPatch(link, LivingEntityPatch.class, patch -> patch.playAnimation(animationAccessor, transitionTimeModifier));
+            this.modifyEntityPatch(link, DummyEntityPatch.class, patch -> {
+                patch.setCurrentAnimHitCallback(null);
+                patch.setCurrentAnimBeHitCallback(null);
+                patch.playAnimation(animationAccessor, transitionTimeModifier);
+            });
         }
 
         public <A extends StaticAnimation> void playAnimation(

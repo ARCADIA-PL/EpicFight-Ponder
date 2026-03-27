@@ -76,6 +76,44 @@ public class EFPSceneUtils {
         return spawnDummyActor(builder, x, y, z, yRot, mainHandItem, ItemStack.EMPTY, null);
     }
 
+    public static ElementLink<EntityElement> spawnDummyVictim(EpicFightSceneBuilder builder, double x, double y, double z, float yRot, ItemStack mainHandItem, ItemStack offHandItem, Style forcedStyle) {
+        return builder.world().createEntity(level -> {
+            LivingEntity victim = EFPEntities.DUMMY_VICTIM_PLAYER.get().create(level);
+            if (victim != null) {
+                victim.setPos(x, y, z);
+                victim.setYRot(yRot);
+                victim.yBodyRot = yRot;
+                victim.yHeadRot = yRot;
+
+                if (mainHandItem != null && !mainHandItem.isEmpty()) {
+                    victim.setItemInHand(InteractionHand.MAIN_HAND, mainHandItem);
+                }
+
+                if (offHandItem != null && !offHandItem.isEmpty()) {
+                    victim.setItemInHand(InteractionHand.OFF_HAND, offHandItem);
+                }
+
+                EpicFightCapabilities.getUnparameterizedEntityPatch(victim, DummyEntityPatch.class).ifPresent(patch -> {
+                    patch.setYRot(yRot);
+                    patch.setYRotO(yRot);
+                    if (forcedStyle != null) {
+                        patch.setForcedStyle(forcedStyle);
+                    }
+                    patch.updateLivingMotionsForPonder();
+                });
+            }
+            return victim;
+        });
+    }
+
+    public static ElementLink<EntityElement> spawnDummyVictim(EpicFightSceneBuilder builder, double x, double y, double z, float yRot, ItemStack mainHandItem, ItemStack offHandItem) {
+        return spawnDummyVictim(builder, x, y, z, yRot, mainHandItem, offHandItem, null);
+    }
+
+    public static ElementLink<EntityElement> spawnDummyVictim(EpicFightSceneBuilder builder, double x, double y, double z, float yRot, ItemStack mainHandItem) {
+        return spawnDummyVictim(builder, x, y, z, yRot, mainHandItem, ItemStack.EMPTY, null);
+    }
+
     /**
      * 3. 显示浮空文本
      */

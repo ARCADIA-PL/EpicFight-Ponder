@@ -9,7 +9,8 @@
     "epicfight.AnimationPlayerMixin",
     "epicfight.MixinCapabilityItem",
     "epicfight.WeaponCapabilityAccessor",
-    "epicfight.client.RenderEngineEventsMixin"
+    "epicfight.client.RenderEngineEventsMixin",
+    "ponder.MixinSchematicLevelHitbox"
   ],
   "client": [
     "compat.epicfightx.MixinRenderUchigatanaX"

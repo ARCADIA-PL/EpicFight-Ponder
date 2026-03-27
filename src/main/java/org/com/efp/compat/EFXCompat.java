@@ -7,6 +7,7 @@ import net.createmod.ponder.api.element.EntityElement;
 import net.createmod.ponder.api.scene.SceneBuilder;
 import net.createmod.ponder.api.scene.SceneBuildingUtil;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import org.com.efp.api.ponder.EpicFightSceneBuilder;
 import org.com.efp.client.ponder.EFPSceneUtils;
 import yesman.epicfight.world.item.EpicFightItems;
@@ -22,6 +23,8 @@ public class EFXCompat {
 
         EFPSceneUtils.setupStandardScene(builder, 11, "tachi_rushing_tempo", "epic_fight_ponder.ponder.tachi_rushing_tempo.title");
         ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.DIAMOND_TACHI.get()));
+
+        ElementLink<EntityElement> victim = EFPSceneUtils.spawnDummyVictim(builder, 5.5, 1, 4.0, 0, new ItemStack(Items.DIAMOND_SWORD));
         builder.idle(20);
 
         EFPSceneUtils.showTextAtTop(builder, util, "epic_fight_ponder.ponder.tachi_rushing_tempo.text_1", 40, 5, 1, 5);

@@ -19,6 +19,7 @@ import yesman.epicfight.api.animation.types.*;
 import yesman.epicfight.api.asset.AssetAccessor;
 import yesman.epicfight.api.client.animation.property.ClientAnimationProperties;
 import yesman.epicfight.api.client.animation.property.TrailInfo;
+import yesman.epicfight.api.collider.Collider;
 import yesman.epicfight.client.ClientEngine;
 import yesman.epicfight.client.renderer.patched.item.RenderItemBase;
 import yesman.epicfight.gameasset.Animations;
@@ -110,46 +111,43 @@ public class DummyEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<
 
     @Override
     public void tick(LivingEvent.LivingTickEvent event) {
+        LivingEntity original = this.getOriginal();
+        if (original.level() instanceof PonderLevel) {
+            original.yBodyRot = original.getYRot();
+            original.yBodyRotO = original.yRotO;
+            original.yHeadRot = original.getYRot();
+            original.yHeadRotO = original.yRotO;
+        }
+
         super.tick(event);
 
         if (this.original.level() instanceof PonderLevel) {
-
             this.activeTrails.forEach(EFPPonderTrailParticle::tick);
             this.activeTrails.removeIf(trail -> !trail.isAlive());
 
             AnimationPlayer animPlayer = this.getClientAnimator() != null ? this.getClientAnimator().getPlayerFor(null) : null;
             if (animPlayer != null) {
                 AssetAccessor<? extends StaticAnimation> currentAnim = animPlayer.getAnimation().get().getRealAnimation();
-
                 if (currentAnim != null && currentAnim != lastPlayedAnimation) {
                     lastPlayedAnimation = currentAnim;
-
                     currentAnim.get().getProperty(ClientAnimationProperties.TRAIL_EFFECT).ifPresent(trailInfos -> {
                         for (TrailInfo info : trailInfos) {
                             TrailInfo processedInfo = info;
-
                             if (processedInfo.hand() != null) {
                                 ItemStack stack = this.getOriginal().getItemInHand(processedInfo.hand());
                                 RenderItemBase renderItemBase = ClientEngine.getInstance().renderEngine.getItemRenderer(stack);
-
                                 if (renderItemBase != null && renderItemBase.trailInfo() != null) {
                                     processedInfo = renderItemBase.trailInfo().overwrite(processedInfo);
                                 }
                             }
-
                             processedInfo = this.getEntityDecorations().getModifiedTrailInfo(
                                     processedInfo,
                                     processedInfo.hand() == null ? CapabilityItem.EMPTY : this.getAdvancedHoldingItemCapability(processedInfo.hand())
                             );
-
-                            if (processedInfo.start() == null || processedInfo.end() == null) {
-                                continue;
-                            }
-
+                            if (processedInfo.start() == null || processedInfo.end() == null) continue;
                             if (processedInfo.rCol() < 0.0F || processedInfo.gCol() < 0.0F || processedInfo.bCol() < 0.0F) {
                                 processedInfo = processedInfo.unpackAsBuilder().r(1.0F).g(1.0F).b(1.0F).create();
                             }
-
                             Joint joint = this.getArmature().searchJointByName(processedInfo.joint());
                             if (joint != null) {
                                 EFPPonderTrailParticle trail = new EFPPonderTrailParticle(this, joint, currentAnim, processedInfo);
@@ -174,10 +172,7 @@ public class DummyEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<
         }
 
         DynamicAnimation playingAnim = player.getAnimation().get();
-
-        if (playingAnim.isLinkAnimation()) {
-            return;
-        }
+        if (playingAnim.isLinkAnimation()) return;
 
         if (!(playingAnim instanceof AttackAnimation attackAnim)) {
             this.clearPonderMemory();
@@ -197,62 +192,57 @@ public class DummyEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<
         EntityState state = playingAnim.getState(this, time);
 
         if (state.attacking() || (prevState.getLevel() <= 2 && state.getLevel() > 2)) {
-
             List<AttackAnimation.Phase> activePhases = new ArrayList<>();
 
             if (attackAnim.getClass().getSimpleName().equals("MultiPhaseAttackAnimation") ||
                     attackAnim.getClass().getName().contains("MultiPhase")) {
                 for (AttackAnimation.Phase phase : attackAnim.phases) {
-                    if (time >= phase.antic && time <= phase.contact) {
-                        activePhases.add(phase);
-                    }
+                    if (time >= phase.antic && time <= phase.contact) activePhases.add(phase);
                 }
             } else {
                 AttackAnimation.Phase currentPhase = attackAnim.getPhaseByTime(time);
-                if (currentPhase != null) {
-                    activePhases.add(currentPhase);
-                }
+                if (currentPhase != null) activePhases.add(currentPhase);
             }
 
             for (AttackAnimation.Phase phase : activePhases) {
-
                 if (!this.playedSwingPhases.contains(phase)) {
                     this.playedSwingPhases.add(phase);
                     SoundEvent swingSound = phase.getProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND).orElse(this.getSwingSound(phase.hand));
-                    if (swingSound != null) {
-                        Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(swingSound, 1, 1.0F));
-                    }
+                    if (swingSound != null) Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(swingSound, 1, 1.0F));
                 }
 
                 float prevPoseTime = prevState.attacking() ? prevTime : phase.preDelay;
                 float poseTime = state.attacking() ? time : phase.contact;
-                float playSpeed = attackAnim.getPlaySpeed(this, attackAnim);
 
-                List<Entity> hits = phase.getCollidingEntities(this, attackAnim, prevPoseTime, poseTime, playSpeed);
+                if (poseTime <= prevPoseTime) poseTime = prevPoseTime + 0.01f;
+
+                float playSpeed = attackAnim.getPlaySpeed(this, attackAnim);
+                List<Entity> hits = new ArrayList<>();
+
+                for (AttackAnimation.JointColliderPair colliderInfo : phase.colliders) {
+                    Collider collider = colliderInfo.getSecond() != null ? colliderInfo.getSecond() : this.getColliderMatching(phase.hand);
+                    if (collider != null) {
+                        hits.addAll(collider.updateAndSelectCollideEntity(this, attackAnim, prevPoseTime, poseTime, colliderInfo.getFirst(), playSpeed));
+                    }
+                }
 
                 Set<Entity> currentPhaseHitMemory = this.phaseHitMemory.computeIfAbsent(phase, k -> new HashSet<>());
-
                 for (Entity hit : hits) {
-                    if (hit != this.getOriginal() && hit instanceof LivingEntity target && !currentPhaseHitMemory.contains(target)) {
+                    if (!(hit instanceof LivingEntity target)) continue;
+                    if (currentPhaseHitMemory.contains(target)) continue;
 
-                        currentPhaseHitMemory.add(target);
+                    currentPhaseHitMemory.add(target);
 
-                        SoundEvent hitSound = phase.getProperty(AnimationProperty.AttackPhaseProperty.HIT_SOUND).orElse(this.getWeaponHitSound(phase.hand));
-                        if (hitSound != null) {
-                            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(hitSound, 1, 1.0F));
-                        }
+                    SoundEvent hitSound = phase.getProperty(AnimationProperty.AttackPhaseProperty.HIT_SOUND).orElse(this.getWeaponHitSound(phase.hand));
+                    if (hitSound != null) Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(hitSound, 1, 1.0F));
 
-                        HitParticleType particle = phase.getProperty(AnimationProperty.AttackPhaseProperty.PARTICLE)
-                                .map(Supplier::get)
-                                .orElse(this.getWeaponHitParticle(phase.hand));
+                    HitParticleType particle = phase.getProperty(AnimationProperty.AttackPhaseProperty.PARTICLE)
+                            .map(Supplier::get).orElse(this.getWeaponHitParticle(phase.hand));
 
-                        if (particle != null) {
-                            Vector3d pos = particle.positionProvider.apply(target, this.getOriginal());
-                            Vector3d args = particle.argumentProvider.apply(target, this.getOriginal());
-                            this.getOriginal().level().addParticle(
-                                    particle, pos.x, pos.y, pos.z, args.x, args.y, args.z
-                            );
-                        }
+                    if (particle != null) {
+                        Vector3d pos = particle.positionProvider.apply(target, this.getOriginal());
+                        Vector3d args = particle.argumentProvider.apply(target, this.getOriginal());
+                        this.getOriginal().level().addParticle(particle, pos.x, pos.y, pos.z, args.x, args.y, args.z);
                     }
                 }
             }

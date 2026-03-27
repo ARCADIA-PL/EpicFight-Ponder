@@ -10,7 +10,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import org.com.efp.api.event.PonderCombatEvent;
 import org.com.efp.client.ponder.trail.EFPPonderTrailParticle;
 import org.joml.Vector3d;
 import yesman.epicfight.api.animation.*;
@@ -32,6 +34,7 @@ import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.capabilities.item.Style;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class DummyEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<T> {
@@ -44,8 +47,21 @@ public class DummyEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<
     private DynamicAnimation lastCheckedAnim = null;
     private Style forcedStyle = null;
 
+    private Consumer<PonderCombatEvent.Hit> currentAnimHitCallback = null;
+    private Consumer<PonderCombatEvent.BeHit> currentAnimBeHitCallback = null;
+
     public DummyEntityPatch() {
         super(Factions.NEUTRAL);
+    }
+
+    public void setCurrentAnimHitCallback(Consumer<PonderCombatEvent.Hit> callback) { this.currentAnimHitCallback = callback; }
+    public void setCurrentAnimBeHitCallback(Consumer<PonderCombatEvent.BeHit> callback) { this.currentAnimBeHitCallback = callback; }
+
+    public boolean hasHitTarget(Entity target) {
+        for (Set<Entity> hits : this.phaseHitMemory.values()) {
+            if (hits.contains(target)) return true;
+        }
+        return false;
     }
 
     @Override
@@ -85,7 +101,6 @@ public class DummyEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<
 
             if (byStyle.containsKey(style) || byStyle.containsKey(CapabilityItem.Styles.COMMON)) {
                 Set<Pair<LivingMotion, AnimationManager.AnimationAccessor<? extends StaticAnimation>>> animModifierSet = byStyle.getOrDefault(style, byStyle.get(CapabilityItem.Styles.COMMON));
-
                 for (Pair<LivingMotion, AnimationManager.AnimationAccessor<? extends StaticAnimation>> pair : animModifierSet) {
                     newLivingAnimations.put(pair.getFirst(), pair.getSecond());
                 }
@@ -111,56 +126,63 @@ public class DummyEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<
 
     @Override
     public void tick(LivingEvent.LivingTickEvent event) {
-        LivingEntity original = this.getOriginal();
-        if (original.level() instanceof PonderLevel) {
-            original.yBodyRot = original.getYRot();
-            original.yBodyRotO = original.yRotO;
-            original.yHeadRot = original.getYRot();
-            original.yHeadRotO = original.yRotO;
-        }
-
         super.tick(event);
 
         if (this.original.level() instanceof PonderLevel) {
-            this.activeTrails.forEach(EFPPonderTrailParticle::tick);
-            this.activeTrails.removeIf(trail -> !trail.isAlive());
-
-            AnimationPlayer animPlayer = this.getClientAnimator() != null ? this.getClientAnimator().getPlayerFor(null) : null;
-            if (animPlayer != null) {
-                AssetAccessor<? extends StaticAnimation> currentAnim = animPlayer.getAnimation().get().getRealAnimation();
-                if (currentAnim != null && currentAnim != lastPlayedAnimation) {
-                    lastPlayedAnimation = currentAnim;
-                    currentAnim.get().getProperty(ClientAnimationProperties.TRAIL_EFFECT).ifPresent(trailInfos -> {
-                        for (TrailInfo info : trailInfos) {
-                            TrailInfo processedInfo = info;
-                            if (processedInfo.hand() != null) {
-                                ItemStack stack = this.getOriginal().getItemInHand(processedInfo.hand());
-                                RenderItemBase renderItemBase = ClientEngine.getInstance().renderEngine.getItemRenderer(stack);
-                                if (renderItemBase != null && renderItemBase.trailInfo() != null) {
-                                    processedInfo = renderItemBase.trailInfo().overwrite(processedInfo);
-                                }
-                            }
-                            processedInfo = this.getEntityDecorations().getModifiedTrailInfo(
-                                    processedInfo,
-                                    processedInfo.hand() == null ? CapabilityItem.EMPTY : this.getAdvancedHoldingItemCapability(processedInfo.hand())
-                            );
-                            if (processedInfo.start() == null || processedInfo.end() == null) continue;
-                            if (processedInfo.rCol() < 0.0F || processedInfo.gCol() < 0.0F || processedInfo.bCol() < 0.0F) {
-                                processedInfo = processedInfo.unpackAsBuilder().r(1.0F).g(1.0F).b(1.0F).create();
-                            }
-                            Joint joint = this.getArmature().searchJointByName(processedInfo.joint());
-                            if (joint != null) {
-                                EFPPonderTrailParticle trail = new EFPPonderTrailParticle(this, joint, currentAnim, processedInfo);
-                                this.activeTrails.add(trail);
-                            }
-                        }
-                    });
-                }
-            } else {
-                lastPlayedAnimation = null;
-            }
-
+            this.updateActiveTrails();
+            this.handleTrailSpawning();
             this.simulatePonderHitbox();
+        }
+    }
+
+    private void updateActiveTrails() {
+        this.activeTrails.forEach(EFPPonderTrailParticle::tick);
+        this.activeTrails.removeIf(trail -> !trail.isAlive());
+    }
+
+    private void handleTrailSpawning() {
+        AnimationPlayer animPlayer = this.getClientAnimator() != null ? this.getClientAnimator().getPlayerFor(null) : null;
+        if (animPlayer == null) {
+            this.lastPlayedAnimation = null;
+            return;
+        }
+
+        AssetAccessor<? extends StaticAnimation> currentAnim = animPlayer.getAnimation().get().getRealAnimation();
+        if (currentAnim != null && currentAnim != lastPlayedAnimation) {
+            this.lastPlayedAnimation = currentAnim;
+            currentAnim.get().getProperty(ClientAnimationProperties.TRAIL_EFFECT).ifPresent(trailInfos -> {
+                for (TrailInfo info : trailInfos) {
+                    this.spawnTrailParticle(currentAnim, info);
+                }
+            });
+        }
+    }
+
+    private void spawnTrailParticle(AssetAccessor<? extends StaticAnimation> currentAnim, TrailInfo info) {
+        TrailInfo processedInfo = info;
+
+        if (processedInfo.hand() != null) {
+            ItemStack stack = this.getOriginal().getItemInHand(processedInfo.hand());
+            RenderItemBase renderItemBase = ClientEngine.getInstance().renderEngine.getItemRenderer(stack);
+            if (renderItemBase != null && renderItemBase.trailInfo() != null) {
+                processedInfo = renderItemBase.trailInfo().overwrite(processedInfo);
+            }
+        }
+
+        processedInfo = this.getEntityDecorations().getModifiedTrailInfo(
+                processedInfo,
+                processedInfo.hand() == null ? CapabilityItem.EMPTY : this.getAdvancedHoldingItemCapability(processedInfo.hand())
+        );
+
+        if (processedInfo.start() == null || processedInfo.end() == null) return;
+
+        if (processedInfo.rCol() < 0.0F || processedInfo.gCol() < 0.0F || processedInfo.bCol() < 0.0F) {
+            processedInfo = processedInfo.unpackAsBuilder().r(1.0F).g(1.0F).b(1.0F).create();
+        }
+
+        Joint joint = this.getArmature().searchJointByName(processedInfo.joint());
+        if (joint != null) {
+            this.activeTrails.add(new EFPPonderTrailParticle(this, joint, currentAnim, processedInfo));
         }
     }
 
@@ -172,9 +194,7 @@ public class DummyEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<
         }
 
         DynamicAnimation playingAnim = player.getAnimation().get();
-        if (playingAnim.isLinkAnimation()) return;
-
-        if (!(playingAnim instanceof AttackAnimation attackAnim)) {
+        if (playingAnim.isLinkAnimation() || !(playingAnim instanceof AttackAnimation attackAnim)) {
             this.clearPonderMemory();
             this.lastCheckedAnim = playingAnim;
             return;
@@ -185,6 +205,8 @@ public class DummyEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<
 
         if (time < prevTime || playingAnim != this.lastCheckedAnim) {
             this.clearPonderMemory();
+            this.currentAnimHitCallback = null;
+            this.currentAnimBeHitCallback = null;
         }
         this.lastCheckedAnim = playingAnim;
 
@@ -192,60 +214,98 @@ public class DummyEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<
         EntityState state = playingAnim.getState(this, time);
 
         if (state.attacking() || (prevState.getLevel() <= 2 && state.getLevel() > 2)) {
-            List<AttackAnimation.Phase> activePhases = new ArrayList<>();
+            this.processAttackPhases(attackAnim, prevTime, time, prevState, state);
+        }
+    }
 
-            if (attackAnim.getClass().getSimpleName().equals("MultiPhaseAttackAnimation") ||
-                    attackAnim.getClass().getName().contains("MultiPhase")) {
-                for (AttackAnimation.Phase phase : attackAnim.phases) {
-                    if (time >= phase.antic && time <= phase.contact) activePhases.add(phase);
-                }
-            } else {
-                AttackAnimation.Phase currentPhase = attackAnim.getPhaseByTime(time);
-                if (currentPhase != null) activePhases.add(currentPhase);
+    private void processAttackPhases(AttackAnimation attackAnim, float prevTime, float time, EntityState prevState, EntityState state) {
+        List<AttackAnimation.Phase> activePhases = this.getActivePhases(attackAnim, time);
+
+        for (AttackAnimation.Phase phase : activePhases) {
+            this.handleSwingSound(phase);
+            List<Entity> hits = this.calculateHitsForPhase(attackAnim, phase, prevTime, time, prevState, state);
+            this.processHitTargets(attackAnim, phase, hits, time);
+        }
+    }
+
+    private List<AttackAnimation.Phase> getActivePhases(AttackAnimation attackAnim, float time) {
+        List<AttackAnimation.Phase> activePhases = new ArrayList<>();
+        if (attackAnim.getClass().getSimpleName().equals("MultiPhaseAttackAnimation") ||
+                attackAnim.getClass().getName().contains("MultiPhase")) {
+            for (AttackAnimation.Phase phase : attackAnim.phases) {
+                if (time >= phase.antic && time <= phase.contact) activePhases.add(phase);
             }
+        } else {
+            AttackAnimation.Phase currentPhase = attackAnim.getPhaseByTime(time);
+            if (currentPhase != null) activePhases.add(currentPhase);
+        }
+        return activePhases;
+    }
 
-            for (AttackAnimation.Phase phase : activePhases) {
-                if (!this.playedSwingPhases.contains(phase)) {
-                    this.playedSwingPhases.add(phase);
-                    SoundEvent swingSound = phase.getProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND).orElse(this.getSwingSound(phase.hand));
-                    if (swingSound != null) Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(swingSound, 1, 1.0F));
-                }
+    private void handleSwingSound(AttackAnimation.Phase phase) {
+        if (!this.playedSwingPhases.contains(phase)) {
+            this.playedSwingPhases.add(phase);
+            SoundEvent swingSound = phase.getProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND).orElse(this.getSwingSound(phase.hand));
+            if (swingSound != null) Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(swingSound, 1, 1.0F));
+        }
+    }
 
-                float prevPoseTime = prevState.attacking() ? prevTime : phase.preDelay;
-                float poseTime = state.attacking() ? time : phase.contact;
+    private List<Entity> calculateHitsForPhase(AttackAnimation attackAnim, AttackAnimation.Phase phase, float prevTime, float time, EntityState prevState, EntityState state) {
+        float prevPoseTime = prevState.attacking() ? prevTime : phase.preDelay;
+        float poseTime = state.attacking() ? time : phase.contact;
+        if (poseTime <= prevPoseTime) poseTime = prevPoseTime + 0.05f;
 
-                if (poseTime <= prevPoseTime) poseTime = prevPoseTime + 0.01f;
+        float playSpeed = attackAnim.getPlaySpeed(this, attackAnim);
+        List<Entity> hits = new ArrayList<>();
 
-                float playSpeed = attackAnim.getPlaySpeed(this, attackAnim);
-                List<Entity> hits = new ArrayList<>();
-
-                for (AttackAnimation.JointColliderPair colliderInfo : phase.colliders) {
-                    Collider collider = colliderInfo.getSecond() != null ? colliderInfo.getSecond() : this.getColliderMatching(phase.hand);
-                    if (collider != null) {
-                        hits.addAll(collider.updateAndSelectCollideEntity(this, attackAnim, prevPoseTime, poseTime, colliderInfo.getFirst(), playSpeed));
-                    }
-                }
-
-                Set<Entity> currentPhaseHitMemory = this.phaseHitMemory.computeIfAbsent(phase, k -> new HashSet<>());
-                for (Entity hit : hits) {
-                    if (!(hit instanceof LivingEntity target)) continue;
-                    if (currentPhaseHitMemory.contains(target)) continue;
-
-                    currentPhaseHitMemory.add(target);
-
-                    SoundEvent hitSound = phase.getProperty(AnimationProperty.AttackPhaseProperty.HIT_SOUND).orElse(this.getWeaponHitSound(phase.hand));
-                    if (hitSound != null) Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(hitSound, 1, 1.0F));
-
-                    HitParticleType particle = phase.getProperty(AnimationProperty.AttackPhaseProperty.PARTICLE)
-                            .map(Supplier::get).orElse(this.getWeaponHitParticle(phase.hand));
-
-                    if (particle != null) {
-                        Vector3d pos = particle.positionProvider.apply(target, this.getOriginal());
-                        Vector3d args = particle.argumentProvider.apply(target, this.getOriginal());
-                        this.getOriginal().level().addParticle(particle, pos.x, pos.y, pos.z, args.x, args.y, args.z);
-                    }
-                }
+        for (AttackAnimation.JointColliderPair colliderInfo : phase.colliders) {
+            Collider collider = colliderInfo.getSecond() != null ? colliderInfo.getSecond() : this.getColliderMatching(phase.hand);
+            if (collider != null) {
+                hits.addAll(collider.updateAndSelectCollideEntity(this, attackAnim, prevPoseTime, poseTime, colliderInfo.getFirst(), playSpeed));
             }
+        }
+        return hits;
+    }
+
+    private void processHitTargets(AttackAnimation attackAnim, AttackAnimation.Phase phase, List<Entity> hits, float time) {
+        Set<Entity> currentPhaseHitMemory = this.phaseHitMemory.computeIfAbsent(phase, k -> new HashSet<>());
+
+        for (Entity hit : hits) {
+            if (!(hit instanceof LivingEntity target)) continue;
+            if (currentPhaseHitMemory.contains(target)) continue;
+
+            PonderCombatEvent.Hit hitEvent = new PonderCombatEvent.Hit(this.getOriginal(), target, attackAnim, phase, attackAnim.getPhaseOrderByTime(time));
+            if (MinecraftForge.EVENT_BUS.post(hitEvent)) continue;
+
+            if (this.currentAnimHitCallback != null) {
+                this.currentAnimHitCallback.accept(hitEvent);
+            }
+            if (hitEvent.isCanceled()) continue;
+
+            currentPhaseHitMemory.add(target);
+
+            this.playHitEffects(phase, target);
+
+            PonderCombatEvent.BeHit beHitEvent = new PonderCombatEvent.BeHit(this.getOriginal(), target, attackAnim, phase, attackAnim.getPhaseOrderByTime(time));
+            MinecraftForge.EVENT_BUS.post(beHitEvent);
+
+            if (this.currentAnimBeHitCallback != null) {
+                this.currentAnimBeHitCallback.accept(beHitEvent);
+            }
+        }
+    }
+
+    private void playHitEffects(AttackAnimation.Phase phase, LivingEntity target) {
+        SoundEvent hitSound = phase.getProperty(AnimationProperty.AttackPhaseProperty.HIT_SOUND).orElse(this.getWeaponHitSound(phase.hand));
+        if (hitSound != null) Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(hitSound, 1, 1.0F));
+
+        HitParticleType particle = phase.getProperty(AnimationProperty.AttackPhaseProperty.PARTICLE)
+                .map(Supplier::get).orElse(this.getWeaponHitParticle(phase.hand));
+
+        if (particle != null) {
+            Vector3d pos = particle.positionProvider.apply(target, this.getOriginal());
+            Vector3d args = particle.argumentProvider.apply(target, this.getOriginal());
+            this.getOriginal().level().addParticle(particle, pos.x, pos.y, pos.z, args.x, args.y, args.z);
         }
     }
 

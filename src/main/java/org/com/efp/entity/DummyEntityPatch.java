@@ -9,12 +9,18 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import org.com.efp.client.ponder.trail.EFPPonderTrailParticle;
 import org.joml.Vector3d;
 import yesman.epicfight.api.animation.*;
 import yesman.epicfight.api.animation.property.AnimationProperty;
 import yesman.epicfight.api.animation.types.*;
 import yesman.epicfight.api.asset.AssetAccessor;
+import yesman.epicfight.api.client.animation.property.ClientAnimationProperties;
+import yesman.epicfight.api.client.animation.property.TrailInfo;
+import yesman.epicfight.client.ClientEngine;
+import yesman.epicfight.client.renderer.patched.item.RenderItemBase;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.gameasset.Armatures;
 import yesman.epicfight.model.armature.HumanoidArmature;
@@ -32,6 +38,8 @@ public class DummyEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<
     private final Map<AttackAnimation.Phase, Set<Entity>> phaseHitMemory = new HashMap<>();
     private final Set<AttackAnimation.Phase> playedSwingPhases = new HashSet<>();
 
+    public final List<EFPPonderTrailParticle> activeTrails = new ArrayList<>();
+    private AssetAccessor<? extends StaticAnimation> lastPlayedAnimation = null;
     private DynamicAnimation lastCheckedAnim = null;
     private Style forcedStyle = null;
 
@@ -104,7 +112,56 @@ public class DummyEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<
     public void tick(LivingEvent.LivingTickEvent event) {
         super.tick(event);
 
-        if (original.level().isClientSide() && original.level() instanceof PonderLevel) {
+        if (this.original.level() instanceof PonderLevel) {
+
+            this.activeTrails.forEach(EFPPonderTrailParticle::tick);
+            this.activeTrails.removeIf(trail -> !trail.isAlive());
+
+            AnimationPlayer animPlayer = this.getClientAnimator() != null ? this.getClientAnimator().getPlayerFor(null) : null;
+            if (animPlayer != null) {
+                AssetAccessor<? extends StaticAnimation> currentAnim = animPlayer.getAnimation().get().getRealAnimation();
+
+                if (currentAnim != null && currentAnim != lastPlayedAnimation) {
+                    lastPlayedAnimation = currentAnim;
+
+                    currentAnim.get().getProperty(ClientAnimationProperties.TRAIL_EFFECT).ifPresent(trailInfos -> {
+                        for (TrailInfo info : trailInfos) {
+                            TrailInfo processedInfo = info;
+
+                            if (processedInfo.hand() != null) {
+                                ItemStack stack = this.getOriginal().getItemInHand(processedInfo.hand());
+                                RenderItemBase renderItemBase = ClientEngine.getInstance().renderEngine.getItemRenderer(stack);
+
+                                if (renderItemBase != null && renderItemBase.trailInfo() != null) {
+                                    processedInfo = renderItemBase.trailInfo().overwrite(processedInfo);
+                                }
+                            }
+
+                            processedInfo = this.getEntityDecorations().getModifiedTrailInfo(
+                                    processedInfo,
+                                    processedInfo.hand() == null ? CapabilityItem.EMPTY : this.getAdvancedHoldingItemCapability(processedInfo.hand())
+                            );
+
+                            if (processedInfo.start() == null || processedInfo.end() == null) {
+                                continue;
+                            }
+
+                            if (processedInfo.rCol() < 0.0F || processedInfo.gCol() < 0.0F || processedInfo.bCol() < 0.0F) {
+                                processedInfo = processedInfo.unpackAsBuilder().r(1.0F).g(1.0F).b(1.0F).create();
+                            }
+
+                            Joint joint = this.getArmature().searchJointByName(processedInfo.joint());
+                            if (joint != null) {
+                                EFPPonderTrailParticle trail = new EFPPonderTrailParticle(this, joint, currentAnim, processedInfo);
+                                this.activeTrails.add(trail);
+                            }
+                        }
+                    });
+                }
+            } else {
+                lastPlayedAnimation = null;
+            }
+
             this.simulatePonderHitbox();
         }
     }
@@ -143,7 +200,7 @@ public class DummyEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<
 
             List<AttackAnimation.Phase> activePhases = new ArrayList<>();
 
-            if (attackAnim.getClass().getSimpleName().equals("com.p1nero.invincible.api.animation.types.MultiPhaseAttackAnimation") ||
+            if (attackAnim.getClass().getSimpleName().equals("MultiPhaseAttackAnimation") ||
                     attackAnim.getClass().getName().contains("MultiPhase")) {
                 for (AttackAnimation.Phase phase : attackAnim.phases) {
                     if (time >= phase.antic && time <= phase.contact) {

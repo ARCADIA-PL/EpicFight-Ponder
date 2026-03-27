@@ -54,7 +54,7 @@ public class EFPPonderPlugin implements PonderPlugin {
 
         registerSkillBookFallback(itemHelper, EFPSKillScenes::showcaseNoSkill);
 
-        registerSkill(skillHelper, "epicfight:guard", EFPSKillScenes::showcaseGuardSkill);
+        registerSkill(skillHelper, "epicfight:guard", EFPSKillScenes::showcaseGuardSkill, EFPSKillScenes::showcaseGuardSkillBreak);
     }
 
     private void registerWeaponGroup(PonderSceneRegistrationHelper<Item> helper, Class<? extends Item> weaponClass, PonderSceneMethod... scenes) {

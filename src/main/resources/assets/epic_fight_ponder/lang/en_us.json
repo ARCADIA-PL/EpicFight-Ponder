@@ -7,6 +7,13 @@
 
   "epic_fight_ponder.ponder.nothing.header": "No Performance",
 
+  "epic_fight_ponder.ponder.skill_guard.header": "Guard",
+  "epic_fight_ponder.ponder.skill_guard.text_1": "Hold [Guard] to enter a defensive stance\nconsuming [Stamina] to block frontal melee attacks.",
+
+  "epic_fight_ponder.ponder.skill_guard_break.header": "Guard Break",
+  "epic_fight_ponder.ponder.skill_guard_break.text_1": "Over-relying on your guard is rarely a wise choice...",
+  "epic_fight_ponder.ponder.skill_guard_break.text_2": "Taking heavy hits with insufficient [Stamina] will result in a [Guard Break]\nleaving you severely staggered.",
+
   "epic_fight_ponder.ponder.tachi_basic_attack_combo.header": "Tachi Basic Attack Combo",
   "epic_fight_ponder.ponder.tachi_basic_attack_combo.text_1": "Tachi Basic Attacks",
   "epic_fight_ponder.ponder.tachi_basic_attack_combo.text_2": "Tachi Dash Attack",

@@ -12,7 +12,6 @@ import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.item.EpicFightItems;
 
 public class EFPWeaponScenes {
-
     public static void showcaseTachiBasicAttackCombo(SceneBuilder baseScene, SceneBuildingUtil util) {
         EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "tachi_basic_attack_combo",
                 EpicFightItems.DIAMOND_TACHI.get().getDefaultInstance());

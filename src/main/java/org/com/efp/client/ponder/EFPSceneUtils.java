@@ -14,6 +14,7 @@ import org.com.efp.registry.EFPEntities;
 import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.types.AttackAnimation;
 import yesman.epicfight.api.animation.types.StaticAnimation;
+import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.capabilities.item.Style;
@@ -266,6 +267,24 @@ public class EFPSceneUtils {
         }
 
         updateSheathState(builder, attacker, 1);
+    }
+
+
+    public static void showcaseNoSkill(
+            SceneBuilder baseScene, SceneBuildingUtil util,
+            int size, String sceneId) {
+
+        EpicFightSceneBuilder builder = new EpicFightSceneBuilder(baseScene);
+        EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
+        double center = size / 2.0D;
+
+        setupStandardScene(builder, size, sceneId, "epic_fight_ponder.ponder." + sceneId + ".title");
+
+        ElementLink<EntityElement> dummy = spawnDummyActor(builder, center, 0.5, center, 180, null, null);
+
+        world.playAnimation(dummy, Animations.BIPED_SIT, 0.0F);
+        builder.idle(20);
+        builder.markAsFinished();
     }
 
     /**

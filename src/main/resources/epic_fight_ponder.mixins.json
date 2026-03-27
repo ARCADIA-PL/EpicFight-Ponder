@@ -13,7 +13,8 @@
     "ponder.MixinSchematicLevelHitbox"
   ],
   "client": [
-    "compat.epicfightx.MixinRenderUchigatanaX"
+    "compat.epicfightx.MixinRenderUchigatanaX",
+    "ponder.MixinPonderUI"
   ],
   "injectors": {
     "defaultRequire": 1

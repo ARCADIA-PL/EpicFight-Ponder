@@ -29,7 +29,15 @@ public class EFPPonderPlugin implements PonderPlugin {
     @Override
     public void registerScenes(PonderSceneRegistrationHelper<ResourceLocation> helper) {
         ForgeRegisteredObjectsHelper forgeObjectsHelper = new ForgeRegisteredObjectsHelper();
+
         PonderSceneRegistrationHelper<Item> itemHelper = helper.withKeyFunction(forgeObjectsHelper::getKeyOrThrow);
+
+        PonderSceneRegistrationHelper<String> skillHelper = helper.withKeyFunction(
+                skillString -> {
+                    ResourceLocation rl = ResourceLocation.parse(skillString);
+                    return ResourceLocation.fromNamespaceAndPath(rl.getNamespace(), "skill_" + rl.getPath());
+                }
+        );
 
         if (EFPCompatManager.isEFXLoaded) {
             registerWeaponGroup(itemHelper, TachiItem.class, EFPWeaponScenes::showcaseTachiBasicAttackCombo, EFXCompat::showcaseRushingTempo_EFX);
@@ -42,8 +50,11 @@ public class EFPPonderPlugin implements PonderPlugin {
         registerWeaponGroup(itemHelper, LongswordItem.class, EFPWeaponScenes::showcaseLongSwordBasicAttackCombo, EFPWeaponScenes::showcaseLongSwordBasicAttackCombo_Ochs, EFPWeaponScenes::showcaseLongSwordBasicAttackCombo_OneHand);
         registerWeaponGroup(itemHelper, DaggerItem.class, EFPWeaponScenes::showcaseDaggerBasicAttackCombo, EFPWeaponScenes::showcaseDaggerBasicAttackCombo_Dual);
         registerWeaponGroup(itemHelper, SpearItem.class, EFPWeaponScenes::showcaseSpearBasicAttackCombo, EFPWeaponScenes::showcaseSpearBasicAttackCombo_OneHand);
-
         registerWeaponGroup(itemHelper, SwordItem.class, true, EFPWeaponScenes::showcaseSwordBasicAttackCombo, EFPWeaponScenes::showcaseSwordBasicAttackCombo_Dual);
+
+        registerSkillBookFallback(itemHelper, EFPSKillScenes::showcaseNoSkill);
+
+        registerSkill(skillHelper, "epicfight:guard", EFPWeaponScenes::showcaseUchigatanaBasicAttackCombo);
     }
 
     private void registerWeaponGroup(PonderSceneRegistrationHelper<Item> helper, Class<? extends Item> weaponClass, PonderSceneMethod... scenes) {
@@ -64,6 +75,36 @@ public class EFPPonderPlugin implements PonderPlugin {
             for (PonderSceneMethod scene : scenes) {
                 component.addStoryBoard(structureId, scene::build);
             }
+        }
+    }
+
+    private void registerSkillBookFallback(PonderSceneRegistrationHelper<Item> helper, PonderSceneMethod... fallbackScenes) {
+        Item[] skillBooks = ForgeRegistries.ITEMS.getValues().stream()
+                .filter(item -> item instanceof SkillBookItem)
+                .toArray(Item[]::new);
+
+        if (skillBooks.length > 0) {
+            var component = helper.forComponents(skillBooks);
+            for (PonderSceneMethod scene : fallbackScenes) {
+                component.addStoryBoard("epicfight_showcase", scene::build);
+            }
+        }
+    }
+
+    /**
+     * 为特定的技能注册专属思索场景
+     * @param helper 技能的 RegistrationHelper
+     * @param skillId 技能全名，例如 "epicfight:guard"
+     * @param scenes 该技能对应的展示场景
+     */
+    private void registerSkill(PonderSceneRegistrationHelper<String> helper, String skillId, PonderSceneMethod... scenes) {
+        registerSkill(helper, skillId, "epicfight_showcase", scenes);
+    }
+
+    private void registerSkill(PonderSceneRegistrationHelper<String> helper, String skillId, String structureId, PonderSceneMethod... scenes) {
+        var component = helper.forComponents(skillId);
+        for (PonderSceneMethod scene : scenes) {
+            component.addStoryBoard(structureId, scene::build);
         }
     }
 }

@@ -15,22 +15,23 @@ import java.util.function.Predicate;
 
 @Mixin(value = SchematicLevel.class, remap = false)
 public abstract class MixinSchematicLevelHitbox {
-
     @Shadow
     public abstract List<Entity> getEntityList();
 
+    @SuppressWarnings("UnresolvedMixinReference")
     @Inject(
-            method = "getEntities(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/AABB;Ljava/util/function/Predicate;)Ljava/util/List;",
+            method = {
+                    "getEntities(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/AABB;Ljava/util/function/Predicate;)Ljava/util/List;",
+                    "m_6249_(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/AABB;Ljava/util/function/Predicate;)Ljava/util/List;"
+            },
             at = @At("HEAD"),
-            cancellable = true,
-            remap = true
+            cancellable = true
     )
     private void efp$allowPonderHitbox(Entity entity, AABB boundingBox, Predicate<? super Entity> predicate, CallbackInfoReturnable<List<Entity>> cir) {
         List<Entity> hits = new ArrayList<>();
 
         for (Entity e : this.getEntityList()) {
             if (e != entity && e.getBoundingBox().intersects(boundingBox)) {
-
                 if (predicate == null || predicate.test(e)) {
                     hits.add(e);
                 }

@@ -10,6 +10,7 @@
     "epicfight.MixinCapabilityItem",
     "epicfight.WeaponCapabilityAccessor",
     "epicfight.client.RenderEngineEventsMixin",
+    "ponder.MixinPonderTooltipHandler",
     "ponder.MixinSchematicLevelHitbox"
   ],
   "client": [

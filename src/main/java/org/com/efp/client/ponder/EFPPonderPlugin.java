@@ -52,6 +52,13 @@ public class EFPPonderPlugin implements PonderPlugin {
 
         registerSkill(skillHelper, "epicfight:guard", EFPSKillScenes::showcaseGuardSkill, EFPSKillScenes::showcaseGuardSkillBreak);
         registerSkill(skillHelper, "epicfight:parrying", EFPSKillScenes::showcaseParrySkill);
+        registerSkill(skillHelper, "epicfight:step", EFPSKillScenes::showcaseStepSkill);
+        registerSkill(skillHelper, "epicfight:roll", EFPSKillScenes::showcaseRollSkill);
+        if (EFPCompatManager.isEFXLoaded) {
+            registerSkill(skillHelper, "epicfight:technician", EFXCompat::showcaseTechnicianSkill_EFX);
+        } else {
+            registerSkill(skillHelper, "epicfight:technician", EFPSKillScenes::showcaseTechnicianSkill);
+        }
     }
 
     private void registerWeaponGroup(PonderSceneRegistrationHelper<Item> helper, Class<? extends Item> weaponClass, PonderSceneMethod... scenes) {

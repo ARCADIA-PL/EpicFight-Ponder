@@ -172,6 +172,9 @@ dependencies {
     implementation fg.deobf("curse.maven:weapons-of-miracles-epicfight-918614:7477498")
     implementation fg.deobf("curse.maven:epic-fight-invincible-1184379:7679941")
     implementation fg.deobf("curse.maven:weapons-of-miracles-epicfight-918614:7477498")
+    implementation fg.deobf("curse.maven:epic-fight-avalon-1268823:7619938")
+    implementation fg.deobf("curse.maven:epic-fight-invincible-1184379:7679941")
+    implementation fg.deobf('libs:efn:3.2.3')
     implementation fg.deobf('libs:efx:1.1.4')
 
     //俺寻思

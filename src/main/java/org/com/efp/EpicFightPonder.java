@@ -11,6 +11,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.com.efp.compat.EFPCompatManager;
+import org.com.efp.particle.EFPParticles;
 import org.com.efp.registry.EFPEntities;
 import org.slf4j.Logger;
 
@@ -23,6 +24,7 @@ public class EpicFightPonder {
         IEventBus bus = context.getModEventBus();
         bus.addListener(this::commonSetup);
         EFPEntities.register(bus);
+        EFPParticles.PARTICLES.register(bus);
         MinecraftForge.EVENT_BUS.register(this);
     }
 

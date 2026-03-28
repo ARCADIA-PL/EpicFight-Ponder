@@ -9,6 +9,9 @@ import net.createmod.ponder.api.scene.SceneBuildingUtil;
 import net.minecraft.world.item.ItemStack;
 import org.com.efp.api.ponder.EpicFightSceneBuilder;
 import org.com.efp.client.ponder.EFPSceneUtils;
+import org.com.efp.gameasset.EFPAnimations;
+import yesman.epicfight.gameasset.EpicFightSounds;
+import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.item.EpicFightItems;
 
 public class EFXCompat {
@@ -81,4 +84,40 @@ public class EFXCompat {
         builder.markAsFinished();
     }
 
+    /**
+     * 技能展示：完美闪避 (Technician)
+     */
+    public static void showcaseTechnicianSkill_EFX(SceneBuilder baseScene, SceneBuildingUtil util) {
+        EpicFightSceneBuilder builder = new EpicFightSceneBuilder(baseScene);
+        EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
+
+        EFPSceneUtils.setupStandardScene(builder, 11, "skill_technician", "epic_fight_ponder.ponder.skill_technician.title");
+
+        double centerX = 5.5;
+        double centerZ = 5.5;
+        double attackerZ = centerZ - 1.9;
+
+        ItemStack victimWeapon = new ItemStack(EpicFightItems.IRON_LONGSWORD.get());
+        ItemStack attackerWeapon = new ItemStack(EpicFightItems.UCHIGATANA.get());
+
+        ElementLink<EntityElement> victim = EFPSceneUtils.spawnDummyVictim(builder, centerX, 1.0, centerZ, 180, victimWeapon, ItemStack.EMPTY, CapabilityItem.Styles.TWO_HAND);
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, centerX, 1.0, attackerZ, 0, attackerWeapon, ItemStack.EMPTY, CapabilityItem.Styles.TWO_HAND);
+        world.modifyEntityMovement(victim, true);
+
+        builder.idle(20);
+
+        EFPSceneUtils.playSoundOnTimeline(builder, attacker, EpicFightSounds.SWORD_IN.get());
+        EFPSceneUtils.playCinematicDodgeStrike(
+                builder, util, attacker, victim,
+                AnimationsX.BATTOJUTSU,
+                EFPAnimations.BIPED_STEP_BACKWARD.get(),
+                38, 4, 40,
+                "epic_fight_ponder.ponder.skill_technician.text_1",
+                "epic_fight_ponder.ponder.skill_technician.text_2",
+                5.5, 1, 5.5
+        );
+
+        builder.idle(40);
+        builder.markAsFinished();
+    }
 }

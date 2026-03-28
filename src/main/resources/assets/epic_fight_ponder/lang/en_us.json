@@ -5,7 +5,17 @@
   "epic_fight_ponder.ponder.tachi_rushing_tempo.text_3": "Successful derivation! Keep the rhythm to chain attacks infinitely...",
   "epic_fight_ponder.ponder.tachi_rushing_tempo.text_4": "Can also be derived after dash or jump attacks.",
 
-  "epic_fight_ponder.ponder.nothing.header": "No Performance",
+  "epic_fight_ponder.ponder.nothing.header": "WIP",
+
+  "epic_fight_ponder.ponder.skill_step.header": "Dodge: Step",
+  "epic_fight_ponder.ponder.skill_step.text_1": "Press [Dodge] to consume stamina and perform a [Step].\nShort distance, swift response, and minimal recovery time. Grants i-frames.",
+
+  "epic_fight_ponder.ponder.skill_roll.header": "Dodge: Roll",
+  "epic_fight_ponder.ponder.skill_roll.text_1": "Press [Dodge] to consume stamina and perform a [Roll].\nCovers a longer distance but leaves a larger opening upon recovery. Grants i-frames.",
+
+  "epic_fight_ponder.ponder.skill_technician.header": "Passive: Technician",
+  "epic_fight_ponder.ponder.skill_technician.text_1": "Evading an incoming attack at the absolute last split-second...",
+  "epic_fight_ponder.ponder.skill_technician.text_2": "...will trigger a [Perfect Dodge], instantly refunding the stamina consumed!",
 
   "epic_fight_ponder.ponder.skill_guard.header": "Guard",
   "epic_fight_ponder.ponder.skill_guard.text_1": "Hold [Guard] to enter a defensive stance\nconsuming [Stamina] to block frontal melee attacks.\n \nConsecutive blocks will rapidly drain your [Stamina]",

@@ -1,0 +1,95 @@
+{
+  "epic_fight_ponder.ponder.tachi_rushing_tempo.header": "太刀本源武技：疾風連斬",
+  "epic_fight_ponder.ponder.tachi_rushing_tempo.text_1": "『疾風連斬』可使修士於常擊收招之隙，順勢變招",
+  "epic_fight_ponder.ponder.tachi_rushing_tempo.text_2": "於常擊揮落、餘息未盡之際，立撳武技之鍵！",
+  "epic_fight_ponder.ponder.tachi_rushing_tempo.text_3": "變招既成！若明律動之理，便可綿延不絕，生生不息……",
+  "epic_fight_ponder.ponder.tachi_rushing_tempo.text_4": "奔襲、躍空擊後，亦可借勢衍化",
+
+  "epic_fight_ponder.ponder.nothing.header": "尚無演武",
+
+  "epic_fight_ponder.ponder.skill_step.header": "趨避 —— 瞬步",
+  "epic_fight_ponder.ponder.skill_step.text_1": "撳[趨避]耗氣力以施『瞬步』。\n縱躍雖短，其勢極迅，動若虛影，期間萬法不侵",
+
+  "epic_fight_ponder.ponder.skill_roll.header": "趨避 —— 翻滾",
+  "epic_fight_ponder.ponder.skill_roll.text_1": "撳[趨避]耗氣力以施『翻滾』。\n遁走甚遠，然收勢遲緩，動若虛影，期間萬法不侵",
+
+  "epic_fight_ponder.ponder.skill_technician.header": "心法 —— 技藝宗師",
+  "epic_fight_ponder.ponder.skill_technician.text_1": "若能於千鈞一髮之際，避敵之鋒芒——",
+  "epic_fight_ponder.ponder.skill_technician.text_2": "便合『極意·趨避』，所耗氣力須臾悉數還本！",
+
+  "epic_fight_ponder.ponder.skill_guard.header": "守勢",
+  "epic_fight_ponder.ponder.skill_guard.text_1": "長撳[禦]以結防禦之陣\n可耗[氣力]以擋當面之兵戈\n \n然若連擋不休，氣力之耗將如大江決堤",
+
+  "epic_fight_ponder.ponder.skill_guard_break.header": "潰防",
+  "epic_fight_ponder.ponder.skill_guard_break.text_1": "一味龜縮死守，實非破局之良策……",
+  "epic_fight_ponder.ponder.skill_guard_break.text_2": "[氣力]枯竭之際若遭重創，\n將陷於毫無還手之力之『潰防』蹣跚死地。",
+
+  "epic_fight_ponder.ponder.skill_parry.header": "招架 —— 更勝一籌之禦敵法門",
+  "epic_fight_ponder.ponder.skill_parry.text_1": "起手結陣之瞬，\n可得白駒過隙般之『招架良機』。",
+  "epic_fight_ponder.ponder.skill_parry.text_2": "於此際承敵之刃，\n僅需微毫氣力，便可盡化其攻勢於無形。",
+
+  "epic_fight_ponder.ponder.tachi_basic_attack_combo.header": "太刀 基礎連段演武",
+  "epic_fight_ponder.ponder.tachi_basic_attack_combo.text_1": "太刀 常擊連段",
+  "epic_fight_ponder.ponder.tachi_basic_attack_combo.text_2": "太刀 奔襲衍化之擊",
+  "epic_fight_ponder.ponder.tachi_basic_attack_combo.text_3": "太刀 躍空衍化之擊",
+
+  "epic_fight_ponder.ponder.uchigatana_basic_attack_combo.header": "打刀 基礎連段演武",
+  "epic_fight_ponder.ponder.uchigatana_basic_attack_combo.text_1": "打刀 常擊連段",
+  "epic_fight_ponder.ponder.uchigatana_basic_attack_combo.text_2": "打刀 奔襲衍化之擊",
+  "epic_fight_ponder.ponder.uchigatana_basic_attack_combo.text_3": "打刀 躍空衍化之擊",
+
+  "epic_fight_ponder.ponder.uchigatana_basic_attack_combo_sheath.header": "打刀 (納刀流) 基礎連段演武",
+  "epic_fight_ponder.ponder.uchigatana_basic_attack_combo_sheath.text_1": "打刀 (納刀流) 常擊連段",
+  "epic_fight_ponder.ponder.uchigatana_basic_attack_combo_sheath.text_2": "打刀 (納刀流) 奔襲衍化之擊",
+  "epic_fight_ponder.ponder.uchigatana_basic_attack_combo_sheath.text_3": "打刀 (納刀流) 躍空衍化之擊",
+
+  "epic_fight_ponder.ponder.greatsword_basic_attack_combo.header": "巨劍 基礎連段演武",
+  "epic_fight_ponder.ponder.greatsword_basic_attack_combo.text_1": "巨劍 常擊連段",
+  "epic_fight_ponder.ponder.greatsword_basic_attack_combo.text_2": "巨劍 奔襲衍化之擊",
+  "epic_fight_ponder.ponder.greatsword_basic_attack_combo.text_3": "巨劍 躍空衍化之擊",
+
+  "epic_fight_ponder.ponder.longsword_basic_attack_combo.header": "長劍 基礎連段演武",
+  "epic_fight_ponder.ponder.longsword_basic_attack_combo.text_1": "長劍 常擊連段",
+  "epic_fight_ponder.ponder.longsword_basic_attack_combo.text_2": "長劍 奔襲衍化之擊",
+  "epic_fight_ponder.ponder.longsword_basic_attack_combo.text_3": "長劍 躍空衍化之擊",
+
+  "epic_fight_ponder.ponder.longsword_basic_attack_combo_onehand.header": "長劍 (劍盾) 基礎連段演武",
+  "epic_fight_ponder.ponder.longsword_basic_attack_combo_onehand.text_1": "長劍 (劍盾) 常擊連段",
+  "epic_fight_ponder.ponder.longsword_basic_attack_combo_onehand.text_2": "長劍 (劍盾) 奔襲衍化之擊",
+  "epic_fight_ponder.ponder.longsword_basic_attack_combo_onehand.text_3": "長劍 (劍盾) 躍空衍化之擊",
+
+  "epic_fight_ponder.ponder.longsword_basic_attack_combo_ochs.header": "長劍 (高位護鋒式) 基礎連段演武",
+  "epic_fight_ponder.ponder.longsword_basic_attack_combo_ochs.text_1": "長劍 (高位護鋒式) 常擊連段",
+  "epic_fight_ponder.ponder.longsword_basic_attack_combo_ochs.text_2": "長劍 (高位護鋒式) 奔襲衍化之擊",
+  "epic_fight_ponder.ponder.longsword_basic_attack_combo_ochs.text_3": "長劍 (高位護鋒式) 躍空衍化之擊",
+
+  "epic_fight_ponder.ponder.spear_basic_attack_combo.header": "長鎩 基礎連段演武",
+  "epic_fight_ponder.ponder.spear_basic_attack_combo.text_1": "長鎩 常擊連段",
+  "epic_fight_ponder.ponder.spear_basic_attack_combo.text_2": "長鎩 奔襲衍化之擊",
+  "epic_fight_ponder.ponder.spear_basic_attack_combo.text_3": "長鎩 躍空衍化之擊",
+
+  "epic_fight_ponder.ponder.spear_basic_attack_combo_onehand.header": "長鎩 (槍盾) 基礎連段演武",
+  "epic_fight_ponder.ponder.spear_basic_attack_combo_onehand.text_1": "長鎩 (槍盾) 常擊連段",
+  "epic_fight_ponder.ponder.spear_basic_attack_combo_onehand.text_2": "長鎩 (槍盾) 奔襲衍化之擊",
+  "epic_fight_ponder.ponder.spear_basic_attack_combo_onehand.text_3": "長鎩 (槍盾) 躍空衍化之擊",
+
+  "epic_fight_ponder.ponder.sword_basic_attack_combo.header": "佩劍 基礎連段演武",
+  "epic_fight_ponder.ponder.sword_basic_attack_combo.text_1": "佩劍 常擊連段",
+  "epic_fight_ponder.ponder.sword_basic_attack_combo.text_2": "佩劍 奔襲衍化之擊",
+  "epic_fight_ponder.ponder.sword_basic_attack_combo.text_3": "佩劍 躍空衍化之擊",
+
+  "epic_fight_ponder.ponder.sword_basic_attack_combo_dual.header": "佩劍 (雙持) 基礎連段演武",
+  "epic_fight_ponder.ponder.sword_basic_attack_combo_dual.text_1": "佩劍 (雙持) 常擊連段",
+  "epic_fight_ponder.ponder.sword_basic_attack_combo_dual.text_2": "佩劍 (雙持) 奔襲衍化之擊",
+  "epic_fight_ponder.ponder.sword_basic_attack_combo_dual.text_3": "佩劍 (雙持) 躍空衍化之擊",
+
+  "epic_fight_ponder.ponder.dagger_basic_attack_combo.header": "短刃 基礎連段演武",
+  "epic_fight_ponder.ponder.dagger_basic_attack_combo.text_1": "短刃 常擊連段",
+  "epic_fight_ponder.ponder.dagger_basic_attack_combo.text_2": "短刃 奔襲衍化之擊",
+  "epic_fight_ponder.ponder.dagger_basic_attack_combo.text_3": "短刃 躍空衍化之擊",
+
+  "epic_fight_ponder.ponder.dagger_basic_attack_combo_dual.header": "短刃 (雙持) 基礎連段演武",
+  "epic_fight_ponder.ponder.dagger_basic_attack_combo_dual.text_1": "短刃 (雙持) 常擊連段",
+  "epic_fight_ponder.ponder.dagger_basic_attack_combo_dual.text_2": "短刃 (雙持) 奔襲衍化之擊",
+  "epic_fight_ponder.ponder.dagger_basic_attack_combo_dual.text_3": "短刃 (雙持) 躍空衍化之擊"
+}

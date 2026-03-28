@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import net.createmod.ponder.api.level.PonderLevel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -13,14 +14,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import org.com.efp.api.event.PonderCombatEvent;
+import org.com.efp.api.ponder.EpicFightSceneBuilder;
 import org.com.efp.client.ponder.trail.EFPPonderTrailParticle;
 import org.joml.Vector3d;
 import yesman.epicfight.api.animation.*;
 import yesman.epicfight.api.animation.property.AnimationProperty;
-import yesman.epicfight.api.animation.types.AttackAnimation;
-import yesman.epicfight.api.animation.types.DynamicAnimation;
-import yesman.epicfight.api.animation.types.EntityState;
-import yesman.epicfight.api.animation.types.StaticAnimation;
+import yesman.epicfight.api.animation.types.*;
 import yesman.epicfight.api.asset.AssetAccessor;
 import yesman.epicfight.api.client.animation.property.ClientAnimationProperties;
 import yesman.epicfight.api.client.animation.property.TrailInfo;
@@ -100,6 +99,17 @@ public class DummyEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<
 
     @Override
     public void updateMotion(boolean considerInaction) {
+        if (this.original.getHealth() <= 0.0F) {
+            this.currentLivingMotion = LivingMotions.DEATH;
+        } else if (this.state.inaction() && considerInaction) {
+            this.currentLivingMotion = LivingMotions.INACTION;
+        } else if (this.original.isSprinting()) {
+            this.currentLivingMotion = LivingMotions.RUN;
+        } else {
+            this.currentLivingMotion = LivingMotions.IDLE;
+        }
+
+        this.currentCompositeMotion = this.currentLivingMotion;
     }
 
     public void updateLivingMotionsForPonder() {
@@ -111,7 +121,7 @@ public class DummyEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<
 
         if (this.weaponLivingMotions != null && this.weaponLivingMotions.containsKey(mainHandCap.getWeaponCategory())) {
             Map<Style, Set<Pair<LivingMotion, AnimationManager.AnimationAccessor<? extends StaticAnimation>>>> byStyle = this.weaponLivingMotions.get(mainHandCap.getWeaponCategory());
-            Style style = mainHandCap.getStyle(this);
+            Style style = this.forcedStyle != null ? this.forcedStyle : mainHandCap.getStyle(this);
 
             if (byStyle.containsKey(style) || byStyle.containsKey(CapabilityItem.Styles.COMMON)) {
                 Set<Pair<LivingMotion, AnimationManager.AnimationAccessor<? extends StaticAnimation>>> animModifierSet = byStyle.getOrDefault(style, byStyle.get(CapabilityItem.Styles.COMMON));
@@ -120,8 +130,12 @@ public class DummyEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<
                 }
             }
         }
-        this.getClientAnimator().resetLivingAnimations();
-        newLivingAnimations.forEach(this.getClientAnimator()::addLivingAnimation);
+
+        if (!newLivingAnimations.isEmpty()) {
+            this.getClientAnimator().resetLivingAnimations();
+            newLivingAnimations.forEach(this.getClientAnimator()::addLivingAnimation);
+            this.getClientAnimator().setCurrentMotionsAsDefault();
+        }
     }
 
     @Override
@@ -143,6 +157,17 @@ public class DummyEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<
     }
 
     @Override
+    public boolean shouldMoveOnCurrentSide(ActionAnimation actionAnimation) {
+        if (this.original.level().isClientSide() && this.original.level() instanceof PonderLevel) {
+            CompoundTag data = this.original.getPersistentData();
+            if (data.contains(EpicFightSceneBuilder.CAN_MOVE)) {
+                return data.getBoolean(EpicFightSceneBuilder.CAN_MOVE);
+            }
+        }
+        return super.shouldMoveOnCurrentSide(actionAnimation);
+    }
+
+    @Override
     public void tick(LivingEvent.LivingTickEvent event) {
         super.tick(event);
 
@@ -160,11 +185,6 @@ public class DummyEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<
         }
 
         if (this.original.level() instanceof PonderLevel) {
-            this.original.yBodyRot = this.original.getYRot();
-            this.original.yBodyRotO = this.original.yRotO;
-            this.original.yHeadRot = this.original.getYRot();
-            this.original.yHeadRotO = this.original.yRotO;
-
             this.updateActiveTrails();
             this.handleTrailSpawning();
             this.simulatePonderHitbox();

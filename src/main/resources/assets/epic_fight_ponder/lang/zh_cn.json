@@ -5,7 +5,17 @@
   "epic_fight_ponder.ponder.tachi_rushing_tempo.text_3": "成功派生！只要掌握节奏，后续便可无限交替...",
   "epic_fight_ponder.ponder.tachi_rushing_tempo.text_4": "疾跑、跳跃攻击后也可进行派生",
 
-  "epic_fight_ponder.ponder.nothing.header": "无展示",
+  "epic_fight_ponder.ponder.nothing.header": "暂无展示",
+
+  "epic_fight_ponder.ponder.skill_step.header": "闪避 —— 跨步",
+  "epic_fight_ponder.ponder.skill_step.text_1": "按下[闪避]键消耗耐力进行的[跨步]。\n位移短、响应快，期间附带无敌帧",
+
+  "epic_fight_ponder.ponder.skill_roll.header": "闪避 —— 翻滚",
+  "epic_fight_ponder.ponder.skill_roll.text_1": "按下[闪避]键消耗耐力进行的[翻滚]。\n位移长，但后摇较大，期间附带无敌帧",
+
+  "epic_fight_ponder.ponder.skill_technician.header": "被动技能 —— 技巧大师",
+  "epic_fight_ponder.ponder.skill_technician.text_1": "若能在千钧一发之际规避敌人的攻击——",
+  "epic_fight_ponder.ponder.skill_technician.text_2": "便会触发[完美闪避]，并瞬间返还本次消耗的耐力！",
 
   "epic_fight_ponder.ponder.skill_guard.header": "防御",
   "epic_fight_ponder.ponder.skill_guard.text_1": "按住[防御]进入防御架势\n可消耗[耐力]抵挡面前的近战伤害\n \n连续格挡会使[耐力]消耗急剧增加",

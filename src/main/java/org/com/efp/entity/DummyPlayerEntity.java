@@ -10,8 +10,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeHooks;
-import yesman.epicfight.api.animation.LivingMotions;
-import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 
 public class DummyPlayerEntity extends PathfinderMob {
 
@@ -44,10 +42,7 @@ public class DummyPlayerEntity extends PathfinderMob {
         this.dashVelocity = new Vec3(totalX / durationTicks, 0, totalZ / durationTicks);
         this.dashTicks = durationTicks;
 
-        DummyEntityPatch<?> patch = EpicFightCapabilities.getEntityPatch(this, DummyEntityPatch.class);
-        if (patch != null) {
-            patch.getClientAnimator().playAnimation(patch.getClientAnimator().getLivingAnimation(LivingMotions.RUN, null), 0);
-        }
+        this.setSprinting(true);
     }
 
     public void jumpFromGround(float jumpForce) {
@@ -59,11 +54,6 @@ public class DummyPlayerEntity extends PathfinderMob {
             float f = this.getYRot() * 0.017453292F;
             newX += -Mth.sin(f) * 0.2F;
             newZ += Mth.cos(f) * 0.2F;
-        }
-
-        DummyEntityPatch<?> patch = EpicFightCapabilities.getEntityPatch(this, DummyEntityPatch.class);
-        if (patch != null) {
-            patch.getClientAnimator().playAnimation(patch.getClientAnimator().getLivingAnimation(LivingMotions.JUMP, null), 0);
         }
 
         this.setDeltaMovement(newX, jumpForce, newZ);

@@ -12,6 +12,7 @@ import net.minecraft.world.phys.Vec3;
 import org.com.efp.api.event.PonderCombatEvent;
 import org.com.efp.entity.DummyEntityPatch;
 import org.com.efp.entity.DummyPlayerEntity;
+import org.com.efp.particle.EFPParticles;
 import org.jetbrains.annotations.NotNull;
 import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.AnimationPlayer;
@@ -31,6 +32,7 @@ import java.util.function.Predicate;
 public class EpicFightSceneBuilder extends PonderSceneBuilder {
 
     public static final String PLAY_SPEED = "play_speed_in_ponder_level";
+    public static final String CAN_MOVE = "can_move_in_ponder_level";
 
     private final EpicFightEffectInstructions effects;
     private final EpicFightWorldInstructions world;
@@ -324,13 +326,13 @@ public class EpicFightSceneBuilder extends PonderSceneBuilder {
 
         public <E extends LivingEntity, T extends LivingEntityPatch<?>> void addEntityAfterImageParticle(Class<E> entityClass) {
             modifyEntities(entityClass, entity -> {
-                entity.level().addParticle(EpicFightParticles.WHITE_AFTERIMAGE.get(), entity.getX(), entity.getY(), entity.getZ(), Double.longBitsToDouble(entity.getId()), 0.0, 0.0);
+                entity.level().addParticle(EFPParticles.PONDER_AFTERIMAGE.get(), entity.getX(), entity.getY(), entity.getZ(), Double.longBitsToDouble(entity.getId()), 0.0, 0.0);
             });
         }
 
         public <E extends LivingEntity, T extends LivingEntityPatch<?>> void addEntityAfterImageParticle(Class<E> entityClass, Vec3 pos) {
             modifyEntities(entityClass, entity -> {
-                entity.level().addParticle(EpicFightParticles.WHITE_AFTERIMAGE.get(), pos.x(), pos.y(), pos.z(), Double.longBitsToDouble(entity.getId()), 0.0, 0.0);
+                entity.level().addParticle(EFPParticles.PONDER_AFTERIMAGE.get(), pos.x(), pos.y(), pos.z(), Double.longBitsToDouble(entity.getId()), 0.0, 0.0);
             });
         }
 
@@ -367,6 +369,18 @@ public class EpicFightSceneBuilder extends PonderSceneBuilder {
             super.modifyEntity(link, e -> e.getPersistentData().putFloat(PLAY_SPEED, playSpeed));
         }
 
+        //允许动画位移
+        public <E extends LivingEntity> void modifyEntitiesMovement(Class<E> entityClass, boolean canMove) {
+            super.modifyEntities(entityClass, e -> e.getPersistentData().putBoolean(CAN_MOVE, canMove));
+        }
+
+        public <E extends LivingEntity> void modifyEntitiesMovement(Class<E> entityClass, Selection area, boolean canMove) {
+            super.modifyEntitiesInside(entityClass, area, e -> e.getPersistentData().putBoolean(CAN_MOVE, canMove));
+        }
+
+        public void modifyEntityMovement(ElementLink<EntityElement> link, boolean canMove) {
+            super.modifyEntity(link, e -> e.getPersistentData().putBoolean(CAN_MOVE, canMove));
+        }
 
         //播动画
         public <E extends LivingEntity, A extends StaticAnimation> void playEntitiesAnimation(Class<E> entityClass, Selection area, AnimationManager.AnimationAccessor<A> animationAccessor, float transitionTimeModifier) {

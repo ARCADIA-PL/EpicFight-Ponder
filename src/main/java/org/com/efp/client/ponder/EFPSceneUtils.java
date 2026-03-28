@@ -8,21 +8,25 @@ import net.createmod.ponder.foundation.PonderScene;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import org.com.efp.api.event.PonderCombatEvent;
 import org.com.efp.api.ponder.EpicFightSceneBuilder;
+import org.com.efp.client.particle.PonderEntityAfterimageParticle;
 import org.com.efp.entity.DummyEntityPatch;
 import org.com.efp.mixin.epicfight.WeaponCapabilityAccessor;
+import org.com.efp.particle.EFPParticles;
 import org.com.efp.registry.EFPEntities;
 import org.joml.Vector3d;
 import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.types.AttackAnimation;
 import yesman.epicfight.api.animation.types.StaticAnimation;
-import yesman.epicfight.gameasset.Animations;
+import yesman.epicfight.api.utils.EntitySnapshot;
 import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.particle.EpicFightParticles;
 import yesman.epicfight.particle.HitParticleType;
@@ -234,6 +238,53 @@ public class EFPSceneUtils {
         });
     }
 
+    /**
+     * 电影级闪避展示：支持“慢-快-极慢”的非线性时间曲线（顿帧与子弹时间）
+     */
+    public static void playCinematicDodgeStrike(
+            EpicFightSceneBuilder builder, SceneBuildingUtil util,
+            ElementLink<EntityElement> attacker, ElementLink<EntityElement> victim,
+            AnimationManager.AnimationAccessor<? extends AttackAnimation> strikeMotion,
+            StaticAnimation dodgeAnim,
+            int startupSlowTicks, int fastSnapTicks, int bulletTimeTicks,
+            @Nullable String textKey1, @Nullable String textKey2,
+            double textX, double textY, double textZ) {
+
+        EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
+
+        Consumer<PonderCombatEvent.Hit> dodgeCallback = createStandardDodgeCallback(dodgeAnim);
+
+        world.playAnimation(attacker, strikeMotion, 0.0F, dodgeCallback, beHit -> {});
+
+        world.modifyEntityPlaySpeed(attacker, 0.35F);
+        world.modifyEntityPlaySpeed(victim, 0.35F);
+
+        if (textKey1 != null && !textKey1.isEmpty()) {
+            showTextAtTop(builder, util, textKey1, (int)(startupSlowTicks * 0.8), (int)textX, (int)textY, (int)textZ);
+        }
+
+        builder.idle(startupSlowTicks);
+
+        world.modifyEntityPlaySpeed(attacker, 1.2F);
+        world.modifyEntityPlaySpeed(victim, 1.2F);
+
+        builder.idle(fastSnapTicks);
+
+        world.modifyEntityPlaySpeed(attacker, 0.1F);
+        world.modifyEntityPlaySpeed(victim, 0.1F);
+
+        if (textKey2 != null && !textKey2.isEmpty()) {
+            showTextAtTop(builder, util, textKey2, bulletTimeTicks, (int)textX, (int)textY, (int)textZ);
+        }
+
+        builder.idle(bulletTimeTicks);
+
+        world.modifyEntityPlaySpeed(attacker, 1.0F);
+        world.modifyEntityPlaySpeed(victim, 1.0F);
+
+        world.waitForInaction(attacker);
+    }
+
     public static void playInteractiveComboWithDefensiveSetup(
             EpicFightSceneBuilder builder, SceneBuildingUtil util,
             ElementLink<EntityElement> attacker, ElementLink<EntityElement> victim,
@@ -301,6 +352,35 @@ public class EFPSceneUtils {
     }
 
     /**
+     * 创建“成功闪避”事件
+     */
+    public static Consumer<PonderCombatEvent.Hit> createStandardDodgeCallback(StaticAnimation dodgeAnim) {
+        return hitEvent -> {
+            hitEvent.setResult(PonderCombatEvent.AttackResult.FAIL_DODGED);
+
+            playSoundClientSide(SoundEvents.PLAYER_ATTACK_SWEEP, 1.0F, 1.0F);
+
+            LivingEntityPatch<?> rawPatch = EpicFightCapabilities.getEntityPatch(hitEvent.getTarget(), LivingEntityPatch.class);
+            if (rawPatch instanceof DummyEntityPatch<?> victimPatch && victimPatch.getClientAnimator() != null) {
+
+                victimPatch.getClientAnimator().playAnimation(dodgeAnim.getRealAnimation(), 0.0F);
+
+                EntitySnapshot<?> snapshot = new EntitySnapshot<>(victimPatch);
+
+                int cacheId = PonderEntityAfterimageParticle.cacheSnapshot(snapshot);
+
+                victimPatch.getOriginal().level().addParticle(
+                        EFPParticles.PONDER_AFTERIMAGE.get(),
+                        victimPatch.getOriginal().getX(),
+                        victimPatch.getOriginal().getY(),
+                        victimPatch.getOriginal().getZ(),
+                        cacheId, 0.0, 0.0
+                );
+            }
+        };
+    }
+
+    /**
      * 创建“成功格挡”事件 (支持 returnAnim 传 null，代表不再回正)
      */
     public static Consumer<PonderCombatEvent.Hit> createStandardGuardCallback(StaticAnimation hitAnim, @Nullable StaticAnimation returnAnim) {
@@ -348,7 +428,6 @@ public class EFPSceneUtils {
 
     /**
      * 创建“成功招架 (Parry)”事件
-     * 允许传入自定义逻辑 (Function)，根据具体的 Hit 事件(例如攻击者的位置、招式)来动态决定使用哪个招架动画。
      */
     public static Consumer<PonderCombatEvent.Hit> createCustomParryCallback(Function<PonderCombatEvent.Hit, StaticAnimation> animSelector) {
         return hitEvent -> {
@@ -396,17 +475,6 @@ public class EFPSceneUtils {
             currentIndex[0] = (currentIndex[0] + 1) % parryAnims.length;
 
             return chosenAnim;
-        });
-    }
-
-    /**
-     * 重置假人状态为持刀待机
-     */
-    public static void resetToIdle(EpicFightSceneBuilder builder, ElementLink<EntityElement> entityLink) {
-        builder.world().modifyEntity(entityLink, entity -> {
-            if (entity instanceof LivingEntity living && EpicFightCapabilities.getEntityPatch(living, LivingEntityPatch.class) instanceof DummyEntityPatch<?> patch) {
-                patch.updateLivingMotionsForPonder();
-            }
         });
     }
 
@@ -523,21 +591,6 @@ public class EFPSceneUtils {
         updateSheathState(builder, attacker, 1);
     }
 
-    public static void showcaseNoSkill(
-            SceneBuilder baseScene, SceneBuildingUtil util,
-            int size, String sceneId) {
-        EpicFightSceneBuilder builder = new EpicFightSceneBuilder(baseScene);
-        EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
-        double center = size / 2.0D;
-
-        setupStandardScene(builder, size, sceneId, "epic_fight_ponder.ponder." + sceneId + ".title");
-        ElementLink<EntityElement> dummy = spawnDummyActor(builder, center, 0.5, center, 180, null, null);
-
-        world.playAnimation(dummy, Animations.BIPED_SIT, 0.0F);
-        builder.idle(20);
-        builder.markAsFinished();
-    }
-
     public static void showcaseStandardWeaponCombo(
             SceneBuilder baseScene, SceneBuildingUtil util,
             int size, String sceneId, ItemStack mainHandItem, ItemStack offHandItem, Style showcaseStyle, boolean enableDash, boolean enableJump) {
@@ -633,6 +686,26 @@ public class EFPSceneUtils {
 
     public static void playSoundClientSide(SoundEvent sound, float pitch, float volume) {
         Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(sound, pitch, volume));
+    }
+
+    public static void playStepSoundOnTimeline(SceneBuilder baseScene, ElementLink<EntityElement> entityLink) {
+        baseScene.addInstruction(scene -> {
+            Entity entity = resolveEntity(scene.builder(), entityLink);
+            BlockState state;
+            if (entity != null) {
+                state = scene.getWorld().getBlockState(entity.getOnPos());
+                playSoundClientSide(state.getSoundType().getHitSound(), 1.0F, 0.8F);
+            }
+        });
+    }
+
+    public static void playSoundOnTimeline(SceneBuilder baseScene, ElementLink<EntityElement> entityLink, SoundEvent soundEvent) {
+        baseScene.addInstruction(scene -> {
+            Entity entity = resolveEntity(scene.builder(), entityLink);
+            if (entity != null) {
+                playSoundClientSide(soundEvent, 1.0F, 0.8F);
+            }
+        });
     }
 
     public static void spawnEfmHitParticleClientSide(

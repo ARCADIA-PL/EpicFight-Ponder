@@ -16,7 +16,6 @@ import org.com.efp.compat.EFPCompatManager;
 import org.com.efp.compat.EFXCompat;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import yesman.epicfight.api.data.reloader.ItemCapabilityReloadListener;
 import yesman.epicfight.world.capabilities.item.ItemKeywordReloadListener;
 import yesman.epicfight.world.item.SkillBookItem;
@@ -31,6 +30,97 @@ public class EFPPonderPlugin implements PonderPlugin {
 
     public EFPPonderPlugin() {
         MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    @Nullable
+    public static ResourceLocation getCustomPonderId(ItemStack item) {
+        if (item == null || item.isEmpty()) return null;
+
+        if (item.getItem() instanceof SkillBookItem) {
+            if (item.getTag() != null && item.hasTag() && item.getTag().contains("skill")) {
+                String skillId = item.getTag().getString("skill");
+                ResourceLocation rawRl = ResourceLocation.parse(skillId);
+                return ResourceLocation.fromNamespaceAndPath(rawRl.getNamespace(), "skill_" + rawRl.getPath());
+            }
+        }
+
+        if (!isCacheBuilt) {
+            rebuildWeaponTypeCache();
+        }
+
+        ResourceLocation presetId = CACHED_WEAPON_TYPES.get(item.getItem());
+        if (presetId != null) {
+            return ResourceLocation.fromNamespaceAndPath(EpicFightPonder.MOD_ID, "weapon_" + presetId.getPath());
+        }
+
+        return null;
+    }
+
+    private static synchronized void rebuildWeaponTypeCache() {
+        CACHED_WEAPON_TYPES.clear();
+
+        ItemCapabilityReloadListener.getWeaponDataStream().forEach(tag -> {
+            if (tag.contains("type")) {
+                Item item = Item.byId(tag.getInt("id"));
+                ResourceLocation presetId = ResourceLocation.parse(tag.getString("type"));
+                CACHED_WEAPON_TYPES.put(item, presetId);
+            }
+        });
+
+        Map<ResourceLocation, ItemKeywordReloadListener.ItemRegex> regexes = ItemKeywordReloadListener.getRegexes();
+
+        for (Map.Entry<ResourceKey<Item>, Item> entry : ForgeRegistries.ITEMS.getEntries()) {
+            Item item = entry.getValue();
+
+            if (CACHED_WEAPON_TYPES.containsKey(item) || item instanceof BlockItem) {
+                continue;
+            }
+
+            ResourceLocation registryName = entry.getKey().location();
+            boolean matched = false;
+
+            for (Map.Entry<ResourceLocation, ItemKeywordReloadListener.ItemRegex> regexEntry : regexes.entrySet()) {
+                if (regexEntry.getValue().matchesAny(registryName.toString())) {
+                    CACHED_WEAPON_TYPES.put(item, regexEntry.getKey());
+                    matched = true;
+                    break;
+                }
+            }
+
+            if (!matched) {
+                Class<?> clazz = item.getClass();
+                while (clazz != null) {
+                    if (SwordItem.class.equals(clazz)) {
+                        CACHED_WEAPON_TYPES.put(item, ResourceLocation.parse("epicfight:sword"));
+                        break;
+                    } else if (AxeItem.class.equals(clazz)) {
+                        CACHED_WEAPON_TYPES.put(item, ResourceLocation.parse("epicfight:axe"));
+                        break;
+                    } else if (PickaxeItem.class.equals(clazz)) {
+                        CACHED_WEAPON_TYPES.put(item, ResourceLocation.parse("epicfight:pickaxe"));
+                        break;
+                    } else if (ShovelItem.class.equals(clazz)) {
+                        CACHED_WEAPON_TYPES.put(item, ResourceLocation.parse("epicfight:shovel"));
+                        break;
+                    } else if (HoeItem.class.equals(clazz)) {
+                        CACHED_WEAPON_TYPES.put(item, ResourceLocation.parse("epicfight:hoe"));
+                        break;
+                    } else if (BowItem.class.equals(clazz)) {
+                        CACHED_WEAPON_TYPES.put(item, ResourceLocation.parse("epicfight:bow"));
+                        break;
+                    } else if (CrossbowItem.class.equals(clazz)) {
+                        CACHED_WEAPON_TYPES.put(item, ResourceLocation.parse("epicfight:crossbow"));
+                        break;
+                    } else if (ShieldItem.class.equals(clazz)) {
+                        CACHED_WEAPON_TYPES.put(item, ResourceLocation.parse("epicfight:shield"));
+                        break;
+                    }
+                    clazz = clazz.getSuperclass();
+                }
+            }
+        }
+
+        isCacheBuilt = true;
     }
 
     @SubscribeEvent
@@ -127,80 +217,6 @@ public class EFPPonderPlugin implements PonderPlugin {
                 EFPWeaponScenes::showcaseSwordBasicAttackCombo_Dual);
     }
 
-    @Nullable
-    public static ResourceLocation getCustomPonderId(ItemStack item) {
-        if (item == null || item.isEmpty()) return null;
-
-        if (item.getItem() instanceof SkillBookItem) {
-            if (item.getTag() != null && item.hasTag() && item.getTag().contains("skill")) {
-                String skillId = item.getTag().getString("skill");
-                ResourceLocation rawRl = ResourceLocation.parse(skillId);
-                return ResourceLocation.fromNamespaceAndPath(rawRl.getNamespace(), "skill_" + rawRl.getPath());
-            }
-        }
-
-        if (!isCacheBuilt) {
-            rebuildWeaponTypeCache();
-        }
-
-        ResourceLocation presetId = CACHED_WEAPON_TYPES.get(item.getItem());
-        if (presetId != null) {
-            return ResourceLocation.fromNamespaceAndPath(EpicFightPonder.MOD_ID, "weapon_" + presetId.getPath());
-        }
-
-        return null;
-    }
-
-    private static synchronized void rebuildWeaponTypeCache() {
-        CACHED_WEAPON_TYPES.clear();
-
-        ItemCapabilityReloadListener.getWeaponDataStream().forEach(tag -> {
-            if (tag.contains("type")) {
-                Item item = Item.byId(tag.getInt("id"));
-                ResourceLocation presetId = ResourceLocation.parse(tag.getString("type"));
-                CACHED_WEAPON_TYPES.put(item, presetId);
-            }
-        });
-
-        Map<ResourceLocation, ItemKeywordReloadListener.ItemRegex> regexes = ItemKeywordReloadListener.getRegexes();
-
-        for (Map.Entry<ResourceKey<Item>, Item> entry : ForgeRegistries.ITEMS.getEntries()) {
-            Item item = entry.getValue();
-
-            if (CACHED_WEAPON_TYPES.containsKey(item) || item instanceof BlockItem) {
-                continue;
-            }
-
-            ResourceLocation registryName = entry.getKey().location();
-            boolean matched = false;
-
-            for (Map.Entry<ResourceLocation, ItemKeywordReloadListener.ItemRegex> regexEntry : regexes.entrySet()) {
-                if (regexEntry.getValue().matchesAny(registryName.toString())) {
-                    CACHED_WEAPON_TYPES.put(item, regexEntry.getKey());
-                    matched = true;
-                    break;
-                }
-            }
-
-            if (!matched) {
-                Class<?> clazz = item.getClass();
-                while (clazz != null) {
-                    if (SwordItem.class.equals(clazz)) { CACHED_WEAPON_TYPES.put(item, ResourceLocation.parse("epicfight:sword")); break; }
-                    else if (AxeItem.class.equals(clazz)) { CACHED_WEAPON_TYPES.put(item, ResourceLocation.parse("epicfight:axe")); break; }
-                    else if (PickaxeItem.class.equals(clazz)) { CACHED_WEAPON_TYPES.put(item, ResourceLocation.parse("epicfight:pickaxe")); break; }
-                    else if (ShovelItem.class.equals(clazz)) { CACHED_WEAPON_TYPES.put(item, ResourceLocation.parse("epicfight:shovel")); break; }
-                    else if (HoeItem.class.equals(clazz)) { CACHED_WEAPON_TYPES.put(item, ResourceLocation.parse("epicfight:hoe")); break; }
-                    else if (BowItem.class.equals(clazz)) { CACHED_WEAPON_TYPES.put(item, ResourceLocation.parse("epicfight:bow")); break; }
-                    else if (CrossbowItem.class.equals(clazz)) { CACHED_WEAPON_TYPES.put(item, ResourceLocation.parse("epicfight:crossbow")); break; }
-                    else if (ShieldItem.class.equals(clazz)) { CACHED_WEAPON_TYPES.put(item, ResourceLocation.parse("epicfight:shield")); break; }
-                    clazz = clazz.getSuperclass();
-                }
-            }
-        }
-
-        isCacheBuilt = true;
-    }
-
     private void registerPreset(PonderSceneRegistrationHelper<String> helper, String presetOrSkillId, PonderSceneMethod... scenes) {
         var component = helper.forComponents(presetOrSkillId);
         for (PonderSceneMethod scene : scenes) {
@@ -208,7 +224,7 @@ public class EFPPonderPlugin implements PonderPlugin {
         }
     }
 
-    private void registerPreset(PonderSceneRegistrationHelper<String> helper, String presetOrSkillId, String structure ,PonderSceneMethod... scenes) {
+    private void registerPreset(PonderSceneRegistrationHelper<String> helper, String presetOrSkillId, String structure, PonderSceneMethod... scenes) {
         var component = helper.forComponents(presetOrSkillId);
         for (PonderSceneMethod scene : scenes) {
             component.addStoryBoard(structure, scene::build);

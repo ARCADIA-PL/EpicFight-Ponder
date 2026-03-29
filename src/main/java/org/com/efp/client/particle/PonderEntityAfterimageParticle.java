@@ -1,15 +1,9 @@
 package org.com.efp.client.particle;
 
-import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
-
-import org.joml.Quaternionf;
-
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -19,12 +13,16 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Quaternionf;
 import yesman.epicfight.api.client.model.Mesh;
 import yesman.epicfight.api.utils.EntitySnapshot;
 import yesman.epicfight.api.utils.math.OpenMatrix4f;
 import yesman.epicfight.api.utils.math.QuaternionUtils;
 import yesman.epicfight.client.particle.EntityAfterimageParticle;
 import yesman.epicfight.client.renderer.EpicFightRenderTypes;
+
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 public class PonderEntityAfterimageParticle extends EntityAfterimageParticle {
 
@@ -33,14 +31,14 @@ public class PonderEntityAfterimageParticle extends EntityAfterimageParticle {
             .build();
     private static int NEXT_ID = 0;
 
+    public PonderEntityAfterimageParticle(ClientLevel level, double x, double y, double z, double xd, double yd, double zd, EntitySnapshot<?> entitySnapshot, Consumer<EntityAfterimageParticle> ticktask) {
+        super(level, x, y, z, xd, yd, zd, entitySnapshot, ticktask);
+    }
+
     public static int cacheSnapshot(EntitySnapshot<?> snapshot) {
         int id = NEXT_ID++;
         SNAPSHOT_CACHE.put(id, snapshot);
         return id;
-    }
-
-    public PonderEntityAfterimageParticle(ClientLevel level, double x, double y, double z, double xd, double yd, double zd, EntitySnapshot<?> entitySnapshot, Consumer<EntityAfterimageParticle> ticktask) {
-        super(level, x, y, z, xd, yd, zd, entitySnapshot, ticktask);
     }
 
     @Override
@@ -68,9 +66,11 @@ public class PonderEntityAfterimageParticle extends EntityAfterimageParticle {
     protected void revert(PoseStack poseStack) {
         poseStack.popPose();
     }
+
     public static class PonderWhite extends PonderEntityAfterimageParticle {
         public PonderWhite(ClientLevel level, double x, double y, double z, double xd, double yd, double zd, EntitySnapshot<?> entitySnapshot) {
-            super(level, x, y, z, xd, yd, zd, entitySnapshot, p -> {});
+            super(level, x, y, z, xd, yd, zd, entitySnapshot, p -> {
+            });
             this.lifetime = 45;
         }
 

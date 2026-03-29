@@ -36,7 +36,7 @@ public class MixinPonderTooltipHandler {
     }
 
     @Redirect(
-            method = { "addToTooltip", "updateHovered" },
+            method = {"addToTooltip", "updateHovered"},
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/createmod/ponder/api/registration/SceneRegistryAccess;doScenesExistForId(Lnet/minecraft/resources/ResourceLocation;)Z"

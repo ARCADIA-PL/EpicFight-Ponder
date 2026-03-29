@@ -143,6 +143,7 @@ public class EFPSceneUtils {
 
     /**
      * [基础] 在目标上方显示普通文本
+     *
      * @param duration 持续时间(tick)
      */
     public static void showText(EpicFightSceneBuilder builder, SceneBuildingUtil util, String textKey, int duration, int x, int y, int z) {
@@ -272,13 +273,14 @@ public class EFPSceneUtils {
 
         Consumer<PonderCombatEvent.Hit> dodgeCallback = createStandardDodgeCallback(dodgeAnim);
 
-        world.playAnimation(attacker, strikeMotion, 0.0F, dodgeCallback, beHit -> {});
+        world.playAnimation(attacker, strikeMotion, 0.0F, dodgeCallback, beHit -> {
+        });
 
         world.modifyEntityPlaySpeed(attacker, 0.35F);
         world.modifyEntityPlaySpeed(victim, 0.35F);
 
         if (textKey1 != null && !textKey1.isEmpty()) {
-            showText(builder, util, textKey1, (int)(startupSlowTicks * 0.8), (int)textX, (int)textY, (int)textZ);
+            showText(builder, util, textKey1, (int) (startupSlowTicks * 0.8), (int) textX, (int) textY, (int) textZ);
         }
 
         builder.idle(startupSlowTicks);
@@ -292,7 +294,7 @@ public class EFPSceneUtils {
         world.modifyEntityPlaySpeed(victim, 0.1F);
 
         if (textKey2 != null && !textKey2.isEmpty()) {
-            showText(builder, util, textKey2, bulletTimeTicks, (int)textX, (int)textY, (int)textZ);
+            showText(builder, util, textKey2, bulletTimeTicks, (int) textX, (int) textY, (int) textZ);
         }
 
         builder.idle(bulletTimeTicks);

@@ -45,7 +45,7 @@ public class EFPSKillScenes {
 
         EFPSceneUtils.setupStandardScene(builder, 11, "skill_step", "epic_fight_ponder.ponder.skill_step.title");
         ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.DIAMOND_LONGSWORD.get()));
-        world.modifyEntityMovement(attacker,true);
+        world.modifyEntityMovement(attacker, true);
 
         EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.skill_step.text_1", 80, 5, 1, 5);
         builder.idle(20);
@@ -76,7 +76,7 @@ public class EFPSKillScenes {
 
         EFPSceneUtils.setupStandardScene(builder, 11, "skill_roll", "epic_fight_ponder.ponder.skill_roll.title");
         ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.DIAMOND_LONGSWORD.get()));
-        world.modifyEntityMovement(attacker,true);
+        world.modifyEntityMovement(attacker, true);
 
         EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.skill_roll.text_1", 80, 5, 1, 5);
         builder.idle(20);

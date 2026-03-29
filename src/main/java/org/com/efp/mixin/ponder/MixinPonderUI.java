@@ -19,9 +19,9 @@ import java.util.List;
 @Mixin(value = PonderUI.class, remap = false)
 public class MixinPonderUI {
 
-    @Shadow ItemStack stack;
-
     private static final ThreadLocal<ItemStack> EFP_CONTEXT_STACK = new ThreadLocal<>();
+    @Shadow
+    ItemStack stack;
 
     @Inject(method = "of(Lnet/minecraft/world/item/ItemStack;)Lnet/createmod/ponder/foundation/ui/PonderUI;", at = @At("HEAD"), cancellable = true)
     private static void routeItemToDataDrivenConcept(ItemStack item, CallbackInfoReturnable<PonderUI> cir) {

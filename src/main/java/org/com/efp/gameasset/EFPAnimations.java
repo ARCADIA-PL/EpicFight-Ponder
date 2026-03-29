@@ -18,17 +18,17 @@ public class EFPAnimations {
 
     public static void buildAnimations(AnimationManager.AnimationBuilder builder) {
         BIPED_ROLL_FORWARD = builder.nextAccessor("biped/skill/roll_forward", (accessor) ->
-                new ActionAnimation(0.1F,accessor, Armatures.BIPED));
+                new ActionAnimation(0.1F, accessor, Armatures.BIPED));
         BIPED_ROLL_BACKWARD = builder.nextAccessor("biped/skill/roll_backward", (accessor) ->
-                new ActionAnimation(0.1F,accessor, Armatures.BIPED));
+                new ActionAnimation(0.1F, accessor, Armatures.BIPED));
         BIPED_STEP_FORWARD = builder.nextAccessor("biped/skill/step_forward", (accessor) ->
-                new ActionAnimation(0.1F,accessor, Armatures.BIPED));
+                new ActionAnimation(0.1F, accessor, Armatures.BIPED));
         BIPED_STEP_BACKWARD = builder.nextAccessor("biped/skill/step_backward", (accessor) ->
-                new ActionAnimation(0.1F,accessor, Armatures.BIPED));
+                new ActionAnimation(0.1F, accessor, Armatures.BIPED));
         BIPED_STEP_LEFT = builder.nextAccessor("biped/skill/step_left", (accessor) ->
-                new ActionAnimation(0.1F,accessor, Armatures.BIPED));
+                new ActionAnimation(0.1F, accessor, Armatures.BIPED));
         BIPED_STEP_RIGHT = builder.nextAccessor("biped/skill/step_right", (accessor) ->
-                new ActionAnimation(0.1F,accessor, Armatures.BIPED));
+                new ActionAnimation(0.1F, accessor, Armatures.BIPED));
     }
 
     @SubscribeEvent

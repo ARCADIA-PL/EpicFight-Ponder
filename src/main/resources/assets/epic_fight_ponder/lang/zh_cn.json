@@ -1,30 +1,24 @@
 {
-  "epic_fight_ponder.ponder.tachi_rushing_tempo.header": "太刀固有技能：急速连斩",
-  "epic_fight_ponder.ponder.tachi_rushing_tempo.text_1": "急速连斩 (Rushing Tempo) 允许你在普攻后摇中穿插派生",
-  "epic_fight_ponder.ponder.tachi_rushing_tempo.text_2": "在普攻挥出的后摇阶段，立刻按下技能键！",
-  "epic_fight_ponder.ponder.tachi_rushing_tempo.text_3": "成功派生！只要掌握节奏，后续便可无限交替...",
-  "epic_fight_ponder.ponder.tachi_rushing_tempo.text_4": "疾跑、跳跃攻击后也可进行派生",
-
   "epic_fight_ponder.ponder.nothing.header": "暂无展示",
 
   "epic_fight_ponder.ponder.skill_step.header": "闪避 —— 跨步",
-  "epic_fight_ponder.ponder.skill_step.text_1": "按下[闪避]键消耗耐力进行的[跨步]。\n位移短、响应快，期间附带无敌帧",
+  "epic_fight_ponder.ponder.skill_step.text_1": "按下[闪避]键消耗耐力进行的[跨步]。\n位移短、响应快，期间附带无敌帧。",
 
   "epic_fight_ponder.ponder.skill_roll.header": "闪避 —— 翻滚",
-  "epic_fight_ponder.ponder.skill_roll.text_1": "按下[闪避]键消耗耐力进行的[翻滚]。\n位移长，但后摇较大，期间附带无敌帧",
+  "epic_fight_ponder.ponder.skill_roll.text_1": "按下[闪避]键消耗耐力进行的[翻滚]。\n位移长，但后摇较大，期间附带无敌帧。",
 
   "epic_fight_ponder.ponder.skill_technician.header": "被动技能 —— 技巧大师",
   "epic_fight_ponder.ponder.skill_technician.text_1": "若能在千钧一发之际规避敌人的攻击——",
   "epic_fight_ponder.ponder.skill_technician.text_2": "便会触发[完美闪避]，并瞬间返还本次消耗的耐力！",
 
   "epic_fight_ponder.ponder.skill_guard.header": "防御",
-  "epic_fight_ponder.ponder.skill_guard.text_1": "按住[防御]进入防御架势\n可消耗[耐力]抵挡面前的近战伤害\n \n连续格挡会使[耐力]消耗急剧增加",
+  "epic_fight_ponder.ponder.skill_guard.text_1": "按住[防御]进入防御架势\n可消耗[耐力]抵挡面前的近战伤害。\n \n连续格挡会使[耐力]消耗急剧增加。",
 
   "epic_fight_ponder.ponder.skill_guard_break.header": "破防",
   "epic_fight_ponder.ponder.skill_guard_break.text_1": "一味地死守绝非明智之举……",
   "epic_fight_ponder.ponder.skill_guard_break.text_2": "[耐力]耗尽时承受重击，\n将陷入毫无防备的【破防】大硬直状态。",
 
-  "epic_fight_ponder.ponder.skill_parry.header": "招架——更高级的防御行为",
+  "epic_fight_ponder.ponder.skill_parry.header": "招架 —— 高阶防御行为",
   "epic_fight_ponder.ponder.skill_parry.text_1": "摆出防御姿态的瞬间，\n将获得短暂的【招架窗口】。",
   "epic_fight_ponder.ponder.skill_parry.text_2": "在此窗口内接下攻击，\n仅需消耗极少耐力即可完美化解攻势。",
 
@@ -33,26 +27,32 @@
   "epic_fight_ponder.ponder.tachi_basic_attack_combo.text_2": "太刀 冲刺攻击派生",
   "epic_fight_ponder.ponder.tachi_basic_attack_combo.text_3": "太刀 跳跃攻击派生",
 
+  "epic_fight_ponder.ponder.tachi_rushing_tempo.header": "太刀武技 · 急速连斩",
+  "epic_fight_ponder.ponder.tachi_rushing_tempo.text_1": "普攻后摇期间可穿插连斩派生。",
+  "epic_fight_ponder.ponder.tachi_rushing_tempo.text_2": "在普攻挥出的后摇阶段，立刻按下技能键！",
+  "epic_fight_ponder.ponder.tachi_rushing_tempo.text_3": "成功派生！掌握节奏，便可无限交替流转……",
+  "epic_fight_ponder.ponder.tachi_rushing_tempo.text_4": "疾跑、跳跃攻击后亦可进行派生。",
+
   "epic_fight_ponder.ponder.uchigatana_basic_attack_combo.header": "打刀 基础连段演示",
   "epic_fight_ponder.ponder.uchigatana_basic_attack_combo.text_1": "打刀 普通攻击连段",
   "epic_fight_ponder.ponder.uchigatana_basic_attack_combo.text_2": "打刀 冲刺攻击派生",
   "epic_fight_ponder.ponder.uchigatana_basic_attack_combo.text_3": "打刀 跳跃攻击派生",
 
-  "epic_fight_ponder.ponder.uchigatana_battojutsu_unsheath.header": "打刀 · 拔刀术",
-  "epic_fight_ponder.ponder.uchigatana_battojutsu_unsheath.text_1": "藏锋于鞘，蓄势待发……",
-  "epic_fight_ponder.ponder.uchigatana_battojutsu_unsheath.text_2": "一斩足矣！",
-  "epic_fight_ponder.ponder.uchigatana_battojutsu_unsheath.text_3": "[疾跑] 时释放：大幅提升突进距离",
-
   "epic_fight_ponder.ponder.uchigatana_passive.header": "打刀 · 专属被动",
-  "epic_fight_ponder.ponder.uchigatana_passive.text_1": "静立片刻，自动收刀入鞘\n随后改变攻击动作，进入[居合架势]",
+  "epic_fight_ponder.ponder.uchigatana_passive.text_1": "静立片刻，自动收刀入鞘。\n随后改变攻击动作，进入[居合架势]。",
+
+  "epic_fight_ponder.ponder.uchigatana_battojutsu_unsheath.header": "打刀武技 · 拔刀术",
+  "epic_fight_ponder.ponder.uchigatana_battojutsu_unsheath.text_1": "藏锋于鞘，蓄势待发……",
+  "epic_fight_ponder.ponder.uchigatana_battojutsu_unsheath.text_2": "破敌，唯此一斩！",
+  "epic_fight_ponder.ponder.uchigatana_battojutsu_unsheath.text_3": "[疾跑] 时释放：大幅提升突进距离。",
 
   "epic_fight_ponder.ponder.uchigatana_basic_attack_combo_sheath.header": "打刀 (纳刀流) 基础连段演示",
   "epic_fight_ponder.ponder.uchigatana_basic_attack_combo_sheath.text_1": "打刀 (纳刀流) 普通攻击连段",
   "epic_fight_ponder.ponder.uchigatana_basic_attack_combo_sheath.text_2": "打刀 (纳刀流) 冲刺攻击派生",
   "epic_fight_ponder.ponder.uchigatana_basic_attack_combo_sheath.text_3": "打刀 (纳刀流) 跳跃攻击派生",
 
-  "epic_fight_ponder.ponder.uchigatana_battojutsu_sheath.header": "打刀 · 拔刀术 [居合]",
-  "epic_fight_ponder.ponder.uchigatana_battojutsu_sheath.text_1": "瞬发居合 —— 杀敌于电光石火之间",
+  "epic_fight_ponder.ponder.uchigatana_battojutsu_sheath.header": "打刀武技 · 拔刀术 [居合]",
+  "epic_fight_ponder.ponder.uchigatana_battojutsu_sheath.text_1": "瞬发居合 —— 杀敌于电光石火之间。",
 
   "epic_fight_ponder.ponder.greatsword_basic_attack_combo.header": "大剑 基础连段演示",
   "epic_fight_ponder.ponder.greatsword_basic_attack_combo.text_1": "大剑 普通攻击连段",
@@ -71,13 +71,18 @@
 
   "epic_fight_ponder.ponder.longsword_basic_attack_combo_ochs.header": "长剑 (格挡式) 基础连段演示",
   "epic_fight_ponder.ponder.longsword_basic_attack_combo_ochs.text_1": "长剑 (格挡式) 普通攻击连段",
-  "epic_fight_ponder.ponder.longsword_basic_attack_combo_ochs.text_2": "长剑 (格挡式) 跳跃攻击派生",
+  "epic_fight_ponder.ponder.longsword_basic_attack_combo_ochs.text_2": "长剑 (格挡式) 冲刺攻击派生",
   "epic_fight_ponder.ponder.longsword_basic_attack_combo_ochs.text_3": "长剑 (格挡式) 跳跃攻击派生",
 
   "epic_fight_ponder.ponder.spear_basic_attack_combo.header": "长枪 基础连段演示",
   "epic_fight_ponder.ponder.spear_basic_attack_combo.text_1": "长枪 普通攻击连段",
   "epic_fight_ponder.ponder.spear_basic_attack_combo.text_2": "长枪 冲刺攻击派生",
   "epic_fight_ponder.ponder.spear_basic_attack_combo.text_3": "长枪 跳跃攻击派生",
+
+  "epic_fight_ponder.ponder.grasping_spire.header": "长枪武技 · 锋取",
+  "epic_fight_ponder.ponder.grasping_spire.text_1": "挺枪向前疾速突刺……",
+  "epic_fight_ponder.ponder.grasping_spire.text_2": "若命中目标，将造成巨大的受击硬直。",
+  "epic_fight_ponder.ponder.grasping_spire.text_3": "顺势派生大范围横扫！",
 
   "epic_fight_ponder.ponder.spear_basic_attack_combo_onehand.header": "长枪 (枪盾) 基础连段演示",
   "epic_fight_ponder.ponder.spear_basic_attack_combo_onehand.text_1": "长枪 (枪盾) 普通攻击连段",
@@ -89,18 +94,43 @@
   "epic_fight_ponder.ponder.sword_basic_attack_combo.text_2": "单手剑 冲刺攻击派生",
   "epic_fight_ponder.ponder.sword_basic_attack_combo.text_3": "单手剑 跳跃攻击派生",
 
+  "epic_fight_ponder.ponder.sweeping_edge.header": "单手剑武技 · 横扫之刃",
+  "epic_fight_ponder.ponder.sweeping_edge.text_1": "对前方目标进行大范围横扫攻击。",
+
   "epic_fight_ponder.ponder.sword_basic_attack_combo_dual.header": "单手剑 (双持) 基础连段演示",
   "epic_fight_ponder.ponder.sword_basic_attack_combo_dual.text_1": "单手剑 (双持) 普通攻击连段",
   "epic_fight_ponder.ponder.sword_basic_attack_combo_dual.text_2": "单手剑 (双持) 冲刺攻击派生",
   "epic_fight_ponder.ponder.sword_basic_attack_combo_dual.text_3": "单手剑 (双持) 跳跃攻击派生",
+
+  "epic_fight_ponder.ponder.dancing_edge.header": "单手剑武技 · 舞动之刃",
+  "epic_fight_ponder.ponder.dancing_edge.text_1": "挥舞双剑进行狂风骤雨般的连击。",
 
   "epic_fight_ponder.ponder.dagger_basic_attack_combo.header": "匕首 基础连段演示",
   "epic_fight_ponder.ponder.dagger_basic_attack_combo.text_1": "匕首 普通攻击连段",
   "epic_fight_ponder.ponder.dagger_basic_attack_combo.text_2": "匕首 冲刺攻击派生",
   "epic_fight_ponder.ponder.dagger_basic_attack_combo.text_3": "匕首 跳跃攻击派生",
 
+  "epic_fight_ponder.ponder.eviscerate_efx.header": "匕首武技 · 剔骨",
+  "epic_fight_ponder.ponder.eviscerate_efx.text_1": "极速向前突进……",
+  "epic_fight_ponder.ponder.eviscerate_efx.text_2": "若命中目标，将发动高爆发的连续追击。",
+  "epic_fight_ponder.ponder.eviscerate_efx.text_3": "追击位移期间可灵活衔接其他招式。",
+
+  "epic_fight_ponder.ponder.eviscerate.header": "匕首武技 · 剔骨",
+  "epic_fight_ponder.ponder.eviscerate.text_1": "极速向前突进……",
+  "epic_fight_ponder.ponder.eviscerate.text_2": "若命中目标，将发动高爆发的连续追击。",
+
   "epic_fight_ponder.ponder.dagger_basic_attack_combo_dual.header": "匕首 (双持) 基础连段演示",
   "epic_fight_ponder.ponder.dagger_basic_attack_combo_dual.text_1": "匕首 (双持) 普通攻击连段",
   "epic_fight_ponder.ponder.dagger_basic_attack_combo_dual.text_2": "匕首 (双持) 冲刺攻击派生",
-  "epic_fight_ponder.ponder.dagger_basic_attack_combo_dual.text_3": "匕首 (双持) 跳跃攻击派生"
+  "epic_fight_ponder.ponder.dagger_basic_attack_combo_dual.text_3": "匕首 (双持) 跳跃攻击派生",
+
+  "epic_fight_ponder.ponder.axe_basic_attack_combo.header": "斧 基础连段演示",
+  "epic_fight_ponder.ponder.axe_basic_attack_combo.text_1": "斧 普通攻击连段",
+  "epic_fight_ponder.ponder.axe_basic_attack_combo.text_2": "斧 冲刺攻击派生",
+  "epic_fight_ponder.ponder.axe_basic_attack_combo.text_3": "斧 跳跃攻击派生",
+
+  "epic_fight_ponder.ponder.guillotine.header": "斧武技 · 断头台",
+  "epic_fight_ponder.ponder.guillotine.text_1": "拖斧向前突进……",
+  "epic_fight_ponder.ponder.guillotine.text_2": "若目标生命值低于斩杀线，",
+  "epic_fight_ponder.ponder.guillotine.text_3": "发动无情处决，强制斩杀！"
 }

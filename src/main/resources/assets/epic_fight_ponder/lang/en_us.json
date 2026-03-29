@@ -1,10 +1,4 @@
 {
-  "epic_fight_ponder.ponder.tachi_rushing_tempo.header": "Tachi Innate Skill: Rushing Tempo",
-  "epic_fight_ponder.ponder.tachi_rushing_tempo.text_1": "Rushing Tempo allows you to weave skill strikes into your basic attack recovery.",
-  "epic_fight_ponder.ponder.tachi_rushing_tempo.text_2": "Press the skill key immediately during the attack recovery window!",
-  "epic_fight_ponder.ponder.tachi_rushing_tempo.text_3": "Successful derivation! Keep the rhythm to chain attacks infinitely...",
-  "epic_fight_ponder.ponder.tachi_rushing_tempo.text_4": "Can also be derived after dash or jump attacks.",
-
   "epic_fight_ponder.ponder.nothing.header": "WIP",
 
   "epic_fight_ponder.ponder.skill_step.header": "Dodge: Step",
@@ -18,13 +12,13 @@
   "epic_fight_ponder.ponder.skill_technician.text_2": "...will trigger a [Perfect Dodge], instantly refunding the stamina consumed!",
 
   "epic_fight_ponder.ponder.skill_guard.header": "Guard",
-  "epic_fight_ponder.ponder.skill_guard.text_1": "Hold [Guard] to enter a defensive stance\nconsuming [Stamina] to block frontal melee attacks.\n \nConsecutive blocks will rapidly drain your [Stamina]",
+  "epic_fight_ponder.ponder.skill_guard.text_1": "Hold [Guard] to enter a defensive stance,\nconsuming [Stamina] to block frontal melee attacks.\n \nConsecutive blocks will rapidly drain your [Stamina].",
 
   "epic_fight_ponder.ponder.skill_guard_break.header": "Guard Break",
   "epic_fight_ponder.ponder.skill_guard_break.text_1": "Relying purely on your guard\nis rarely a wise choice...",
   "epic_fight_ponder.ponder.skill_guard_break.text_2": "Taking heavy blows when depleting your [Stamina]\nwill result in a devastating [Guard Break] stagger.",
 
-  "epic_fight_ponder.ponder.skill_parry.header": "Parry——Advanced Guard Action",
+  "epic_fight_ponder.ponder.skill_parry.header": "Parry: Advanced Guard Action",
   "epic_fight_ponder.ponder.skill_parry.text_1": "Raising your weapon to guard\ngrants a split-second [Parry Window].",
   "epic_fight_ponder.ponder.skill_parry.text_2": "Blocking an attack within this window\nperfectly deflects the blow with minimal stamina cost.",
 
@@ -33,26 +27,32 @@
   "epic_fight_ponder.ponder.tachi_basic_attack_combo.text_2": "Tachi Dash Attack",
   "epic_fight_ponder.ponder.tachi_basic_attack_combo.text_3": "Tachi Jump Attack",
 
+  "epic_fight_ponder.ponder.tachi_rushing_tempo.header": "Tachi Skill: Rushing Tempo",
+  "epic_fight_ponder.ponder.tachi_rushing_tempo.text_1": "Weave skill strikes into your basic attack recovery.",
+  "epic_fight_ponder.ponder.tachi_rushing_tempo.text_2": "Press the skill key immediately during the attack recovery window!",
+  "epic_fight_ponder.ponder.tachi_rushing_tempo.text_3": "Successful derivation! Keep the rhythm to chain attacks infinitely...",
+  "epic_fight_ponder.ponder.tachi_rushing_tempo.text_4": "Can also be derived after Dash or Jump attacks.",
+
   "epic_fight_ponder.ponder.uchigatana_basic_attack_combo.header": "Uchigatana Basic Attack Combo",
   "epic_fight_ponder.ponder.uchigatana_basic_attack_combo.text_1": "Uchigatana Basic Attacks",
   "epic_fight_ponder.ponder.uchigatana_basic_attack_combo.text_2": "Uchigatana Dash Attack",
   "epic_fight_ponder.ponder.uchigatana_basic_attack_combo.text_3": "Uchigatana Jump Attack",
 
-  "epic_fight_ponder.ponder.uchigatana_battojutsu_unsheath.header": "Uchigatana: Battojutsu",
+  "epic_fight_ponder.ponder.uchigatana_passive.header": "Uchigatana Passive",
+  "epic_fight_ponder.ponder.uchigatana_passive.text_1": "Stand idle for a moment to sheathe the blade.\nAlters the moveset and enters [Iai Stance].",
+
+  "epic_fight_ponder.ponder.uchigatana_battojutsu_unsheath.header": "Uchigatana Skill: Battojutsu",
   "epic_fight_ponder.ponder.uchigatana_battojutsu_unsheath.text_1": "Blade sheathed. Focus gathered...",
   "epic_fight_ponder.ponder.uchigatana_battojutsu_unsheath.text_2": "One slash is all it takes!",
   "epic_fight_ponder.ponder.uchigatana_battojutsu_unsheath.text_3": "Use while [Sprinting]: Significantly increases dash distance.",
-
-  "epic_fight_ponder.ponder.uchigatana_passive.header": "Uchigatana: Passive",
-  "epic_fight_ponder.ponder.uchigatana_passive.text_1": "Stand idle for a moment to sheathe the blade.\nAlters the moveset and enters [Iai Stance].",
-
-  "epic_fight_ponder.ponder.uchigatana_battojutsu_sheath.header": "Uchigatana: Battojutsu [Sheathed]",
-  "epic_fight_ponder.ponder.uchigatana_battojutsu_sheath.text_1": "Instant Iai strike — Cut down foes in the blink of an eye.",
 
   "epic_fight_ponder.ponder.uchigatana_basic_attack_combo_sheath.header": "Uchigatana (Sheathed) Basic Attack Combo",
   "epic_fight_ponder.ponder.uchigatana_basic_attack_combo_sheath.text_1": "Uchigatana (Sheathed) Basic Attacks",
   "epic_fight_ponder.ponder.uchigatana_basic_attack_combo_sheath.text_2": "Uchigatana (Sheathed) Dash Attack",
   "epic_fight_ponder.ponder.uchigatana_basic_attack_combo_sheath.text_3": "Uchigatana (Sheathed) Jump Attack",
+
+  "epic_fight_ponder.ponder.uchigatana_battojutsu_sheath.header": "Uchigatana Skill: Battojutsu [Sheathed]",
+  "epic_fight_ponder.ponder.uchigatana_battojutsu_sheath.text_1": "Instant Iai strike — Cut down foes in the blink of an eye.",
 
   "epic_fight_ponder.ponder.greatsword_basic_attack_combo.header": "Greatsword Basic Attack Combo",
   "epic_fight_ponder.ponder.greatsword_basic_attack_combo.text_1": "Greatsword Basic Attacks",
@@ -64,14 +64,14 @@
   "epic_fight_ponder.ponder.longsword_basic_attack_combo.text_2": "Longsword Dash Attack",
   "epic_fight_ponder.ponder.longsword_basic_attack_combo.text_3": "Longsword Jump Attack",
 
-  "epic_fight_ponder.ponder.longsword_basic_attack_combo_onehand.header": "Longsword (One-Handed) Basic Attack Combo",
-  "epic_fight_ponder.ponder.longsword_basic_attack_combo_onehand.text_1": "Longsword (One-Handed) Basic Attacks",
-  "epic_fight_ponder.ponder.longsword_basic_attack_combo_onehand.text_2": "Longsword (One-Handed) Dash Attack",
-  "epic_fight_ponder.ponder.longsword_basic_attack_combo_onehand.text_3": "Longsword (One-Handed) Jump Attack",
+  "epic_fight_ponder.ponder.longsword_basic_attack_combo_onehand.header": "Longsword (Sword & Shield) Basic Attack Combo",
+  "epic_fight_ponder.ponder.longsword_basic_attack_combo_onehand.text_1": "Longsword (Sword & Shield) Basic Attacks",
+  "epic_fight_ponder.ponder.longsword_basic_attack_combo_onehand.text_2": "Longsword (Sword & Shield) Dash Attack",
+  "epic_fight_ponder.ponder.longsword_basic_attack_combo_onehand.text_3": "Longsword (Sword & Shield) Jump Attack",
 
   "epic_fight_ponder.ponder.longsword_basic_attack_combo_ochs.header": "Longsword (Ochs Stance) Basic Attack Combo",
   "epic_fight_ponder.ponder.longsword_basic_attack_combo_ochs.text_1": "Longsword (Ochs Stance) Basic Attacks",
-  "epic_fight_ponder.ponder.longsword_basic_attack_combo_ochs.text_2": "Longsword (Ochs Stance) Jump Attack",
+  "epic_fight_ponder.ponder.longsword_basic_attack_combo_ochs.text_2": "Longsword (Ochs Stance) Dash Attack",
   "epic_fight_ponder.ponder.longsword_basic_attack_combo_ochs.text_3": "Longsword (Ochs Stance) Jump Attack",
 
   "epic_fight_ponder.ponder.spear_basic_attack_combo.header": "Spear Basic Attack Combo",
@@ -79,28 +79,58 @@
   "epic_fight_ponder.ponder.spear_basic_attack_combo.text_2": "Spear Dash Attack",
   "epic_fight_ponder.ponder.spear_basic_attack_combo.text_3": "Spear Jump Attack",
 
-  "epic_fight_ponder.ponder.spear_basic_attack_combo_onehand.header": "Spear (One-Handed) Basic Attack Combo",
-  "epic_fight_ponder.ponder.spear_basic_attack_combo_onehand.text_1": "Spear (One-Handed) Basic Attacks",
-  "epic_fight_ponder.ponder.spear_basic_attack_combo_onehand.text_2": "Spear (One-Handed) Dash Attack",
-  "epic_fight_ponder.ponder.spear_basic_attack_combo_onehand.text_3": "Spear (One-Handed) Jump Attack",
+  "epic_fight_ponder.ponder.grasping_spire.header": "Spear Skill: Grasping Spire",
+  "epic_fight_ponder.ponder.grasping_spire.text_1": "Dash forward with a piercing thrust...",
+  "epic_fight_ponder.ponder.grasping_spire.text_2": "If it hits, inflicts massive stagger on the target.",
+  "epic_fight_ponder.ponder.grasping_spire.text_3": "Followed immediately by a wide sweeping strike!",
+
+  "epic_fight_ponder.ponder.spear_basic_attack_combo_onehand.header": "Spear (Spear & Shield) Basic Attack Combo",
+  "epic_fight_ponder.ponder.spear_basic_attack_combo_onehand.text_1": "Spear (Spear & Shield) Basic Attacks",
+  "epic_fight_ponder.ponder.spear_basic_attack_combo_onehand.text_2": "Spear (Spear & Shield) Dash Attack",
+  "epic_fight_ponder.ponder.spear_basic_attack_combo_onehand.text_3": "Spear (Spear & Shield) Jump Attack",
 
   "epic_fight_ponder.ponder.sword_basic_attack_combo.header": "Sword Basic Attack Combo",
   "epic_fight_ponder.ponder.sword_basic_attack_combo.text_1": "Sword Basic Attacks",
   "epic_fight_ponder.ponder.sword_basic_attack_combo.text_2": "Sword Dash Attack",
   "epic_fight_ponder.ponder.sword_basic_attack_combo.text_3": "Sword Jump Attack",
 
+  "epic_fight_ponder.ponder.sweeping_edge.header": "Sword Skill: Sweeping Edge",
+  "epic_fight_ponder.ponder.sweeping_edge.text_1": "Perform a wide sweeping slash against enemies in front.",
+
   "epic_fight_ponder.ponder.sword_basic_attack_combo_dual.header": "Sword (Dual Wield) Basic Attack Combo",
   "epic_fight_ponder.ponder.sword_basic_attack_combo_dual.text_1": "Sword (Dual Wield) Basic Attacks",
   "epic_fight_ponder.ponder.sword_basic_attack_combo_dual.text_2": "Sword (Dual Wield) Dash Attack",
   "epic_fight_ponder.ponder.sword_basic_attack_combo_dual.text_3": "Sword (Dual Wield) Jump Attack",
+
+  "epic_fight_ponder.ponder.dancing_edge.header": "Sword Skill: Dancing Edge",
+  "epic_fight_ponder.ponder.dancing_edge.text_1": "Unleash a flurry of wild dual-wielding strikes.",
 
   "epic_fight_ponder.ponder.dagger_basic_attack_combo.header": "Dagger Basic Attack Combo",
   "epic_fight_ponder.ponder.dagger_basic_attack_combo.text_1": "Dagger Basic Attacks",
   "epic_fight_ponder.ponder.dagger_basic_attack_combo.text_2": "Dagger Dash Attack",
   "epic_fight_ponder.ponder.dagger_basic_attack_combo.text_3": "Dagger Jump Attack",
 
+  "epic_fight_ponder.ponder.eviscerate_efx.header": "Dagger Skill: Eviscerate",
+  "epic_fight_ponder.ponder.eviscerate_efx.text_1": "Dash forward at blinding speed...",
+  "epic_fight_ponder.ponder.eviscerate_efx.text_2": "If it hits, trigger a high-burst follow-up attack.",
+  "epic_fight_ponder.ponder.eviscerate_efx.text_3": "Can smoothly chain into other moves during the follow-up dash.",
+
+  "epic_fight_ponder.ponder.eviscerate.header": "Dagger Skill: Eviscerate",
+  "epic_fight_ponder.ponder.eviscerate.text_1": "Dash forward at blinding speed...",
+  "epic_fight_ponder.ponder.eviscerate.text_2": "If it hits, trigger a high-burst follow-up attack.",
+
   "epic_fight_ponder.ponder.dagger_basic_attack_combo_dual.header": "Dagger (Dual Wield) Basic Attack Combo",
   "epic_fight_ponder.ponder.dagger_basic_attack_combo_dual.text_1": "Dagger (Dual Wield) Basic Attacks",
   "epic_fight_ponder.ponder.dagger_basic_attack_combo_dual.text_2": "Dagger (Dual Wield) Dash Attack",
-  "epic_fight_ponder.ponder.dagger_basic_attack_combo_dual.text_3": "Dagger (Dual Wield) Jump Attack"
+  "epic_fight_ponder.ponder.dagger_basic_attack_combo_dual.text_3": "Dagger (Dual Wield) Jump Attack",
+
+  "epic_fight_ponder.ponder.axe_basic_attack_combo.header": "Axe Basic Attack Combo",
+  "epic_fight_ponder.ponder.axe_basic_attack_combo.text_1": "Axe Basic Attacks",
+  "epic_fight_ponder.ponder.axe_basic_attack_combo.text_2": "Axe Dash Attack",
+  "epic_fight_ponder.ponder.axe_basic_attack_combo.text_3": "Axe Jump Attack",
+
+  "epic_fight_ponder.ponder.guillotine.header": "Axe Skill: Guillotine",
+  "epic_fight_ponder.ponder.guillotine.text_1": "Charge forward dragging the axe...",
+  "epic_fight_ponder.ponder.guillotine.text_2": "If the target's health is below the execution threshold,",
+  "epic_fight_ponder.ponder.guillotine.text_3": "perform a ruthless execution, instantly killing them!"
 }

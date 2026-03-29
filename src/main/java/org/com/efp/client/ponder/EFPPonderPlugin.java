@@ -173,6 +173,22 @@ public class EFPPonderPlugin implements PonderPlugin {
 
         // ==== 根据WeaponCapPreset的ID注册武器 ====
         if (EFPCompatManager.isEFXLoaded) {
+            registerPreset(weaponHelper, "epicfight:sword",
+                    EFPWeaponScenes::showcaseSwordBasicAttackCombo,
+                    EFXCompat::showcaseSweepingEdge_EFX,
+                    EFPWeaponScenes::showcaseSwordBasicAttackCombo_Dual,
+                    EFXCompat::showcaseDancingEdge_EFX);
+            registerPreset(weaponHelper, "epicfight:dagger",
+                    EFPWeaponScenes::showcaseDaggerBasicAttackCombo,
+                    EFXCompat::showcaseEviscerate_EFX,
+                    EFPWeaponScenes::showcaseDaggerBasicAttackCombo_Dual);
+            registerPreset(weaponHelper, "epicfight:spear",
+                    EFPWeaponScenes::showcaseSpearBasicAttackCombo,
+                    EFXCompat::showcaseGraspingSpire_EFX,
+                    EFPWeaponScenes::showcaseSpearBasicAttackCombo_OneHand);
+            registerPreset(weaponHelper, "epicfight:axe",
+                    EFPWeaponScenes::showcaseAxeBasicAttackCombo,
+                    EFXCompat::showcaseGuillotine_EFX);
             registerPreset(weaponHelper, "epicfight:tachi",
                     EFPWeaponScenes::showcaseTachiBasicAttackCombo,
                     EFXCompat::showcaseRushingTempo_EFX);
@@ -186,6 +202,22 @@ public class EFPPonderPlugin implements PonderPlugin {
             registerPreset(weaponHelper, "epicfight:uchigatana", "epicfight_showcase_long",
                     EFXCompat::showcaseUchigatanaBattojutsu_Sheath_EFX);
         } else {
+            registerPreset(weaponHelper, "epicfight:sword",
+                    EFPWeaponScenes::showcaseSwordBasicAttackCombo,
+                    EFPWeaponScenes::showcaseSweepingEdge,
+                    EFPWeaponScenes::showcaseSwordBasicAttackCombo_Dual,
+                    EFPWeaponScenes::showcaseDancingEdge);
+            registerPreset(weaponHelper, "epicfight:dagger",
+                    EFPWeaponScenes::showcaseDaggerBasicAttackCombo,
+                    EFPWeaponScenes::showcaseEviscerate,
+                    EFPWeaponScenes::showcaseDaggerBasicAttackCombo_Dual);
+            registerPreset(weaponHelper, "epicfight:spear",
+                    EFPWeaponScenes::showcaseSpearBasicAttackCombo,
+                    EFPWeaponScenes::showcaseGraspingSpire,
+                    EFPWeaponScenes::showcaseSpearBasicAttackCombo_OneHand);
+            registerPreset(weaponHelper, "epicfight:axe",
+                    EFPWeaponScenes::showcaseAxeBasicAttackCombo,
+                    EFPWeaponScenes::showcaseGuillotine);
             registerPreset(weaponHelper, "epicfight:tachi",
                     EFPWeaponScenes::showcaseTachiBasicAttackCombo,
                     EFPWeaponScenes::showcaseRushingTempo);
@@ -206,15 +238,6 @@ public class EFPPonderPlugin implements PonderPlugin {
                 EFPWeaponScenes::showcaseLongSwordBasicAttackCombo,
                 EFPWeaponScenes::showcaseLongSwordBasicAttackCombo_Ochs,
                 EFPWeaponScenes::showcaseLongSwordBasicAttackCombo_OneHand);
-        registerPreset(weaponHelper, "epicfight:dagger",
-                EFPWeaponScenes::showcaseDaggerBasicAttackCombo,
-                EFPWeaponScenes::showcaseDaggerBasicAttackCombo_Dual);
-        registerPreset(weaponHelper, "epicfight:spear",
-                EFPWeaponScenes::showcaseSpearBasicAttackCombo,
-                EFPWeaponScenes::showcaseSpearBasicAttackCombo_OneHand);
-        registerPreset(weaponHelper, "epicfight:sword",
-                EFPWeaponScenes::showcaseSwordBasicAttackCombo,
-                EFPWeaponScenes::showcaseSwordBasicAttackCombo_Dual);
     }
 
     private void registerPreset(PonderSceneRegistrationHelper<String> helper, String presetOrSkillId, PonderSceneMethod... scenes) {

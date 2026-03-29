@@ -6,11 +6,14 @@ import net.createmod.ponder.api.scene.SceneBuilder;
 import net.createmod.ponder.api.scene.SceneBuildingUtil;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import org.com.efp.api.event.PonderCombatEvent;
 import org.com.efp.api.ponder.EpicFightSceneBuilder;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.item.EpicFightItems;
+
+import java.util.function.Consumer;
 
 public class EFPWeaponScenes {
     public static void showcaseTachiBasicAttackCombo(SceneBuilder baseScene, SceneBuildingUtil util) {
@@ -79,6 +82,127 @@ public class EFPWeaponScenes {
                 EpicFightItems.DIAMOND_DAGGER.get().getDefaultInstance(), EpicFightItems.DIAMOND_DAGGER.get().getDefaultInstance(), CapabilityItem.Styles.TWO_HAND);
     }
 
+    public static void showcaseAxeBasicAttackCombo(SceneBuilder baseScene, SceneBuildingUtil util) {
+        EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "axe_basic_attack_combo",
+                Items.DIAMOND_AXE.getDefaultInstance());
+    }
+
+    public static void showcaseEviscerate(SceneBuilder baseScene, SceneBuildingUtil util) {
+        EpicFightSceneBuilder builder = new EpicFightSceneBuilder(baseScene);
+        EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
+
+        EFPSceneUtils.setupStandardScene(builder, 11, "eviscerate", "epic_fight_ponder.ponder.eviscerate.title");
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.NETHERITE_DAGGER.get()));
+        ElementLink<EntityElement> victim = EFPSceneUtils.spawnDummyVictim(builder, 5.5, 1.0, 3, 0, ItemStack.EMPTY, ItemStack.EMPTY);
+        world.modifyEntityMovement(attacker, true);
+        builder.idle(10);
+        EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.eviscerate.text_1", 20, 5, 1, 5);
+        builder.idle(10);
+        Consumer<PonderCombatEvent.Hit> normalKillCallBack = EFPSceneUtils.createStandardExHitCallback(Animations.EVISCERATE_FIRST.get(), Animations.EVISCERATE_SECOND.get(), 6, 1.5F, 0.7F);
+        EFPSceneUtils.playInteractiveStrike(builder, attacker, Animations.EVISCERATE_FIRST, 1.0F, normalKillCallBack);
+        builder.idle(2);
+        EFPSceneUtils.showTextWithKeyFrame(builder, util, "epic_fight_ponder.ponder.eviscerate.text_2", 40, 5, 1, 4);
+        world.modifyEntityPlaySpeed(attacker, 0.2F);
+        builder.idle(10);
+        world.modifyEntityPlaySpeed(attacker, 1F);
+        builder.idle(10);
+        world.modifyEntityPlaySpeed(attacker, 0.3F);
+        builder.idle(15);
+        world.modifyEntityPlaySpeed(attacker, 1);
+        world.waitForInaction(attacker);
+        builder.idle(20);
+        builder.markAsFinished();
+    }
+
+    public static void showcaseGraspingSpire(SceneBuilder baseScene, SceneBuildingUtil util) {
+        EpicFightSceneBuilder builder = new EpicFightSceneBuilder(baseScene);
+        EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
+
+        EFPSceneUtils.setupStandardScene(builder, 11, "grasping_spire", "epic_fight_ponder.ponder.grasping_spire.title");
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.DIAMOND_SPEAR.get()));
+        ElementLink<EntityElement> victim = EFPSceneUtils.spawnDummyVictim(builder, 5.5, 1.0, 1.5, 0, ItemStack.EMPTY, ItemStack.EMPTY);
+        world.modifyEntityMovement(attacker, true);
+        builder.idle(10);
+        EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.grasping_spire.text_1", 20, 5, 1, 6);
+        builder.idle(10);
+        Consumer<PonderCombatEvent.Hit> normalKillCallBack = EFPSceneUtils.createStandardExHitCallback(Animations.GRASPING_SPIRAL_FIRST.get(), Animations.GRASPING_SPIRAL_SECOND.get(), 15, 1.5F, 0.7F);
+        EFPSceneUtils.playInteractiveStrike(builder, attacker, Animations.GRASPING_SPIRAL_FIRST, 1.0F, normalKillCallBack);
+        builder.idle(5);
+        EFPSceneUtils.showTextWithKeyFrame(builder, util, "epic_fight_ponder.ponder.grasping_spire.text_2", 20, 5, 1, 4);
+        world.modifyEntityPlaySpeed(attacker, 0.2F);
+        builder.idle(8);
+        world.modifyEntityPlaySpeed(attacker, 1.15F);
+        builder.idle(5);
+        world.modifyEntityPlaySpeed(attacker, 0.3F);
+        builder.idle(15);
+        EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.grasping_spire.text_3", 40, 5, 1, 3);
+        world.modifyEntityPlaySpeed(attacker, 1);
+        world.waitForInaction(attacker);
+        builder.idle(20);
+        builder.markAsFinished();
+    }
+
+    public static void showcaseGuillotine(SceneBuilder baseScene, SceneBuildingUtil util) {
+        EpicFightSceneBuilder builder = new EpicFightSceneBuilder(baseScene);
+        EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
+
+        EFPSceneUtils.setupStandardScene(builder, 11, "guillotine", "epic_fight_ponder.ponder.guillotine.title");
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(Items.GOLDEN_AXE));
+        ElementLink<EntityElement> victim = EFPSceneUtils.spawnDummyVictim(builder, 5.5, 1.0, 1.5, 0, ItemStack.EMPTY, ItemStack.EMPTY);
+        world.modifyEntityMovement(attacker, true);
+        builder.idle(10);
+        EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.guillotine.text_1", 20, 5, 1, 6);
+        builder.idle(10);
+        Consumer<PonderCombatEvent.Hit> normalKillCallBack = EFPSceneUtils.createStandardKillCallback();
+        EFPSceneUtils.playInteractiveStrike(builder, attacker, Animations.THE_GUILLOTINE, 1.0F, normalKillCallBack);
+        builder.idle(7);
+        EFPSceneUtils.showTextWithKeyFrame(builder, util, "epic_fight_ponder.ponder.guillotine.text_2", 30, 5, 2, 4);
+        world.modifyEntityPlaySpeed(attacker, 0.2F);
+        builder.idle(19);
+        world.modifyEntityPlaySpeed(attacker, 1.15F);
+        EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.guillotine.text_3", 40, 5, 1, 3);
+        world.waitForCanBasicAttack(attacker);
+        world.modifyEntityPlaySpeed(attacker, 0.3F);
+        builder.idle(15);
+        world.modifyEntityPlaySpeed(attacker, 1);
+        world.waitForInaction(attacker);
+        builder.idle(20);
+        builder.markAsFinished();
+    }
+
+    public static void showcaseSweepingEdge(SceneBuilder baseScene, SceneBuildingUtil util) {
+        EpicFightSceneBuilder builder = new EpicFightSceneBuilder(baseScene);
+        EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
+
+        EFPSceneUtils.setupStandardScene(builder, 11, "sweeping_edge", "epic_fight_ponder.ponder.sweeping_edge.title");
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(Items.DIAMOND_SWORD));
+        ElementLink<EntityElement> victim = EFPSceneUtils.spawnDummyVictim(builder, 5.5, 1.0, 2.5, 0, ItemStack.EMPTY, ItemStack.EMPTY);
+        world.modifyEntityMovement(attacker, true);
+        builder.idle(10);
+        EFPSceneUtils.showTextWithKeyFrame(builder, util, "epic_fight_ponder.ponder.sweeping_edge.text_1", 80, 5, 1, 6);
+        builder.idle(10);
+        world.playAnimation(attacker, Animations.SWEEPING_EDGE, 0.0F);
+        world.waitForInaction(attacker);
+        builder.idle(20);
+        builder.markAsFinished();
+    }
+
+    public static void showcaseDancingEdge(SceneBuilder baseScene, SceneBuildingUtil util) {
+        EpicFightSceneBuilder builder = new EpicFightSceneBuilder(baseScene);
+        EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
+
+        EFPSceneUtils.setupStandardScene(builder, 11, "dancing_edge", "epic_fight_ponder.ponder.dancing_edge.title");
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(Items.DIAMOND_SWORD), new ItemStack(Items.NETHERITE_SWORD));
+        ElementLink<EntityElement> victim = EFPSceneUtils.spawnDummyVictim(builder, 5.5, 1.0, 3.5, 0, ItemStack.EMPTY, ItemStack.EMPTY);
+        builder.idle(10);
+        EFPSceneUtils.showTextWithKeyFrame(builder, util, "epic_fight_ponder.ponder.dancing_edge.text_1", 80, 5, 1, 6);
+        builder.idle(10);
+        world.playAnimation(attacker, Animations.DANCING_EDGE, 0.0F);
+        world.waitForInaction(attacker);
+        builder.idle(20);
+        builder.markAsFinished();
+    }
+
     /**
      * 技能展示：RushingTempo
      */
@@ -88,6 +212,7 @@ public class EFPWeaponScenes {
 
         EFPSceneUtils.setupStandardScene(builder, 11, "tachi_rushing_tempo", "epic_fight_ponder.ponder.tachi_rushing_tempo.title");
         ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.DIAMOND_TACHI.get()));
+        ElementLink<EntityElement> victim = EFPSceneUtils.spawnDummyVictim(builder, 5.5, 1, 3.5, 0, null);
         builder.idle(20);
 
         EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.tachi_rushing_tempo.text_1", 40, 5, 1, 5);
@@ -145,11 +270,15 @@ public class EFPWeaponScenes {
 
         EFPSceneUtils.setupStandardLongScene(builder, "uchigatana_battojutsu_unsheath", "epic_fight_ponder.ponder.uchigatana_battojutsu_unsheath.title");
         ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 3.5, 1, 12.5, 180, new ItemStack(EpicFightItems.UCHIGATANA.get()), null, CapabilityItem.Styles.TWO_HAND);
+        ElementLink<EntityElement> victim = EFPSceneUtils.spawnDummyVictim(builder, 3.5, 1.0, 10.5, 0, ItemStack.EMPTY, ItemStack.EMPTY);
+        ElementLink<EntityElement> victim1 = EFPSceneUtils.spawnDummyVictim(builder, 3.5, 1.0, 5, 0, ItemStack.EMPTY, ItemStack.EMPTY);
         EFPSceneUtils.updateSheathState(builder, attacker, 0);
         world.modifyEntityMovement(attacker, true);
         builder.idle(20);
 
-        world.playAnimation(attacker, Animations.BATTOJUTSU, 0.0F);
+        Consumer<PonderCombatEvent.Hit> normalKillCallBack = EFPSceneUtils.createStandardKillCallback();
+
+        EFPSceneUtils.playInteractiveStrike(builder, attacker, Animations.BATTOJUTSU, 1.0F, 0.0F, normalKillCallBack);
         EFPSceneUtils.playSoundOnTimeline(builder, attacker, EpicFightSounds.SWORD_IN.get());
         EFPSceneUtils.showTextWithKeyFrame(builder, util, "epic_fight_ponder.ponder.uchigatana_battojutsu_unsheath.text_1", 30, 3, 1, 12);
         builder.idle(1);
@@ -157,7 +286,7 @@ public class EFPWeaponScenes {
         builder.idle(20);
         world.modifyEntityPlaySpeed(attacker, 1F);
         world.waitForAttacking(attacker);
-        EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.uchigatana_battojutsu_unsheath.text_2", 20, 3, 1, 7);
+        EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.uchigatana_battojutsu_unsheath.text_2", 20, 3, 1, 11);
         world.modifyEntityPlaySpeed(attacker, 0.3F);
         builder.idle(10);
         world.modifyEntityPlaySpeed(attacker, 1F);
@@ -167,7 +296,7 @@ public class EFPWeaponScenes {
         world.simulateSpring(attacker, 1, 5);
         EFPSceneUtils.showTextWithKeyFrame(builder, util, "epic_fight_ponder.ponder.uchigatana_battojutsu_unsheath.text_3", 40, 3, 1, 10);
         builder.idle(5);
-        world.playAnimation(attacker, Animations.BATTOJUTSU_DASH, 0.0F);
+        EFPSceneUtils.playInteractiveStrike(builder, attacker, Animations.BATTOJUTSU_DASH, 1.0F, 0.0F, normalKillCallBack);
         EFPSceneUtils.playSoundOnTimeline(builder, attacker, EpicFightSounds.SWORD_IN.get());
         world.waitForAttacking(attacker);
         world.modifyEntityPlaySpeed(attacker, 0.3F);
@@ -185,13 +314,17 @@ public class EFPWeaponScenes {
 
         EFPSceneUtils.setupStandardLongScene(builder, "uchigatana_battojutsu_sheath", "epic_fight_ponder.ponder.uchigatana_battojutsu_sheath.title");
         ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 3.5, 1, 12.5, 180, new ItemStack(EpicFightItems.UCHIGATANA.get()), null, CapabilityItem.Styles.SHEATH);
+        ElementLink<EntityElement> victim = EFPSceneUtils.spawnDummyVictim(builder, 3.5, 1.0, 10.5, 0, ItemStack.EMPTY, ItemStack.EMPTY);
+        ElementLink<EntityElement> victim1 = EFPSceneUtils.spawnDummyVictim(builder, 3.5, 1.0, 5, 0, ItemStack.EMPTY, ItemStack.EMPTY);
         EFPSceneUtils.updateSheathState(builder, attacker, 1);
         world.modifyEntityMovement(attacker, true);
         builder.idle(20);
         EFPSceneUtils.showTextWithKeyFrame(builder, util, "epic_fight_ponder.ponder.uchigatana_battojutsu_sheath.text_1", 40, 3, 1, 12);
         builder.idle(20);
 
-        world.playAnimation(attacker, Animations.BATTOJUTSU, -0.45F);
+        Consumer<PonderCombatEvent.Hit> normalKillCallBack = EFPSceneUtils.createStandardKillCallback();
+
+        EFPSceneUtils.playInteractiveStrike(builder, attacker, Animations.BATTOJUTSU, 1.0F, -0.45F, normalKillCallBack);
         builder.idle(3);
         world.modifyEntityPlaySpeed(attacker, 0.3F);
         builder.idle(5);
@@ -204,7 +337,7 @@ public class EFPWeaponScenes {
         builder.idle(15);
         world.simulateSpring(attacker, 1, 5);
         builder.idle(1);
-        world.playAnimation(attacker, Animations.BATTOJUTSU_DASH, -0.45F);
+        EFPSceneUtils.playInteractiveStrike(builder, attacker, Animations.BATTOJUTSU_DASH, 1.0F, -0.45F, normalKillCallBack);
         world.waitForInaction(attacker);
         EFPSceneUtils.changeStyleAndRefreshMotions(builder, attacker, CapabilityItem.Styles.TWO_HAND);
 

@@ -28,6 +28,7 @@ import yesman.epicfight.api.animation.types.AttackAnimation;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.api.asset.AssetAccessor;
 import yesman.epicfight.api.utils.EntitySnapshot;
+import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.particle.EpicFightParticles;
 import yesman.epicfight.particle.HitParticleType;
@@ -257,6 +258,19 @@ public class EFPSceneUtils {
         });
     }
 
+    public static void playInteractiveStrike(
+            EpicFightSceneBuilder builder,
+            ElementLink<EntityElement> attacker,
+            AnimationManager.AnimationAccessor<? extends AttackAnimation> strikeMotion,
+            float playSpeed,
+            float transitionTime,
+            Consumer<PonderCombatEvent.Hit> onHitCallback) {
+
+        builder.world().modifyEntityPlaySpeed(attacker, playSpeed);
+        builder.world().playAnimation(attacker, strikeMotion, transitionTime, onHitCallback, beHitEvent -> {
+        });
+    }
+
     /**
      * 电影级闪避展示：支持“慢-快-极慢”的非线性时间曲线（顿帧与子弹时间）
      */
@@ -407,7 +421,7 @@ public class EFPSceneUtils {
                 victimPatch.getClientAnimator().playAnimation(hitAnim.getRealAnimation(), 0.0F);
 
                 if (returnAnim != null) {
-                    int delay = (int) (Objects.requireNonNull(victimPatch.getClientAnimator().getPlayerFor(hitAnim.getRealAnimation())).getAnimation().get().getTotalTime() / 20);
+                    int delay = (int) (Objects.requireNonNull(victimPatch.getClientAnimator().getPlayerFor(hitAnim.getRealAnimation())).getAnimation().get().getTotalTime() * 20);
                     victimPatch.scheduleDelayedTask(delay, () -> {
                         victimPatch.getClientAnimator().playAnimation(returnAnim.getRealAnimation(), 0.3F);
                     });
@@ -486,6 +500,47 @@ public class EFPSceneUtils {
 
             return chosenAnim;
         });
+    }
+
+    /**
+     * 创建“成功击杀”事件
+     */
+    public static Consumer<PonderCombatEvent.Hit> createStandardKillCallback() {
+        return hitEvent -> {
+            hitEvent.setResult(PonderCombatEvent.AttackResult.SUCCESS);
+            playSoundClientSide(EpicFightSounds.EVISCERATE.get(), 1.0F, 1.0F);
+            LivingEntityPatch<?> rawPatch = EpicFightCapabilities.getEntityPatch(hitEvent.getTarget(), LivingEntityPatch.class);
+            if (rawPatch instanceof DummyEntityPatch<?> victimPatch && victimPatch.getClientAnimator() != null) {
+                victimPatch.getOriginal().remove(Entity.RemovalReason.KILLED);
+            }
+        };
+    }
+
+    /**
+     * 创建“命中追击”事件
+     */
+    public static Consumer<PonderCombatEvent.Hit> createStandardExHitCallback(StaticAnimation originAnim, StaticAnimation exAttackAnim, int exAttackDelay, float originAnimStunTime, float exAttackStunTime) {
+        return hitEvent -> {
+            hitEvent.setResult(PonderCombatEvent.AttackResult.SUCCESS);
+            playSoundClientSide(EpicFightSounds.BLADE_RUSH_FINISHER.get(), 1.0F, 1.0F);
+            LivingEntityPatch<?> rawPatch = EpicFightCapabilities.getEntityPatch(hitEvent.getAttacker(), LivingEntityPatch.class);
+            LivingEntityPatch<?> rawPatch1 = EpicFightCapabilities.getEntityPatch(hitEvent.getTarget(), LivingEntityPatch.class);
+            if (rawPatch instanceof DummyEntityPatch<?> attackerPatch && attackerPatch.getClientAnimator() != null && hitEvent.getAnimation().equals(originAnim)) {
+                attackerPatch.scheduleDelayedTask(exAttackDelay, () -> {
+                    attackerPatch.getClientAnimator().playAnimation(exAttackAnim.getRealAnimation(), 0.0F);
+                });
+            }
+            if (rawPatch1 instanceof DummyEntityPatch<?> victimPatch && victimPatch.getClientAnimator() != null && hitEvent.getAnimation().equals(originAnim)) {
+                victimPatch.scheduleDelayedTask(2, () -> {
+                    victimPatch.playAnimation(Animations.BIPED_HIT_SHORT, originAnimStunTime);
+                });
+            }
+            if (rawPatch1 instanceof DummyEntityPatch<?> victimPatch && victimPatch.getClientAnimator() != null && hitEvent.getAnimation().equals(exAttackAnim)) {
+                victimPatch.scheduleDelayedTask(2, () -> {
+                    victimPatch.playAnimation(Animations.BIPED_HIT_SHORT, exAttackStunTime);
+                });
+            }
+        };
     }
 
     /**

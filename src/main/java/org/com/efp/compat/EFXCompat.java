@@ -10,7 +10,6 @@ import net.minecraft.world.item.ItemStack;
 import org.com.efp.api.ponder.EpicFightSceneBuilder;
 import org.com.efp.client.ponder.EFPSceneUtils;
 import org.com.efp.gameasset.EFPAnimations;
-import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.item.EpicFightItems;
@@ -28,7 +27,7 @@ public class EFXCompat {
         ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.DIAMOND_TACHI.get()));
         builder.idle(20);
 
-        EFPSceneUtils.showTextAtTop(builder, util, "epic_fight_ponder.ponder.tachi_rushing_tempo.text_1", 40, 5, 1, 5);
+        EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.tachi_rushing_tempo.text_1", 40, 5, 1, 5);
         builder.idle(50);
 
         // 普攻起手
@@ -37,7 +36,7 @@ public class EFXCompat {
         // 第一个派生慢动作提示
         world.waitForCanUseSkill(attacker);
         world.modifyEntityPlaySpeed(attacker, 0.05F);
-        EFPSceneUtils.showTextAtTop(builder, util, "epic_fight_ponder.ponder.tachi_rushing_tempo.text_2", 40, 5, 2, 5);
+        EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.tachi_rushing_tempo.text_2", 40, 5, 2, 5);
         builder.idle(50);
 
         world.modifyEntityPlaySpeed(attacker, 1.0F);
@@ -46,7 +45,7 @@ public class EFXCompat {
         //微时缓增加打击感
         world.waitForCanBasicAttack(attacker);
         world.modifyEntityPlaySpeed(attacker, 0.25F);
-        EFPSceneUtils.showTextAtTop(builder, util, "epic_fight_ponder.ponder.tachi_rushing_tempo.text_3", 100, 5, 2, 5);
+        EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.tachi_rushing_tempo.text_3", 100, 5, 2, 5);
         builder.idle(15);
 
         EFPSceneUtils.playDerivationWithSlowMo(builder, attacker, EFPSceneUtils.WaitType.CAN_USE_SKILL, AnimationsX.TACHI_AUTO2, 0.25F, 10);
@@ -64,7 +63,7 @@ public class EFXCompat {
         world.modifyEntityPlaySpeed(attacker, 1.0F);
         world.simulateSpring(attacker, 2, 10);
         builder.idle(10);
-        EFPSceneUtils.showTextAtTop(builder, util, "epic_fight_ponder.ponder.tachi_rushing_tempo.text_4", 80, 5, 2, 5);
+        EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.tachi_rushing_tempo.text_4", 80, 5, 2, 5);
 
         world.playAnimation(attacker, AnimationsX.TACHI_DASH, 0.0F);
         EFPSceneUtils.playDerivationWithSlowMo(builder, attacker, EFPSceneUtils.WaitType.CAN_USE_SKILL, ExtraAnimations.RUSHING_DASH, 0.25F, 10);
@@ -129,8 +128,9 @@ public class EFXCompat {
         EFPSceneUtils.setupStandardScene(builder, 11, "uchigatana_passive", "epic_fight_ponder.ponder.uchigatana_passive.title");
         ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.UCHIGATANA.get()), null, CapabilityItem.Styles.TWO_HAND);
         EFPSceneUtils.updateSheathState(builder, attacker, 0);
-        builder.idle(40);
-
+        builder.idle(20);
+        EFPSceneUtils.showTextWithKeyFrame(builder, util, "epic_fight_ponder.ponder.uchigatana_passive.text_1", 80, 5, 1, 5);
+        builder.idle(20);
         world.playAnimation(attacker, AnimationsX.BIPED_UCHIGATANA_SCRAP, 0.0F);
         EFPSceneUtils.playSoundOnTimeline(builder, attacker, EpicFightSounds.SWORD_IN.get());
         EFPSceneUtils.changeStyleAndRefreshMotions(builder, attacker, CapabilityItem.Styles.SHEATH);
@@ -147,18 +147,25 @@ public class EFXCompat {
         ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 3.5, 1, 12.5, 180, new ItemStack(EpicFightItems.UCHIGATANA.get()), null, CapabilityItem.Styles.TWO_HAND);
         EFPSceneUtils.updateSheathState(builder, attacker, 0);
         world.modifyEntityMovement(attacker, true);
-        builder.idle(40);
+        builder.idle(20);
 
         world.playAnimation(attacker, AnimationsX.BATTOJUTSU, 0.0F);
         EFPSceneUtils.playSoundOnTimeline(builder, attacker, EpicFightSounds.SWORD_IN.get());
+        EFPSceneUtils.showTextWithKeyFrame(builder, util, "epic_fight_ponder.ponder.uchigatana_battojutsu_unsheath.text_1", 30, 3, 1, 12);
+        builder.idle(1);
+        world.modifyEntityPlaySpeed(attacker, 0.2F);
+        builder.idle(20);
+        world.modifyEntityPlaySpeed(attacker, 1F);
         world.waitForAttacking(attacker);
+        EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.uchigatana_battojutsu_unsheath.text_2", 20, 3, 1, 7);
         world.modifyEntityPlaySpeed(attacker, 0.3F);
-        builder.idle(5);
+        builder.idle(10);
         world.modifyEntityPlaySpeed(attacker, 1F);
         world.waitForInaction(attacker);
         world.setPosition(attacker, 3.5, 1, 12);
-        builder.idle(5);
+        builder.idle(10);
         world.simulateSpring(attacker, 1, 5);
+        EFPSceneUtils.showTextWithKeyFrame(builder, util, "epic_fight_ponder.ponder.uchigatana_battojutsu_unsheath.text_3", 40, 3, 1, 10);
         builder.idle(5);
         world.playAnimation(attacker, AnimationsX.BATTOJUTSU_DASH, 0.0F);
         EFPSceneUtils.playSoundOnTimeline(builder, attacker, EpicFightSounds.SWORD_IN.get());
@@ -180,7 +187,9 @@ public class EFXCompat {
         ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 3.5, 1, 12.5, 180, new ItemStack(EpicFightItems.UCHIGATANA.get()), null, CapabilityItem.Styles.SHEATH);
         EFPSceneUtils.updateSheathState(builder, attacker, 1);
         world.modifyEntityMovement(attacker, true);
-        builder.idle(40);
+        builder.idle(20);
+        EFPSceneUtils.showTextWithKeyFrame(builder, util, "epic_fight_ponder.ponder.uchigatana_battojutsu_sheath.text_1", 40, 3, 1, 12);
+        builder.idle(20);
 
         world.playAnimation(attacker, AnimationsX.BATTOJUTSU, -0.6F);
         builder.idle(3);

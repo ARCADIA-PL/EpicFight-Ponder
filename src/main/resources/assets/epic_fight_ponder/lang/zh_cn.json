@@ -38,10 +38,21 @@
   "epic_fight_ponder.ponder.uchigatana_basic_attack_combo.text_2": "打刀 冲刺攻击派生",
   "epic_fight_ponder.ponder.uchigatana_basic_attack_combo.text_3": "打刀 跳跃攻击派生",
 
+  "epic_fight_ponder.ponder.uchigatana_battojutsu_unsheath.header": "打刀 · 拔刀术",
+  "epic_fight_ponder.ponder.uchigatana_battojutsu_unsheath.text_1": "藏锋于鞘，蓄势待发……",
+  "epic_fight_ponder.ponder.uchigatana_battojutsu_unsheath.text_2": "一斩足矣！",
+  "epic_fight_ponder.ponder.uchigatana_battojutsu_unsheath.text_3": "[疾跑] 时释放：大幅提升突进距离",
+
+  "epic_fight_ponder.ponder.uchigatana_passive.header": "打刀 · 专属被动",
+  "epic_fight_ponder.ponder.uchigatana_passive.text_1": "静立片刻，自动收刀入鞘\n随后改变攻击动作，进入[居合架势]",
+
   "epic_fight_ponder.ponder.uchigatana_basic_attack_combo_sheath.header": "打刀 (纳刀流) 基础连段演示",
   "epic_fight_ponder.ponder.uchigatana_basic_attack_combo_sheath.text_1": "打刀 (纳刀流) 普通攻击连段",
   "epic_fight_ponder.ponder.uchigatana_basic_attack_combo_sheath.text_2": "打刀 (纳刀流) 冲刺攻击派生",
   "epic_fight_ponder.ponder.uchigatana_basic_attack_combo_sheath.text_3": "打刀 (纳刀流) 跳跃攻击派生",
+
+  "epic_fight_ponder.ponder.uchigatana_battojutsu_sheath.header": "打刀 · 拔刀术 [居合]",
+  "epic_fight_ponder.ponder.uchigatana_battojutsu_sheath.text_1": "瞬发居合 —— 杀敌于电光石火之间",
 
   "epic_fight_ponder.ponder.greatsword_basic_attack_combo.header": "大剑 基础连段演示",
   "epic_fight_ponder.ponder.greatsword_basic_attack_combo.text_1": "大剑 普通攻击连段",

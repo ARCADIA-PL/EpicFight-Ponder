@@ -47,7 +47,7 @@ public class EFPSKillScenes {
         ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.DIAMOND_LONGSWORD.get()));
         world.modifyEntityMovement(attacker,true);
 
-        EFPSceneUtils.showTextAtTop(builder, util, "epic_fight_ponder.ponder.skill_step.text_1", 80, 5, 1, 5);
+        EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.skill_step.text_1", 80, 5, 1, 5);
         builder.idle(20);
 
         world.playAnimation(attacker, EFPAnimations.BIPED_STEP_BACKWARD, 0.0F);
@@ -78,7 +78,7 @@ public class EFPSKillScenes {
         ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.DIAMOND_LONGSWORD.get()));
         world.modifyEntityMovement(attacker,true);
 
-        EFPSceneUtils.showTextAtTop(builder, util, "epic_fight_ponder.ponder.skill_roll.text_1", 80, 5, 1, 5);
+        EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.skill_roll.text_1", 80, 5, 1, 5);
         builder.idle(20);
 
         world.playAnimation(attacker, EFPAnimations.BIPED_ROLL_BACKWARD, 0.0F);
@@ -151,7 +151,7 @@ public class EFPSKillScenes {
 
         builder.idle(20);
 
-        EFPSceneUtils.showTextAtTop(builder, util, "epic_fight_ponder.ponder.skill_guard.text_1", 80, (int) centerX, 2, (int) centerZ);
+        EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.skill_guard.text_1", 80, (int) centerX, 2, (int) centerZ);
         world.playAnimation(victim, Animations.UCHIGATANA_GUARD, 0.0F);
         builder.idle(10);
 
@@ -200,7 +200,7 @@ public class EFPSKillScenes {
         Consumer<PonderCombatEvent.Hit> breakCallback = EFPSceneUtils.createGuardBreakCallback(Animations.BIPED_COMMON_NEUTRALIZED.get());
 
         // 第一击：跑攻 -> 触发标准格挡
-        EFPSceneUtils.showTextAtTop(builder, util, "epic_fight_ponder.ponder.skill_guard_break.text_1", 40, (int) centerX, 2, (int) centerZ);
+        EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.skill_guard_break.text_1", 40, (int) centerX, 2, (int) centerZ);
         EFPSceneUtils.playInteractiveStrike(builder, attacker, dashAttack, 1.0F, guardCallback);
 
         world.waitForInaction(attacker);
@@ -208,7 +208,7 @@ public class EFPSKillScenes {
 
         // 第二击：跳劈破防
         world.simulateJump(attacker);
-        EFPSceneUtils.showTextAtTop(builder, util, "epic_fight_ponder.ponder.skill_guard_break.text_2", 80, (int) centerX, 0, (int) centerZ);
+        EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.skill_guard_break.text_2", 80, (int) centerX, 0, (int) centerZ);
         builder.idle(5);
 
         // 跳劈命中 -> 触发破防回调

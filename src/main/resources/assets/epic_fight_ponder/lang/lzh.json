@@ -38,10 +38,21 @@
   "epic_fight_ponder.ponder.uchigatana_basic_attack_combo.text_2": "打刀 奔襲衍化之擊",
   "epic_fight_ponder.ponder.uchigatana_basic_attack_combo.text_3": "打刀 躍空衍化之擊",
 
+  "epic_fight_ponder.ponder.uchigatana_battojutsu_unsheath.header": "打刀武技：拔刀術",
+  "epic_fight_ponder.ponder.uchigatana_battojutsu_unsheath.text_1": "斂鋒於鞘，引而不發……",
+  "epic_fight_ponder.ponder.uchigatana_battojutsu_unsheath.text_2": "破敵，唯此一斬！",
+  "epic_fight_ponder.ponder.uchigatana_battojutsu_unsheath.text_3": "於[奔襲]時施為：可極盡縮地成寸之法，突進甚遠。",
+
+  "epic_fight_ponder.ponder.uchigatana_passive.header": "打刀 本源秘法",
+  "epic_fight_ponder.ponder.uchigatana_passive.text_1": "靜立少頃，利刃自歸其鞘。\n隨之身法衍化，結『居合之陣』。",
+
   "epic_fight_ponder.ponder.uchigatana_basic_attack_combo_sheath.header": "打刀 (納刀流) 基礎連段演武",
   "epic_fight_ponder.ponder.uchigatana_basic_attack_combo_sheath.text_1": "打刀 (納刀流) 常擊連段",
   "epic_fight_ponder.ponder.uchigatana_basic_attack_combo_sheath.text_2": "打刀 (納刀流) 奔襲衍化之擊",
   "epic_fight_ponder.ponder.uchigatana_basic_attack_combo_sheath.text_3": "打刀 (納刀流) 躍空衍化之擊",
+
+  "epic_fight_ponder.ponder.uchigatana_battojutsu_sheath.header": "打刀武技：拔刀術『居合』",
+  "epic_fight_ponder.ponder.uchigatana_battojutsu_sheath.text_1": "須臾出鞘，居合瞬斬——\n誅敵於電光石火之間。",
 
   "epic_fight_ponder.ponder.greatsword_basic_attack_combo.header": "巨劍 基礎連段演武",
   "epic_fight_ponder.ponder.greatsword_basic_attack_combo.text_1": "巨劍 常擊連段",

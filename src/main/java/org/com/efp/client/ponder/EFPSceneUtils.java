@@ -24,7 +24,6 @@ import org.com.efp.particle.EFPParticles;
 import org.com.efp.registry.EFPEntities;
 import org.joml.Vector3d;
 import yesman.epicfight.api.animation.AnimationManager;
-import yesman.epicfight.api.animation.LivingMotions;
 import yesman.epicfight.api.animation.types.AttackAnimation;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.api.asset.AssetAccessor;
@@ -143,12 +142,21 @@ public class EFPSceneUtils {
     }
 
     /**
-     * 3. 显示浮空文本
+     * [基础] 在目标上方显示普通文本
+     * @param duration 持续时间(tick)
      */
-    public static void showTextAtTop(EpicFightSceneBuilder builder, SceneBuildingUtil util, String textKey, int duration, int x, int y, int z) {
+    public static void showText(EpicFightSceneBuilder builder, SceneBuildingUtil util, String textKey, int duration, int x, int y, int z) {
         builder.overlay().showText(duration)
                 .text(textKey)
-                .pointAt(util.vector().topOf(x, y, z))
+                .pointAt(util.vector().centerOf(x, y, z))
+                .placeNearTarget();
+    }
+
+    public static void showTextWithKeyFrame(EpicFightSceneBuilder builder, SceneBuildingUtil util, String textKey, int duration, int x, int y, int z) {
+        builder.overlay().showText(duration)
+                .text(textKey)
+                .pointAt(util.vector().centerOf(x, y, z))
+                .attachKeyFrame()
                 .placeNearTarget();
     }
 
@@ -270,7 +278,7 @@ public class EFPSceneUtils {
         world.modifyEntityPlaySpeed(victim, 0.35F);
 
         if (textKey1 != null && !textKey1.isEmpty()) {
-            showTextAtTop(builder, util, textKey1, (int)(startupSlowTicks * 0.8), (int)textX, (int)textY, (int)textZ);
+            showText(builder, util, textKey1, (int)(startupSlowTicks * 0.8), (int)textX, (int)textY, (int)textZ);
         }
 
         builder.idle(startupSlowTicks);
@@ -284,7 +292,7 @@ public class EFPSceneUtils {
         world.modifyEntityPlaySpeed(victim, 0.1F);
 
         if (textKey2 != null && !textKey2.isEmpty()) {
-            showTextAtTop(builder, util, textKey2, bulletTimeTicks, (int)textX, (int)textY, (int)textZ);
+            showText(builder, util, textKey2, bulletTimeTicks, (int)textX, (int)textY, (int)textZ);
         }
 
         builder.idle(bulletTimeTicks);
@@ -326,7 +334,7 @@ public class EFPSceneUtils {
                 if (defenseSetupAnim != null) {
                     world.playAnimation(victim, defenseSetupAnim.getRealAnimation(), 0.1F);
                     if (prepareHitTextKey != null && !prepareHitTextKey.isEmpty()) {
-                        showTextAtTop(builder, util, prepareHitTextKey, 60, (int) prepareHitTextX, (int) prepareHitTextY, (int) prepareHitTextZ);
+                        showText(builder, util, prepareHitTextKey, 60, (int) prepareHitTextX, (int) prepareHitTextY, (int) prepareHitTextZ);
                     }
                 }
 
@@ -336,7 +344,7 @@ public class EFPSceneUtils {
                 world.modifyEntityPlaySpeed(victim, 0.05F);
 
                 if (firstHitTextKey != null && !firstHitTextKey.isEmpty()) {
-                    showTextAtTop(builder, util, firstHitTextKey, 100, (int) firstHitTextX, (int) firstHitTextY, (int) firstHitTextZ);
+                    showText(builder, util, firstHitTextKey, 100, (int) firstHitTextX, (int) firstHitTextY, (int) firstHitTextZ);
                 }
 
                 builder.idle(20);
@@ -506,7 +514,7 @@ public class EFPSceneUtils {
                 world.simulateSpring(attacker, 1.5F, 10);
                 builder.idle(10);
                 if (dashTextKey != null && !dashTextKey.isEmpty()) {
-                    showTextAtTop(builder, util, dashTextKey, 30, (int) centerX, (int) centerY - 1, (int) centerZ);
+                    showText(builder, util, dashTextKey, 30, (int) centerX, (int) centerY - 1, (int) centerZ);
                 }
             } else if (i == jumpIndex) {
                 world.setPosition(attacker, centerX, centerY, centerZ);
@@ -514,7 +522,7 @@ public class EFPSceneUtils {
                 world.simulateJump(attacker);
                 builder.idle(8);
                 if (jumpTextKey != null && !jumpTextKey.isEmpty()) {
-                    showTextAtTop(builder, util, jumpTextKey, 40, (int) centerX, (int) centerY + 1, (int) centerZ);
+                    showText(builder, util, jumpTextKey, 40, (int) centerX, (int) centerY + 1, (int) centerZ);
                 }
             }
 
@@ -562,7 +570,7 @@ public class EFPSceneUtils {
                 world.simulateSpring(attacker, 1.5F, 10);
                 builder.idle(10);
                 if (dashTextKey != null && !dashTextKey.isEmpty()) {
-                    showTextAtTop(builder, util, dashTextKey, 30, (int) centerX, (int) centerY - 1, (int) centerZ);
+                    showText(builder, util, dashTextKey, 30, (int) centerX, (int) centerY - 1, (int) centerZ);
                 }
             } else if (i == jumpIndex) {
                 updateSheathState(builder, attacker, 1);
@@ -571,7 +579,7 @@ public class EFPSceneUtils {
                 world.simulateJump(attacker);
                 builder.idle(8);
                 if (jumpTextKey != null && !jumpTextKey.isEmpty()) {
-                    showTextAtTop(builder, util, jumpTextKey, 40, (int) centerX, (int) centerY + 1, (int) centerZ);
+                    showText(builder, util, jumpTextKey, 40, (int) centerX, (int) centerY + 1, (int) centerZ);
                 }
             }
 
@@ -604,7 +612,7 @@ public class EFPSceneUtils {
         ElementLink<EntityElement> attacker = spawnDummyActor(builder, center, centerY, center, 180, mainHandItem, offHandItem, showcaseStyle);
         builder.idle(10);
 
-        showTextAtTop(builder, util, "epic_fight_ponder.ponder." + sceneId + ".text_1", 40, (int) center, (int) centerY + 1, (int) center);
+        showText(builder, util, "epic_fight_ponder.ponder." + sceneId + ".text_1", 40, (int) center, (int) centerY + 1, (int) center);
         builder.idle(20);
 
         List<AnimationManager.AnimationAccessor<? extends AttackAnimation>> comboMotions = getSafeComboMotions(mainHandItem, showcaseStyle);
@@ -644,7 +652,7 @@ public class EFPSceneUtils {
         updateSheathState(builder, attacker, 1);
         builder.idle(10);
 
-        showTextAtTop(builder, util, "epic_fight_ponder.ponder." + sceneId + ".text_1", 40, (int) center, (int) centerY + 1, (int) center);
+        showText(builder, util, "epic_fight_ponder.ponder." + sceneId + ".text_1", 40, (int) center, (int) centerY + 1, (int) center);
         builder.idle(20);
 
         List<AnimationManager.AnimationAccessor<? extends AttackAnimation>> comboMotions = getSafeComboMotions(mainHandItem, showcaseStyle);

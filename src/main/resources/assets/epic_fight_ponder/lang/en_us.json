@@ -38,6 +38,17 @@
   "epic_fight_ponder.ponder.uchigatana_basic_attack_combo.text_2": "Uchigatana Dash Attack",
   "epic_fight_ponder.ponder.uchigatana_basic_attack_combo.text_3": "Uchigatana Jump Attack",
 
+  "epic_fight_ponder.ponder.uchigatana_battojutsu_unsheath.header": "Uchigatana: Battojutsu",
+  "epic_fight_ponder.ponder.uchigatana_battojutsu_unsheath.text_1": "Blade sheathed. Focus gathered...",
+  "epic_fight_ponder.ponder.uchigatana_battojutsu_unsheath.text_2": "One slash is all it takes!",
+  "epic_fight_ponder.ponder.uchigatana_battojutsu_unsheath.text_3": "Use while [Sprinting]: Significantly increases dash distance.",
+
+  "epic_fight_ponder.ponder.uchigatana_passive.header": "Uchigatana: Passive",
+  "epic_fight_ponder.ponder.uchigatana_passive.text_1": "Stand idle for a moment to sheathe the blade.\nAlters the moveset and enters [Iai Stance].",
+
+  "epic_fight_ponder.ponder.uchigatana_battojutsu_sheath.header": "Uchigatana: Battojutsu [Sheathed]",
+  "epic_fight_ponder.ponder.uchigatana_battojutsu_sheath.text_1": "Instant Iai strike — Cut down foes in the blink of an eye.",
+
   "epic_fight_ponder.ponder.uchigatana_basic_attack_combo_sheath.header": "Uchigatana (Sheathed) Basic Attack Combo",
   "epic_fight_ponder.ponder.uchigatana_basic_attack_combo_sheath.text_1": "Uchigatana (Sheathed) Basic Attacks",
   "epic_fight_ponder.ponder.uchigatana_basic_attack_combo_sheath.text_2": "Uchigatana (Sheathed) Dash Attack",

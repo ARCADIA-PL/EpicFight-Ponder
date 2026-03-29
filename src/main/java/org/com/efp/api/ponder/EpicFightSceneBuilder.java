@@ -156,6 +156,18 @@ public class EpicFightSceneBuilder extends PonderSceneBuilder {
             waitForState(link, EntityState::canUseSkill);
         }
 
+        public void waitForAttacking(ElementLink<EntityElement> link) {
+            waitForState(link, EntityState::attacking);
+        }
+
+        public void waitForPhaseLevel(ElementLink<EntityElement> link, int targetPhase) {
+            waitForState(link, state -> state.getLevel() == targetPhase);
+        }
+
+        public void waitForHurtLevel(ElementLink<EntityElement> link, int targetHurtLevel) {
+            waitForState(link, state -> state.hurtLevel() == targetHurtLevel);
+        }
+
         /**
          * 动画播放的时间进度
          */

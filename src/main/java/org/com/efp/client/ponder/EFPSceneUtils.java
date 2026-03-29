@@ -24,8 +24,10 @@ import org.com.efp.particle.EFPParticles;
 import org.com.efp.registry.EFPEntities;
 import org.joml.Vector3d;
 import yesman.epicfight.api.animation.AnimationManager;
+import yesman.epicfight.api.animation.LivingMotions;
 import yesman.epicfight.api.animation.types.AttackAnimation;
 import yesman.epicfight.api.animation.types.StaticAnimation;
+import yesman.epicfight.api.asset.AssetAccessor;
 import yesman.epicfight.api.utils.EntitySnapshot;
 import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.particle.EpicFightParticles;
@@ -52,6 +54,14 @@ public class EFPSceneUtils {
         builder.configureBasePlate(0, 0, size);
         builder.showBasePlate();
         builder.scaleSceneView(1.0F);
+        builder.idle(5);
+    }
+
+    public static void setupStandardLongScene(EpicFightSceneBuilder builder, String sceneId, String title) {
+        builder.title(sceneId, title);
+        builder.configureBasePlate(-5, 0, 15);
+        builder.showBasePlate();
+        builder.scaleSceneView(0.7F);
         builder.idle(5);
     }
 
@@ -365,17 +375,7 @@ public class EFPSceneUtils {
 
                 victimPatch.getClientAnimator().playAnimation(dodgeAnim.getRealAnimation(), 0.0F);
 
-                EntitySnapshot<?> snapshot = new EntitySnapshot<>(victimPatch);
-
-                int cacheId = PonderEntityAfterimageParticle.cacheSnapshot(snapshot);
-
-                victimPatch.getOriginal().level().addParticle(
-                        EFPParticles.PONDER_AFTERIMAGE.get(),
-                        victimPatch.getOriginal().getX(),
-                        victimPatch.getOriginal().getY(),
-                        victimPatch.getOriginal().getZ(),
-                        cacheId, 0.0, 0.0
-                );
+                spawnAfterImage(hitEvent.getTarget());
             }
         };
     }
@@ -670,6 +670,30 @@ public class EFPSceneUtils {
         showcaseUchigatanaStandardWeaponCombo(baseScene, util, size, sceneId, weapon, ItemStack.EMPTY, CapabilityItem.Styles.TWO_HAND, true, true);
     }
 
+    public static void changeStyleAndRefreshMotions(
+            EpicFightSceneBuilder builder,
+            ElementLink<EntityElement> entityLink,
+            Style newStyle) {
+
+        builder.world().modifyEntity(entityLink, entity -> {
+            if (entity instanceof LivingEntity living) {
+                EpicFightCapabilities.getUnparameterizedEntityPatch(living, DummyEntityPatch.class).ifPresent(patch -> {
+
+                    patch.setForcedStyle(newStyle);
+
+                    patch.updateLivingMotionsForPonder();
+
+                    if (patch.getClientAnimator() != null) {
+                        AssetAccessor<? extends StaticAnimation> newLiving = patch.getClientAnimator().getLivingAnimation(patch.getCurrentLivingMotion(), null);
+                        if (newLiving != null) {
+                            patch.getClientAnimator().playAnimation(newLiving, 0.2F);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
     @Nullable
     public static Entity resolveEntity(SceneBuilder sceneBuilder, ElementLink<EntityElement> link) {
         PonderScene scene = sceneBuilder.getScene();
@@ -688,6 +712,30 @@ public class EFPSceneUtils {
         Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(sound, pitch, volume));
     }
 
+    public static void spawnAfterImage(Entity entity) {
+        if (entity == null) {
+            return;
+        } else {
+            entity.level();
+        }
+
+        LivingEntityPatch<?> rawPatch = EpicFightCapabilities.getEntityPatch(entity, LivingEntityPatch.class);
+        if (rawPatch instanceof DummyEntityPatch<?> dummyPatch && dummyPatch.getClientAnimator() != null) {
+
+            EntitySnapshot<?> snapshot = new EntitySnapshot<>(dummyPatch);
+
+            int cacheId = PonderEntityAfterimageParticle.cacheSnapshot(snapshot);
+
+            entity.level().addParticle(
+                    EFPParticles.PONDER_AFTERIMAGE.get(),
+                    entity.getX(),
+                    entity.getY(),
+                    entity.getZ(),
+                    cacheId, 0.0, 0.0
+            );
+        }
+    }
+
     public static void playStepSoundOnTimeline(SceneBuilder baseScene, ElementLink<EntityElement> entityLink) {
         baseScene.addInstruction(scene -> {
             Entity entity = resolveEntity(scene.builder(), entityLink);
@@ -704,6 +752,15 @@ public class EFPSceneUtils {
             Entity entity = resolveEntity(scene.builder(), entityLink);
             if (entity != null) {
                 playSoundClientSide(soundEvent, 1.0F, 0.8F);
+            }
+        });
+    }
+
+    public static void addAfterImageOnTimeline(SceneBuilder baseScene, ElementLink<EntityElement> entityLink) {
+        baseScene.addInstruction(scene -> {
+            Entity entity = resolveEntity(scene.builder(), entityLink);
+            if (entity != null) {
+                spawnAfterImage(entity);
             }
         });
     }

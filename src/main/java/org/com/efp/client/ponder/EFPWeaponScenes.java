@@ -8,6 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.com.efp.api.ponder.EpicFightSceneBuilder;
 import yesman.epicfight.gameasset.Animations;
+import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.item.EpicFightItems;
 
@@ -116,6 +117,87 @@ public class EFPWeaponScenes {
         EFPSceneUtils.playDerivationWithSlowMo(builder, attacker, EFPSceneUtils.WaitType.CAN_BASIC_ATTACK, Animations.RUSHING_TEMPO3, 0.2F, 5);
 
         world.waitForInaction(attacker);
+
+        builder.idle(30);
+        builder.markAsFinished();
+    }
+
+    public static void showcaseUchigatanaPassive(SceneBuilder baseScene, SceneBuildingUtil util) {
+        EpicFightSceneBuilder builder = new EpicFightSceneBuilder(baseScene);
+        EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
+
+        EFPSceneUtils.setupStandardScene(builder, 11, "uchigatana_passive", "epic_fight_ponder.ponder.uchigatana_passive.title");
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.UCHIGATANA.get()), null, CapabilityItem.Styles.TWO_HAND);
+        EFPSceneUtils.updateSheathState(builder, attacker, 0);
+        builder.idle(40);
+
+        world.playAnimation(attacker, Animations.BIPED_UCHIGATANA_SCRAP, 0.0F);
+        EFPSceneUtils.playSoundOnTimeline(builder, attacker, EpicFightSounds.SWORD_IN.get());
+        EFPSceneUtils.changeStyleAndRefreshMotions(builder, attacker, CapabilityItem.Styles.SHEATH);
+
+        builder.idle(30);
+        builder.markAsFinished();
+    }
+
+    public static void showcaseUchigatanaBattojutsu_UnSheath(SceneBuilder baseScene, SceneBuildingUtil util) {
+        EpicFightSceneBuilder builder = new EpicFightSceneBuilder(baseScene);
+        EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
+
+        EFPSceneUtils.setupStandardLongScene(builder, "uchigatana_battojutsu_unsheath", "epic_fight_ponder.ponder.uchigatana_battojutsu_unsheath.title");
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 3.5, 1, 12.5, 180, new ItemStack(EpicFightItems.UCHIGATANA.get()), null, CapabilityItem.Styles.TWO_HAND);
+        EFPSceneUtils.updateSheathState(builder, attacker, 0);
+        world.modifyEntityMovement(attacker, true);
+        builder.idle(40);
+
+        world.playAnimation(attacker, Animations.BATTOJUTSU, 0.0F);
+        EFPSceneUtils.playSoundOnTimeline(builder, attacker, EpicFightSounds.SWORD_IN.get());
+        world.waitForAttacking(attacker);
+        world.modifyEntityPlaySpeed(attacker, 0.3F);
+        builder.idle(5);
+        world.modifyEntityPlaySpeed(attacker, 1F);
+        world.waitForInaction(attacker);
+        world.setPosition(attacker, 3.5, 1, 12);
+        builder.idle(5);
+        world.simulateSpring(attacker, 1, 5);
+        builder.idle(5);
+        world.playAnimation(attacker, Animations.BATTOJUTSU_DASH, 0.0F);
+        EFPSceneUtils.playSoundOnTimeline(builder, attacker, EpicFightSounds.SWORD_IN.get());
+        world.waitForAttacking(attacker);
+        world.modifyEntityPlaySpeed(attacker, 0.3F);
+        builder.idle(5);
+        world.modifyEntityPlaySpeed(attacker, 1F);
+        world.waitForInaction(attacker);
+
+        builder.idle(30);
+        builder.markAsFinished();
+    }
+
+    public static void showcaseUchigatanaBattojutsu_Sheath(SceneBuilder baseScene, SceneBuildingUtil util) {
+        EpicFightSceneBuilder builder = new EpicFightSceneBuilder(baseScene);
+        EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
+
+        EFPSceneUtils.setupStandardLongScene(builder, "uchigatana_battojutsu_sheath", "epic_fight_ponder.ponder.uchigatana_battojutsu_sheath.title");
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 3.5, 1, 12.5, 180, new ItemStack(EpicFightItems.UCHIGATANA.get()), null, CapabilityItem.Styles.SHEATH);
+        EFPSceneUtils.updateSheathState(builder, attacker, 1);
+        world.modifyEntityMovement(attacker, true);
+        builder.idle(40);
+
+        world.playAnimation(attacker, Animations.BATTOJUTSU, -0.45F);
+        builder.idle(3);
+        world.modifyEntityPlaySpeed(attacker, 0.3F);
+        builder.idle(5);
+        world.modifyEntityPlaySpeed(attacker, 1F);
+        world.waitForInaction(attacker);
+        EFPSceneUtils.changeStyleAndRefreshMotions(builder, attacker, CapabilityItem.Styles.TWO_HAND);
+        builder.idle(15);
+        world.setPosition(attacker, 3.5, 1, 12);
+        EFPSceneUtils.updateSheathState(builder, attacker, 1);
+        builder.idle(15);
+        world.simulateSpring(attacker, 1, 5);
+        builder.idle(1);
+        world.playAnimation(attacker, Animations.BATTOJUTSU_DASH, -0.45F);
+        world.waitForInaction(attacker);
+        EFPSceneUtils.changeStyleAndRefreshMotions(builder, attacker, CapabilityItem.Styles.TWO_HAND);
 
         builder.idle(30);
         builder.markAsFinished();

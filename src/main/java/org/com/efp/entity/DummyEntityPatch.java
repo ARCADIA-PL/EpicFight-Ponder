@@ -145,11 +145,6 @@ public class DummyEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<
 
     @Override
     public void playSound(SoundEvent sound, float volume, float pitch) {
-        if (this.original.level().isClientSide() && this.original.level() instanceof PonderLevel) {
-            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(sound, pitch, 1.0F));
-        } else {
-            super.playSound(sound, volume, pitch);
-        }
     }
 
     public void scheduleDelayedTask(int delayTicks, Runnable action) {

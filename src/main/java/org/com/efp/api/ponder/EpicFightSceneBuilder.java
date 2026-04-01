@@ -69,6 +69,22 @@ public class EpicFightSceneBuilder extends PonderSceneBuilder {
             });
         }
 
+        public void setYRot(ElementLink<EntityElement> link, float y) {
+            world().modifyEntity(link, entity -> {
+                if (entity instanceof DummyPlayerEntity dummyPlayerEntity) {
+                    dummyPlayerEntity.setYRot(y);
+                    dummyPlayerEntity.setYBodyRot(y);
+                    dummyPlayerEntity.setYHeadRot(y);
+                    EpicFightCapabilities.getUnparameterizedEntityPatch(dummyPlayerEntity, LivingEntityPatch.class).ifPresent(livingEntityPatch -> {
+                        if (livingEntityPatch instanceof DummyEntityPatch<?> dummyEntityPatch) {
+                            dummyEntityPatch.setYRot(y);
+                            dummyEntityPatch.setYRotO(y);
+                        }
+                    });
+                }
+            });
+        }
+
         public void updateLivingMotions(ElementLink<EntityElement> link) {
             world().modifyEntity(link, entity -> {
                 if (entity instanceof DummyPlayerEntity dummyPlayerEntity) {

@@ -15,6 +15,9 @@
   ],
   "client": [
     "compat.epicfightx.MixinRenderUchigatanaX",
+    "epicskills.AccessorSkillBookScreen",
+    "epicskills.client.MixinSkillInfoScreen",
+    "epicskills.client.MixinSkillTreeNodeButton",
     "ponder.MixinPonderUI"
   ],
   "injectors": {

@@ -21,9 +21,12 @@ import yesman.epicfight.world.capabilities.item.ItemKeywordReloadListener;
 import yesman.epicfight.world.item.SkillBookItem;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class EFPPonderPlugin implements PonderPlugin {
+
+    public static final Set<String> REGISTERED_SKILLS = ConcurrentHashMap.newKeySet();
 
     private static final Map<Item, ResourceLocation> CACHED_WEAPON_TYPES = new ConcurrentHashMap<>();
     private static boolean isCacheBuilt = false;
@@ -151,27 +154,27 @@ public class EFPPonderPlugin implements PonderPlugin {
         );
 
         // ==== 注册技能 ====
-        registerPreset(skillHelper, "epic_fight_ponder:fallback",
+        registerSkill(skillHelper, "epic_fight_ponder:fallback",
                 EFPSKillScenes::showcaseNoSkill);
-        registerPreset(skillHelper, "epicfight:guard",
+        registerSkill(skillHelper, "epicfight:guard",
                 EFPSKillScenes::showcaseGuardSkill,
                 EFPSKillScenes::showcaseGuardSkillBreak);
-        registerPreset(skillHelper, "epicfight:parrying",
+        registerSkill(skillHelper, "epicfight:parrying",
                 EFPSKillScenes::showcaseParrySkill);
-        registerPreset(skillHelper, "epicfight:step",
+        registerSkill(skillHelper, "epicfight:step",
                 EFPSKillScenes::showcaseStepSkill);
-        registerPreset(skillHelper, "epicfight:roll",
+        registerSkill(skillHelper, "epicfight:roll",
                 EFPSKillScenes::showcaseRollSkill);
 
         if (EFPCompatManager.isEFXLoaded) {
-            registerPreset(skillHelper, "epicfight:technician",
+            registerSkill(skillHelper, "epicfight:technician",
                     EFXCompat::showcaseTechnicianSkill_EFX);
         } else {
-            registerPreset(skillHelper, "epicfight:technician",
+            registerSkill(skillHelper, "epicfight:technician",
                     EFPSKillScenes::showcaseTechnicianSkill);
         }
 
-        // ==== 根据WeaponCapPreset的ID注册武器 ====
+        // ==== 注册武器====
         if (EFPCompatManager.isEFXLoaded) {
             registerPreset(weaponHelper, "epicfight:sword",
                     EFPWeaponScenes::showcaseSwordBasicAttackCombo,
@@ -238,6 +241,11 @@ public class EFPPonderPlugin implements PonderPlugin {
                 EFPWeaponScenes::showcaseLongSwordBasicAttackCombo,
                 EFPWeaponScenes::showcaseLongSwordBasicAttackCombo_Ochs,
                 EFPWeaponScenes::showcaseLongSwordBasicAttackCombo_OneHand);
+    }
+
+    private void registerSkill(PonderSceneRegistrationHelper<String> helper, String skillId, PonderSceneMethod... scenes) {
+        REGISTERED_SKILLS.add(skillId);
+        registerPreset(helper, skillId, scenes);
     }
 
     private void registerPreset(PonderSceneRegistrationHelper<String> helper, String presetOrSkillId, PonderSceneMethod... scenes) {

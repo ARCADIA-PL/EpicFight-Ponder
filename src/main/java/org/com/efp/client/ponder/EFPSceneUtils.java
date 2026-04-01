@@ -568,12 +568,14 @@ public class EFPSceneUtils {
             if (i == jumpIndex && !enableJump) continue;
 
             if (i == dashIndex) {
-                world.simulateSpring(attacker, 1.5F, 10);
-                builder.idle(10);
+                world.modifyEntityMovement(attacker, true);
+                world.simulateSpring(attacker, 0.3F, 4);
+                builder.idle(6);
                 if (dashTextKey != null && !dashTextKey.isEmpty()) {
                     showText(builder, util, dashTextKey, 30, (int) centerX, (int) centerY - 1, (int) centerZ);
                 }
             } else if (i == jumpIndex) {
+                world.modifyEntityMovement(attacker, true);
                 world.setPosition(attacker, centerX, centerY, centerZ);
                 builder.idle(5);
                 world.simulateJump(attacker);
@@ -581,6 +583,8 @@ public class EFPSceneUtils {
                 if (jumpTextKey != null && !jumpTextKey.isEmpty()) {
                     showText(builder, util, jumpTextKey, 40, (int) centerX, (int) centerY + 1, (int) centerZ);
                 }
+            } else {
+                world.modifyEntityMovement(attacker, false);
             }
 
             world.playAnimation(attacker, comboMotions.get(i), 0.0F);
@@ -623,9 +627,10 @@ public class EFPSceneUtils {
             if (i == jumpIndex && !enableJump) continue;
 
             if (i == dashIndex) {
+                world.modifyEntityMovement(attacker, true);
                 updateSheathState(builder, attacker, 1);
-                world.simulateSpring(attacker, 1.5F, 10);
-                builder.idle(10);
+                world.simulateSpring(attacker, 0.3F, 4);
+                builder.idle(4);
                 if (dashTextKey != null && !dashTextKey.isEmpty()) {
                     showText(builder, util, dashTextKey, 30, (int) centerX, (int) centerY - 1, (int) centerZ);
                 }
@@ -638,6 +643,8 @@ public class EFPSceneUtils {
                 if (jumpTextKey != null && !jumpTextKey.isEmpty()) {
                     showText(builder, util, jumpTextKey, 40, (int) centerX, (int) centerY + 1, (int) centerZ);
                 }
+            } else {
+                world.modifyEntityMovement(attacker, false);
             }
 
             updateSheathState(builder, attacker, 0);

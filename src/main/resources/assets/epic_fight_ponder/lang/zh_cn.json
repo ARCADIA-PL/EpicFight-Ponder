@@ -1,4 +1,6 @@
 {
+  "epic_fight_ponder.ui.hold_to_ponder": "按住 [%1$s] 开始思索",
+
   "epic_fight_ponder.ponder.nothing.header": "暂无展示",
 
   "epic_fight_ponder.ponder.skill_step.header": "闪避 —— 跨步",

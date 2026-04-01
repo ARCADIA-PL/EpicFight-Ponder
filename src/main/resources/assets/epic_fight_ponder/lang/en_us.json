@@ -1,4 +1,6 @@
 {
+  "epic_fight_ponder.ui.hold_to_ponder": "Hold [%1$s] to Ponder",
+
   "epic_fight_ponder.ponder.nothing.header": "WIP",
 
   "epic_fight_ponder.ponder.skill_step.header": "Dodge: Step",

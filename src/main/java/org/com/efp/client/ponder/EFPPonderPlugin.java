@@ -161,17 +161,21 @@ public class EFPPonderPlugin implements PonderPlugin {
                 EFPSKillScenes::showcaseGuardSkillBreak);
         registerSkill(skillHelper, "epicfight:parrying",
                 EFPSKillScenes::showcaseParrySkill);
-        registerSkill(skillHelper, "epicfight:step",
-                EFPSKillScenes::showcaseStepSkill);
-        registerSkill(skillHelper, "epicfight:roll",
-                EFPSKillScenes::showcaseRollSkill);
 
         if (EFPCompatManager.isEFXLoaded) {
             registerSkill(skillHelper, "epicfight:technician",
                     EFXCompat::showcaseTechnicianSkill_EFX);
+            registerSkill(skillHelper, "epicfight:step",
+                    EFXCompat::showcaseStepSkill_EFX);
+            registerSkill(skillHelper, "epicfight:roll",
+                    EFXCompat::showcaseRollSkill_EFX);
         } else {
             registerSkill(skillHelper, "epicfight:technician",
                     EFPSKillScenes::showcaseTechnicianSkill);
+            registerSkill(skillHelper, "epicfight:step",
+                    EFPSKillScenes::showcaseStepSkill);
+            registerSkill(skillHelper, "epicfight:roll",
+                    EFPSKillScenes::showcaseRollSkill);
         }
 
         // ==== 注册武器====
@@ -185,6 +189,8 @@ public class EFPPonderPlugin implements PonderPlugin {
                     EFPWeaponScenes::showcaseDaggerBasicAttackCombo,
                     EFXCompat::showcaseEviscerate_EFX,
                     EFPWeaponScenes::showcaseDaggerBasicAttackCombo_Dual);
+            registerPreset(weaponHelper, "epicfight:dagger", "epicfight_showcase_long",
+                    EFXCompat::showcaseBladeRush_EFX);
             registerPreset(weaponHelper, "epicfight:spear",
                     EFPWeaponScenes::showcaseSpearBasicAttackCombo,
                     EFXCompat::showcaseGraspingSpire_EFX,
@@ -214,6 +220,8 @@ public class EFPPonderPlugin implements PonderPlugin {
                     EFPWeaponScenes::showcaseDaggerBasicAttackCombo,
                     EFPWeaponScenes::showcaseEviscerate,
                     EFPWeaponScenes::showcaseDaggerBasicAttackCombo_Dual);
+            registerPreset(weaponHelper, "epicfight:dagger", "epicfight_showcase_long",
+                    EFPWeaponScenes::showcaseBladeRush);
             registerPreset(weaponHelper, "epicfight:spear",
                     EFPWeaponScenes::showcaseSpearBasicAttackCombo,
                     EFPWeaponScenes::showcaseGraspingSpire,

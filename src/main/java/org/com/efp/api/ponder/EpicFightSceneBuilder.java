@@ -7,9 +7,12 @@ import net.createmod.ponder.api.scene.Selection;
 import net.createmod.ponder.foundation.PonderScene;
 import net.createmod.ponder.foundation.PonderSceneBuilder;
 import net.createmod.ponder.foundation.instruction.PonderInstruction;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import org.com.efp.api.event.PonderCombatEvent;
+import org.com.efp.client.ponder.EFPSceneUtils;
 import org.com.efp.entity.DummyEntityPatch;
 import org.com.efp.entity.DummyPlayerEntity;
 import org.com.efp.particle.EFPParticles;
@@ -81,6 +84,15 @@ public class EpicFightSceneBuilder extends PonderSceneBuilder {
                             dummyEntityPatch.setYRotO(y);
                         }
                     });
+                }
+            });
+        }
+
+        public void lookAtEntity(ElementLink<EntityElement> looker, ElementLink<EntityElement> target) {
+            world().modifyEntity(looker, entity -> {
+                Entity targetEntity = EFPSceneUtils.resolveEntity(EpicFightSceneBuilder.this, target);
+                if (targetEntity != null) {
+                    entity.lookAt(EntityAnchorArgument.Anchor.EYES, targetEntity.position());
                 }
             });
         }

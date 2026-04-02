@@ -8,6 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.com.efp.api.event.PonderCombatEvent;
 import org.com.efp.api.ponder.EpicFightSceneBuilder;
+import org.com.efp.gameasset.EFPAnimations;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
@@ -85,6 +86,61 @@ public class EFPWeaponScenes {
     public static void showcaseAxeBasicAttackCombo(SceneBuilder baseScene, SceneBuildingUtil util) {
         EFPSceneUtils.showcaseStandardWeaponCombo(baseScene, util, 11, "axe_basic_attack_combo",
                 Items.DIAMOND_AXE.getDefaultInstance());
+    }
+
+    public static void showcaseBladeRush(SceneBuilder baseScene, SceneBuildingUtil util) {
+        EpicFightSceneBuilder builder = new EpicFightSceneBuilder(baseScene);
+        EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
+
+        EFPSceneUtils.setupStandardLongScene(builder, "blade_rush", "epic_fight_ponder.ponder.blade_rush.title");
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 3.5, 1, 12.5, 180, new ItemStack(EpicFightItems.NETHERITE_DAGGER.get()), new ItemStack(EpicFightItems.NETHERITE_DAGGER.get()));
+        ElementLink<EntityElement> victim = EFPSceneUtils.spawnDummyVictim(builder, 3.5, 2.5, 7, 0, ItemStack.EMPTY, ItemStack.EMPTY);
+        world.modifyEntityMovement(attacker, true);
+        builder.idle(10);
+        EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.blade_rush.text_1", 20, 3, 1, 12);
+        builder.idle(10);
+
+        world.lookAtEntity(attacker, victim);
+        world.playAnimation(attacker, EFPAnimations.BLADE_RUSH_COMBO1_PONDER, 0.0F);
+        world.waitForPhaseLevel(attacker,3);
+        world.modifyEntityPlaySpeed(attacker, 0.1F);
+        EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.blade_rush.text_2", 30, 5, 0, 5);
+        builder.idle(20);
+        world.modifyEntityPlaySpeed(attacker, 1F);
+        world.waitForCanUseSkill(attacker);
+        world.lookAtEntity(attacker, victim);
+
+        world.playAnimation(attacker, EFPAnimations.BLADE_RUSH_COMBO2_PONDER, 0.0F);
+        world.waitForPhaseLevel(attacker,3);
+        world.modifyEntityPlaySpeed(attacker, 0.1F);
+        builder.idle(10);
+        world.modifyEntityPlaySpeed(attacker, 1F);
+        world.waitForCanUseSkill(attacker);
+        world.lookAtEntity(attacker, victim);
+
+        world.playAnimation(attacker, EFPAnimations.BLADE_RUSH_COMBO3_PONDER, 0.0F);
+        world.waitForPhaseLevel(attacker,3);
+        world.modifyEntityPlaySpeed(attacker, 0.1F);
+        EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.blade_rush.text_3", 30, 5, 0, 7);
+        builder.idle(25);
+        world.modifyEntityPlaySpeed(attacker, 1F);
+        world.waitForInaction(attacker);
+        world.lookAtEntity(attacker, victim);
+
+        world.playAnimation(attacker, EFPAnimations.BLADE_RUSH_TRY_PONDER, 0.0F);
+        world.waitForAnimationProgress(attacker, 0.15F);
+        world.setPosition(attacker, 3.5, 2.5, 6.5);
+        world.waitForAnimationProgress(attacker, 0.2F);
+        world.modifyEntityPlaySpeed(attacker, 0.2F);
+        EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.blade_rush.text_4", 50, 3, 2, 6);
+        builder.idle(15);
+        Consumer<PonderCombatEvent.Hit> normalKillCallBack = EFPSceneUtils.createStandardKillCallback();
+        EFPSceneUtils.playInteractiveStrike(builder, attacker, EFPAnimations.BLADE_RUSH_EXECUTE_BIPED_PONDER, 1.0F, normalKillCallBack);
+        world.waitForCanBasicAttack(attacker);
+        world.setYRot(attacker, 180);
+
+        builder.idle(20);
+        builder.markAsFinished();
     }
 
     public static void showcaseEviscerate(SceneBuilder baseScene, SceneBuildingUtil util) {

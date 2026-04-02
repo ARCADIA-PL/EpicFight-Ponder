@@ -126,6 +126,12 @@
   "epic_fight_ponder.ponder.dagger_basic_attack_combo_dual.text_2": "Dagger (Dual Wield) Dash Attack",
   "epic_fight_ponder.ponder.dagger_basic_attack_combo_dual.text_3": "Dagger (Dual Wield) Jump Attack",
 
+  "epic_fight_ponder.ponder.blade_rush.header": "Dagger Skill: Blade Rush",
+  "epic_fight_ponder.ponder.blade_rush.text_1": "Lock onto a target to perform a high-speed forward dash.",
+  "epic_fight_ponder.ponder.blade_rush.text_2": "Each successful dash strike inflicts one stack of [Unbalanced].",
+  "epic_fight_ponder.ponder.blade_rush.text_3": "Once the target reaches three stacks of [Unbalanced]...",
+  "epic_fight_ponder.ponder.blade_rush.text_4": "...instantly blink to their blind spot and execute them!",
+
   "epic_fight_ponder.ponder.axe_basic_attack_combo.header": "Axe Basic Attack Combo",
   "epic_fight_ponder.ponder.axe_basic_attack_combo.text_1": "Axe Basic Attacks",
   "epic_fight_ponder.ponder.axe_basic_attack_combo.text_2": "Axe Dash Attack",

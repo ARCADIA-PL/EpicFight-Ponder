@@ -126,6 +126,12 @@
   "epic_fight_ponder.ponder.dagger_basic_attack_combo_dual.text_2": "匕首 (双持) 冲刺攻击派生",
   "epic_fight_ponder.ponder.dagger_basic_attack_combo_dual.text_3": "匕首 (双持) 跳跃攻击派生",
 
+  "epic_fight_ponder.ponder.blade_rush.header": "匕首武技 · 刃闪",
+  "epic_fight_ponder.ponder.blade_rush.text_1": "锁定目标时，向前极速突进。",
+  "epic_fight_ponder.ponder.blade_rush.text_2": "每次突进斩击命中，都会为目标叠加一层 [失稳] 状态。",
+  "epic_fight_ponder.ponder.blade_rush.text_3": "当目标的 [失稳] 状态叠加至三层时……",
+  "epic_fight_ponder.ponder.blade_rush.text_4": "可无视距离瞬身至其死角，执行致命处决！",
+
   "epic_fight_ponder.ponder.axe_basic_attack_combo.header": "斧 基础连段演示",
   "epic_fight_ponder.ponder.axe_basic_attack_combo.text_1": "斧 普通攻击连段",
   "epic_fight_ponder.ponder.axe_basic_attack_combo.text_2": "斧 冲刺攻击派生",

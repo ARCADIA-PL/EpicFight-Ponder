@@ -20,6 +20,116 @@ import java.util.function.Consumer;
 
 public class EFXCompat {
 
+    public static void showcaseStepSkill_EFX(SceneBuilder baseScene, SceneBuildingUtil util) {
+        EpicFightSceneBuilder builder = new EpicFightSceneBuilder(baseScene);
+        EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
+
+        EFPSceneUtils.setupStandardScene(builder, 11, "skill_step", "epic_fight_ponder.ponder.skill_step.title");
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.DIAMOND_LONGSWORD.get()));
+        world.modifyEntityMovement(attacker, true);
+
+        EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.skill_step.text_1", 100, 5, 1, 5);
+        builder.idle(20);
+
+        world.playAnimation(attacker, AnimationsX.BIPED_STEP_BACKWARD_PONDER, 0.0F);
+        EFPSceneUtils.playStepSoundOnTimeline(builder, attacker);
+        world.waitForInaction(attacker);
+        builder.idle(5);
+        world.playAnimation(attacker, AnimationsX.BIPED_STEP_FORWARD_PONDER, 0.0F);
+        EFPSceneUtils.playStepSoundOnTimeline(builder, attacker);
+        world.waitForInaction(attacker);
+        builder.idle(5);
+        world.playAnimation(attacker, AnimationsX.BIPED_STEP_RIGHT_PONDER, 0.0F);
+        EFPSceneUtils.playStepSoundOnTimeline(builder, attacker);
+        world.waitForInaction(attacker);
+        builder.idle(5);
+        world.playAnimation(attacker, AnimationsX.BIPED_STEP_LEFT_PONDER, 0.0F);
+        EFPSceneUtils.playStepSoundOnTimeline(builder, attacker);
+        world.waitForInaction(attacker);
+
+        builder.idle(30);
+        builder.markAsFinished();
+    }
+
+    public static void showcaseRollSkill_EFX(SceneBuilder baseScene, SceneBuildingUtil util) {
+        EpicFightSceneBuilder builder = new EpicFightSceneBuilder(baseScene);
+        EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
+
+        EFPSceneUtils.setupStandardScene(builder, 11, "skill_roll", "epic_fight_ponder.ponder.skill_roll.title");
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.DIAMOND_LONGSWORD.get()));
+        world.modifyEntityMovement(attacker, true);
+
+        EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.skill_roll.text_1", 100, 5, 1, 5);
+        builder.idle(20);
+
+        world.playAnimation(attacker, AnimationsX.BIPED_ROLL_BACKWARD_PONDER, 0.0F);
+        EFPSceneUtils.playSoundOnTimeline(builder, attacker, EpicFightSounds.ROLL.get());
+        world.waitForInaction(attacker);
+        builder.idle(5);
+        world.playAnimation(attacker, AnimationsX.BIPED_ROLL_FORWARD_PONDER, 0.0F);
+        EFPSceneUtils.playSoundOnTimeline(builder, attacker, EpicFightSounds.ROLL.get());
+        world.waitForInaction(attacker);
+
+        builder.idle(30);
+        builder.markAsFinished();
+    }
+
+
+    public static void showcaseBladeRush_EFX(SceneBuilder baseScene, SceneBuildingUtil util) {
+        EpicFightSceneBuilder builder = new EpicFightSceneBuilder(baseScene);
+        EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
+
+        EFPSceneUtils.setupStandardLongScene(builder, "blade_rush", "epic_fight_ponder.ponder.blade_rush.title");
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 3.5, 1, 12.5, 180, new ItemStack(EpicFightItems.NETHERITE_DAGGER.get()), new ItemStack(EpicFightItems.NETHERITE_DAGGER.get()));
+        ElementLink<EntityElement> victim = EFPSceneUtils.spawnDummyVictim(builder, 3.5, 2.5, 7, 0, ItemStack.EMPTY, ItemStack.EMPTY);
+        world.modifyEntityMovement(attacker, true);
+        builder.idle(10);
+        EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.blade_rush.text_1", 20, 3, 1, 12);
+        builder.idle(10);
+
+        world.lookAtEntity(attacker, victim);
+        world.playAnimation(attacker, AnimationsX.BLADE_RUSH_COMBO1_PONDER, 0.0F);
+        world.waitForPhaseLevel(attacker,3);
+        world.modifyEntityPlaySpeed(attacker, 0.1F);
+        EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.blade_rush.text_2", 30, 5, 0, 5);
+        builder.idle(20);
+        world.modifyEntityPlaySpeed(attacker, 1F);
+        world.waitForCanUseSkill(attacker);
+        world.lookAtEntity(attacker, victim);
+
+        world.playAnimation(attacker, AnimationsX.BLADE_RUSH_COMBO2_PONDER, 0.0F);
+        world.waitForPhaseLevel(attacker,3);
+        world.modifyEntityPlaySpeed(attacker, 0.1F);
+        builder.idle(10);
+        world.modifyEntityPlaySpeed(attacker, 1F);
+        world.waitForCanUseSkill(attacker);
+        world.lookAtEntity(attacker, victim);
+
+        world.playAnimation(attacker, AnimationsX.BLADE_RUSH_COMBO3_PONDER, 0.0F);
+        world.waitForPhaseLevel(attacker,3);
+        world.modifyEntityPlaySpeed(attacker, 0.1F);
+        EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.blade_rush.text_3", 30, 5, 0, 7);
+        builder.idle(25);
+        world.modifyEntityPlaySpeed(attacker, 1F);
+        world.waitForInaction(attacker);
+        world.lookAtEntity(attacker, victim);
+
+        world.playAnimation(attacker, AnimationsX.BLADE_RUSH_TRY_PONDER, 0.0F);
+        world.waitForAnimationProgress(attacker, 0.15F);
+        world.setPosition(attacker, 3.5, 2.5, 6.5);
+        world.waitForAnimationProgress(attacker, 0.2F);
+        world.modifyEntityPlaySpeed(attacker, 0.2F);
+        EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.blade_rush.text_4", 50, 3, 2, 6);
+        builder.idle(15);
+        Consumer<PonderCombatEvent.Hit> normalKillCallBack = EFPSceneUtils.createStandardKillCallback();
+        EFPSceneUtils.playInteractiveStrike(builder, attacker, AnimationsX.BLADE_RUSH_EXECUTE_BIPED_PONDER, 1.0F, normalKillCallBack);
+        world.waitForCanBasicAttack(attacker);
+        world.setYRot(attacker, 180);
+
+        builder.idle(20);
+        builder.markAsFinished();
+    }
+
     public static void showcaseEviscerate_EFX(SceneBuilder baseScene, SceneBuildingUtil util) {
         EpicFightSceneBuilder builder = new EpicFightSceneBuilder(baseScene);
         EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
@@ -31,8 +141,8 @@ public class EFXCompat {
         builder.idle(10);
         EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.eviscerate_efx.text_1", 20, 5, 1, 7);
         builder.idle(10);
-        Consumer<PonderCombatEvent.Hit> normalKillCallBack = EFPSceneUtils.createStandardExHitCallback(AnimationsX.EVISCERATE_FIRST.get(), AnimationsX.EVISCERATE_SECOND.get(), 6, 1.5F, 0.7F);
-        EFPSceneUtils.playInteractiveStrike(builder, attacker, AnimationsX.EVISCERATE_FIRST, 1.0F, normalKillCallBack);
+        Consumer<PonderCombatEvent.Hit> normalExHitCallBack = EFPSceneUtils.createStandardExHitCallback(AnimationsX.EVISCERATE_FIRST.get(), AnimationsX.EVISCERATE_SECOND.get(), 6, 1.5F, 0.7F);
+        EFPSceneUtils.playInteractiveStrike(builder, attacker, AnimationsX.EVISCERATE_FIRST, 1.0F, normalExHitCallBack);
         builder.idle(5);
         EFPSceneUtils.showTextWithKeyFrame(builder, util, "epic_fight_ponder.ponder.eviscerate_efx.text_2", 30, 5, 1, 3);
         world.modifyEntityPlaySpeed(attacker, 0.2F);
@@ -60,8 +170,8 @@ public class EFXCompat {
         builder.idle(10);
         EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.grasping_spire.text_1", 20, 5, 1, 6);
         builder.idle(10);
-        Consumer<PonderCombatEvent.Hit> normalKillCallBack = EFPSceneUtils.createStandardExHitCallback(AnimationsX.GRASPING_SPIRAL_FIRST.get(), AnimationsX.GRASPING_SPIRAL_SECOND.get(), 15, 1.5F, 0.7F);
-        EFPSceneUtils.playInteractiveStrike(builder, attacker, AnimationsX.GRASPING_SPIRAL_FIRST, 1.0F, normalKillCallBack);
+        Consumer<PonderCombatEvent.Hit> normalExHitCallBack = EFPSceneUtils.createStandardExHitCallback(AnimationsX.GRASPING_SPIRAL_FIRST.get(), AnimationsX.GRASPING_SPIRAL_SECOND.get(), 15, 1.5F, 0.7F);
+        EFPSceneUtils.playInteractiveStrike(builder, attacker, AnimationsX.GRASPING_SPIRAL_FIRST, 1.0F, normalExHitCallBack);
         builder.idle(3);
         EFPSceneUtils.showTextWithKeyFrame(builder, util, "epic_fight_ponder.ponder.grasping_spire.text_2", 20, 5, 1, 2);
         world.modifyEntityPlaySpeed(attacker, 0.2F);

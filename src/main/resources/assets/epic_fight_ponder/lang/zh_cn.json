@@ -71,10 +71,10 @@
   "epic_fight_ponder.ponder.longsword_basic_attack_combo_onehand.text_2": "长剑 (剑盾) 疾跑攻击派生",
   "epic_fight_ponder.ponder.longsword_basic_attack_combo_onehand.text_3": "长剑 (剑盾) 跳跃攻击派生",
 
-  "epic_fight_ponder.ponder.longsword_basic_attack_combo_ochs.header": "长剑 (格挡式) 基础连段演示",
-  "epic_fight_ponder.ponder.longsword_basic_attack_combo_ochs.text_1": "长剑 (格挡式) 普通攻击连段",
-  "epic_fight_ponder.ponder.longsword_basic_attack_combo_ochs.text_2": "长剑 (格挡式) 冲刺攻击派生",
-  "epic_fight_ponder.ponder.longsword_basic_attack_combo_ochs.text_3": "长剑 (格挡式) 跳跃攻击派生",
+  "epic_fight_ponder.ponder.longsword_ochs.header": "长剑 (高位护锋式) 拼刀演示",
+  "epic_fight_ponder.ponder.longsword_ochs.text_1": "变阵！转入 [高位护锋式]……",
+  "epic_fight_ponder.ponder.longsword_ochs.text_2": "面对敌人压倒性的重火力猛攻，无需退缩半步！",
+  "epic_fight_ponder.ponder.longsword_ochs.text_3": "攻防一体！迎击敌刃触发 [拼刀]，化解攻势并予以反击！",
 
   "epic_fight_ponder.ponder.spear_basic_attack_combo.header": "长枪 基础连段演示",
   "epic_fight_ponder.ponder.spear_basic_attack_combo.text_1": "长枪 普通攻击连段",

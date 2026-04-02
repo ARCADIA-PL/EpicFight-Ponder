@@ -71,10 +71,10 @@
   "epic_fight_ponder.ponder.longsword_basic_attack_combo_onehand.text_2": "長劍 (劍盾) 奔襲衍化之擊",
   "epic_fight_ponder.ponder.longsword_basic_attack_combo_onehand.text_3": "長劍 (劍盾) 躍空衍化之擊",
 
-  "epic_fight_ponder.ponder.longsword_basic_attack_combo_ochs.header": "長劍 (高位護鋒式) 基礎連段演武",
-  "epic_fight_ponder.ponder.longsword_basic_attack_combo_ochs.text_1": "長劍 (高位護鋒式) 常擊連段",
-  "epic_fight_ponder.ponder.longsword_basic_attack_combo_ochs.text_2": "長劍 (高位護鋒式) 奔襲衍化之擊",
-  "epic_fight_ponder.ponder.longsword_basic_attack_combo_ochs.text_3": "長劍 (高位護鋒式) 躍空衍化之擊",
+  "epic_fight_ponder.ponder.longsword_ochs.header": "長劍 (高位護鋒式) 拼刀演武",
+  "epic_fight_ponder.ponder.longsword_ochs.text_1": "變陣！劍指敵軀，結『高位護鋒』之陣……",
+  "epic_fight_ponder.ponder.longsword_ochs.text_2": "縱敵之巨劍勢若雷霆，亦無退怯之理！",
+  "epic_fight_ponder.ponder.longsword_ochs.text_3": "攻守同軸！迎刃而斬以觸『拼刀』，盪開敵鋒，反戈一擊！",
 
   "epic_fight_ponder.ponder.spear_basic_attack_combo.header": "長鎩 基礎連段演武",
   "epic_fight_ponder.ponder.spear_basic_attack_combo.text_1": "長鎩 常擊連段",

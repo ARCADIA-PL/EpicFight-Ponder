@@ -517,6 +517,25 @@ public class EFPSceneUtils {
     }
 
     /**
+     * 创建“成功拼刀”事件
+     */
+    public static Consumer<PonderCombatEvent.Hit> createStandardClashCallback() {
+        return hitEvent -> {
+            hitEvent.setResult(PonderCombatEvent.AttackResult.SUCCESS);
+            Entity attackerEntity = hitEvent.getAttacker();
+            Entity victimEntity = hitEvent.getTarget();
+            if (attackerEntity != null && victimEntity != null) {
+                EFPSceneUtils.playSoundClientSide(EpicFightSounds.BLADE_RUSH_FINISHER.get(), 1.0F, 1.0F);
+                EFPSceneUtils.playSoundClientSide(EpicFightSounds.CLASH.get(), 1.0F, 1.0F);
+                EFPSceneUtils.spawnEfmHitParticleClientSide(
+                        attackerEntity.level(), EpicFightParticles.HIT_BLUNT.get(),
+                        attackerEntity, victimEntity, HitParticleType.FRONT_OF_EYES, HitParticleType.ZERO
+                );
+            }
+        };
+    }
+
+    /**
      * 创建“命中追击”事件
      */
     public static Consumer<PonderCombatEvent.Hit> createStandardExHitCallback(StaticAnimation originAnim, StaticAnimation exAttackAnim, int exAttackDelay, float originAnimStunTime, float exAttackStunTime) {

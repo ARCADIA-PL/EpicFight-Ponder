@@ -210,6 +210,10 @@ public class EFPPonderPlugin implements PonderPlugin {
                     EFPWeaponScenes::showcaseUchigatanaBasicAttackCombo_Sheath);
             registerPreset(weaponHelper, "epicfight:uchigatana", "epicfight_showcase_long",
                     EFXCompat::showcaseUchigatanaBattojutsu_Sheath_EFX);
+            registerPreset(weaponHelper, "epicfight:longsword",
+                    EFPWeaponScenes::showcaseLongSwordBasicAttackCombo,
+                    EFXCompat::showcaseLongSwordBasicAttackCombo_Ochs_EFX,
+                    EFPWeaponScenes::showcaseLongSwordBasicAttackCombo_OneHand);
         } else {
             registerPreset(weaponHelper, "epicfight:sword",
                     EFPWeaponScenes::showcaseSwordBasicAttackCombo,
@@ -241,14 +245,14 @@ public class EFPPonderPlugin implements PonderPlugin {
                     EFPWeaponScenes::showcaseUchigatanaBasicAttackCombo_Sheath);
             registerPreset(weaponHelper, "epicfight:uchigatana", "epicfight_showcase_long",
                     EFPWeaponScenes::showcaseUchigatanaBattojutsu_Sheath);
+            registerPreset(weaponHelper, "epicfight:longsword",
+                    EFPWeaponScenes::showcaseLongSwordBasicAttackCombo,
+                    EFPWeaponScenes::showcaseLongSwordBasicAttackCombo_Ochs,
+                    EFPWeaponScenes::showcaseLongSwordBasicAttackCombo_OneHand);
         }
 
         registerPreset(weaponHelper, "epicfight:greatsword",
                 EFPWeaponScenes::showcaseGreatSwordBasicAttackCombo);
-        registerPreset(weaponHelper, "epicfight:longsword",
-                EFPWeaponScenes::showcaseLongSwordBasicAttackCombo,
-                EFPWeaponScenes::showcaseLongSwordBasicAttackCombo_Ochs,
-                EFPWeaponScenes::showcaseLongSwordBasicAttackCombo_OneHand);
     }
 
     private void registerSkill(PonderSceneRegistrationHelper<String> helper, String skillId, PonderSceneMethod... scenes) {

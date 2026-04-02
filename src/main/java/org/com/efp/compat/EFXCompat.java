@@ -6,16 +6,22 @@ import net.createmod.ponder.api.element.ElementLink;
 import net.createmod.ponder.api.element.EntityElement;
 import net.createmod.ponder.api.scene.SceneBuilder;
 import net.createmod.ponder.api.scene.SceneBuildingUtil;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.com.efp.api.event.PonderCombatEvent;
 import org.com.efp.api.ponder.EpicFightSceneBuilder;
 import org.com.efp.client.ponder.EFPSceneUtils;
+import org.com.efp.client.ponder.EFPWeaponScenes;
 import org.com.efp.gameasset.EFPAnimations;
 import yesman.epicfight.gameasset.EpicFightSounds;
+import yesman.epicfight.particle.EpicFightParticles;
+import yesman.epicfight.particle.HitParticleType;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.item.EpicFightItems;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 public class EFXCompat {
@@ -74,6 +80,103 @@ public class EFXCompat {
         builder.markAsFinished();
     }
 
+    public static void showcaseLongSwordBasicAttackCombo_Ochs_EFX(SceneBuilder baseScene, SceneBuildingUtil util) {
+        EpicFightSceneBuilder builder = new EpicFightSceneBuilder(baseScene);
+        EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
+
+        EFPSceneUtils.setupStandardScene(builder, 11, "longsword_ochs", "epic_fight_ponder.ponder.longsword_ochs.title");
+
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 6.5, 180,
+                new ItemStack(EpicFightItems.DIAMOND_LONGSWORD.get()), ItemStack.EMPTY, CapabilityItem.Styles.TWO_HAND);
+        ElementLink<EntityElement> victim = EFPSceneUtils.spawnDummyVictim(builder, 5.5, 1, 4.5, 0,
+                new ItemStack(EpicFightItems.IRON_GREATSWORD.get()), ItemStack.EMPTY, CapabilityItem.Styles.TWO_HAND);
+
+        world.modifyEntityNoStun(victim, true);
+        world.modifyEntityNoStun(attacker, true);
+
+        builder.idle(20);
+        EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.longsword_ochs.text_1", 20, 4, 2, 5);
+        world.playAnimation(attacker, AnimationsX.BIPED_LIECHTENAUER_READY, 0);
+        EFPSceneUtils.playSoundOnTimeline(builder, attacker, SoundEvents.ARMOR_EQUIP_CHAIN);
+        EFPSceneUtils.changeStyleAndRefreshMotions(builder, attacker, CapabilityItem.Styles.OCHS);
+        builder.idle(25);
+
+        List<EFPWeaponScenes.ClashFrame> clashSequence = List.of(
+                new EFPWeaponScenes.ClashFrame(AnimationsX.GREATSWORD_AUTO1, 1, AnimationsX.LONGSWORD_LIECHTENAUER_AUTO1, 9, false),
+                new EFPWeaponScenes.ClashFrame(AnimationsX.GREATSWORD_AUTO2, 3, AnimationsX.LONGSWORD_LIECHTENAUER_AUTO2, 10, false),
+                new EFPWeaponScenes.ClashFrame(ExtraAnimations.GREATSWORD_AUTO3, 3, AnimationsX.LONGSWORD_LIECHTENAUER_AUTO3, 9, false),
+                new EFPWeaponScenes.ClashFrame(ExtraAnimations.GREATSWORD_AUTO4, 2, ExtraAnimations.LONGSWORD_LIECHTENAUER_AUTO4, 10, false),
+                new EFPWeaponScenes.ClashFrame(ExtraAnimations.GREATSWORD_AUTO5, 6, ExtraAnimations.LONGSWORD_LIECHTENAUER_AUTO5, 10, false),
+                new EFPWeaponScenes.ClashFrame(AnimationsX.GREATSWORD_DASH, 2, ExtraAnimations.LONGSWORD_LIECHTENAUER_AUTO6, 11, false),
+                new EFPWeaponScenes.ClashFrame(AnimationsX.GREATSWORD_AIR_SLASH, 2, ExtraAnimations.LONGSWORD_TWOHAND_AIR_SLASH, 11, true)
+        );
+
+        EFPSceneUtils.showTextWithKeyFrame(builder, util, "epic_fight_ponder.ponder.longsword_ochs.text_2", 25, 4, 2, 5);
+        builder.idle(20);
+
+        for (int i = 0; i < clashSequence.size(); i++) {
+            EFPWeaponScenes.ClashFrame frame = clashSequence.get(i);
+
+            if (frame.isJump) {
+                world.setPosition(attacker, 5.5, 1, 6.5);
+                builder.idle(5);
+                world.simulateJump(attacker);
+            }
+
+            world.playAnimation(victim, frame.victimAnim, 0.0F, hitEvent -> {
+                if (hitEvent.isCancelable()) hitEvent.setCanceled(true);
+            }, beHitEvent -> {
+            });
+
+            builder.idle(frame.attackerDelay);
+
+            world.playAnimation(attacker, frame.attackerAnim, 0.0F, hitEvent -> {
+                EFPSceneUtils.playSoundClientSide(EpicFightSounds.BLADE_RUSH_FINISHER.get(), 1.0F, 1.0F);
+            }, beHitEvent -> {
+            });
+
+            world.waitForPhaseLevel(attacker, 1);
+
+            builder.idle(frame.clashDelay);
+
+            world.modifyEntityPlaySpeed(attacker, 0.05F);
+            world.modifyEntityPlaySpeed(victim, 0.05F);
+
+            baseScene.addInstruction(scene -> {
+                Entity attackerEntity = EFPSceneUtils.resolveEntity(scene.builder(), attacker);
+                Entity victimEntity = EFPSceneUtils.resolveEntity(scene.builder(), victim);
+                if (attackerEntity != null && victimEntity != null) {
+                    EFPSceneUtils.playSoundClientSide(EpicFightSounds.CLASH.get(), 1.0F, 1.0F);
+                    EFPSceneUtils.spawnEfmHitParticleClientSide(
+                            attackerEntity.level(), EpicFightParticles.HIT_BLUNT.get(),
+                            attackerEntity, victimEntity, HitParticleType.FRONT_OF_EYES, HitParticleType.ZERO
+                    );
+                }
+            });
+
+            if (i == 0) {
+                builder.idle(4);
+                EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.longsword_ochs.text_3", 70, 4, 2, 5);
+            }
+
+            builder.idle(15);
+
+            world.modifyEntityPlaySpeed(attacker, 1.0F);
+            world.modifyEntityPlaySpeed(victim, 1.0F);
+
+            if (!frame.isJump && i < clashSequence.size() - 1) {
+                world.waitForCanBasicAttack(attacker);
+            } else {
+                world.waitForInaction(attacker);
+                if (frame.isJump) {
+                    world.resetJump(attacker);
+                }
+            }
+        }
+
+        builder.idle(30);
+        builder.markAsFinished();
+    }
 
     public static void showcaseBladeRush_EFX(SceneBuilder baseScene, SceneBuildingUtil util) {
         EpicFightSceneBuilder builder = new EpicFightSceneBuilder(baseScene);
@@ -89,7 +192,7 @@ public class EFXCompat {
 
         world.lookAtEntity(attacker, victim);
         world.playAnimation(attacker, AnimationsX.BLADE_RUSH_COMBO1_PONDER, 0.0F);
-        world.waitForPhaseLevel(attacker,3);
+        world.waitForPhaseLevel(attacker, 3);
         world.modifyEntityPlaySpeed(attacker, 0.1F);
         EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.blade_rush.text_2", 30, 5, 0, 5);
         builder.idle(20);
@@ -98,7 +201,7 @@ public class EFXCompat {
         world.lookAtEntity(attacker, victim);
 
         world.playAnimation(attacker, AnimationsX.BLADE_RUSH_COMBO2_PONDER, 0.0F);
-        world.waitForPhaseLevel(attacker,3);
+        world.waitForPhaseLevel(attacker, 3);
         world.modifyEntityPlaySpeed(attacker, 0.1F);
         builder.idle(10);
         world.modifyEntityPlaySpeed(attacker, 1F);
@@ -106,7 +209,7 @@ public class EFXCompat {
         world.lookAtEntity(attacker, victim);
 
         world.playAnimation(attacker, AnimationsX.BLADE_RUSH_COMBO3_PONDER, 0.0F);
-        world.waitForPhaseLevel(attacker,3);
+        world.waitForPhaseLevel(attacker, 3);
         world.modifyEntityPlaySpeed(attacker, 0.1F);
         EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.blade_rush.text_3", 30, 5, 0, 7);
         builder.idle(25);

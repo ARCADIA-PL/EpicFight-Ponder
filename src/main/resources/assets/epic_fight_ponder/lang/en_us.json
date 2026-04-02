@@ -71,10 +71,10 @@
   "epic_fight_ponder.ponder.longsword_basic_attack_combo_onehand.text_2": "Longsword (Sword & Shield) Dash Attack",
   "epic_fight_ponder.ponder.longsword_basic_attack_combo_onehand.text_3": "Longsword (Sword & Shield) Jump Attack",
 
-  "epic_fight_ponder.ponder.longsword_basic_attack_combo_ochs.header": "Longsword (Ochs Stance) Basic Attack Combo",
-  "epic_fight_ponder.ponder.longsword_basic_attack_combo_ochs.text_1": "Longsword (Ochs Stance) Basic Attacks",
-  "epic_fight_ponder.ponder.longsword_basic_attack_combo_ochs.text_2": "Longsword (Ochs Stance) Dash Attack",
-  "epic_fight_ponder.ponder.longsword_basic_attack_combo_ochs.text_3": "Longsword (Ochs Stance) Jump Attack",
+  "epic_fight_ponder.ponder.longsword_ochs.header": "Longsword (Ochs Stance) Masterstrike",
+  "epic_fight_ponder.ponder.longsword_ochs.text_1": "Shift your stance... enter the [Ochs Guard].",
+  "epic_fight_ponder.ponder.longsword_ochs.text_2": "Never back down, even against a relentless barrage of heavy strikes!",
+  "epic_fight_ponder.ponder.longsword_ochs.text_3": "Offensive Defense! Strike the incoming blade to trigger a [Clash], deflecting the attack while delivering your own!",
 
   "epic_fight_ponder.ponder.spear_basic_attack_combo.header": "Spear Basic Attack Combo",
   "epic_fight_ponder.ponder.spear_basic_attack_combo.text_1": "Spear Basic Attacks",

@@ -15,7 +15,8 @@ import java.util.List;
 @Mixin(value = SkillTreeScreen.TreePage.NodeButton.class)
 public abstract class MixinSkillTreeNodeButton {
 
-    @Shadow public abstract Skill getSkill();
+    @Shadow
+    public abstract Skill getSkill();
 
     @Redirect(
             method = "renderWidget",

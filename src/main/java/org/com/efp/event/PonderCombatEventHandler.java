@@ -1,9 +1,11 @@
 package org.com.efp.event;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.com.efp.EpicFightPonder;
 import org.com.efp.api.event.PonderCombatEvent;
+import org.com.efp.api.ponder.EpicFightSceneBuilder;
 import org.com.efp.entity.DummyEntityPatch;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
@@ -17,10 +19,14 @@ public class PonderCombatEventHandler {
     @SubscribeEvent
     public static void onBeHitDefaultReaction(PonderCombatEvent.BeHit event) {
         if (event.isCanceled()) return;
-        System.out.println("Animation: " + event.getAnimation() + " Phase: " + event.getPhaseOrder());
         DummyEntityPatch<?> victimEntityPatch = EpicFightCapabilities.getEntityPatch(event.getTarget(), DummyEntityPatch.class);
         if (victimEntityPatch != null) {
-            victimEntityPatch.playAnimation(Animations.BIPED_HIT_SHORT, 0F);
+            CompoundTag data = victimEntityPatch.getOriginal().getPersistentData();
+            if (data.contains(EpicFightSceneBuilder.NO_STUN) && !data.getBoolean(EpicFightSceneBuilder.NO_STUN)) {
+                victimEntityPatch.playAnimation(Animations.BIPED_HIT_SHORT, 0F);
+            } else if (!data.contains(EpicFightSceneBuilder.NO_STUN)) {
+                victimEntityPatch.playAnimation(Animations.BIPED_HIT_SHORT, 0F);
+            }
         }
     }
 }

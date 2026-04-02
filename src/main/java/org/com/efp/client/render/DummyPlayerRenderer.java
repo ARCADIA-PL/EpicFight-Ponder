@@ -32,7 +32,7 @@ public class DummyPlayerRenderer extends HumanoidMobRenderer<DummyPlayerEntity, 
     }
 
     @Override
-    public void render(DummyPlayerEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
+    public void render(@NotNull DummyPlayerEntity entity, float entityYaw, float partialTicks, @NotNull PoseStack poseStack, @NotNull MultiBufferSource buffer, int packedLight) {
         super.render(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);
 
         if (entity.level() instanceof PonderLevel) {

@@ -35,6 +35,7 @@ public class EpicFightSceneBuilder extends PonderSceneBuilder {
 
     public static final String PLAY_SPEED = "play_speed_in_ponder_level";
     public static final String CAN_MOVE = "can_move_in_ponder_level";
+    public static final String NO_STUN = "no_stun_in_ponder_level";
 
     private final EpicFightEffectInstructions effects;
     private final EpicFightWorldInstructions world;
@@ -434,6 +435,19 @@ public class EpicFightSceneBuilder extends PonderSceneBuilder {
 
         public void modifyEntityMovement(ElementLink<EntityElement> link, boolean canMove) {
             super.modifyEntity(link, e -> e.getPersistentData().putBoolean(CAN_MOVE, canMove));
+        }
+
+        //霸体
+        public <E extends LivingEntity> void modifyEntitiesNoStun(Class<E> entityClass, boolean noStun) {
+            super.modifyEntities(entityClass, e -> e.getPersistentData().putBoolean(NO_STUN, noStun));
+        }
+
+        public <E extends LivingEntity> void modifyEntitiesNoStun(Class<E> entityClass, Selection area, boolean noStun) {
+            super.modifyEntitiesInside(entityClass, area, e -> e.getPersistentData().putBoolean(NO_STUN, noStun));
+        }
+
+        public void modifyEntityNoStun(ElementLink<EntityElement> link, boolean noStun) {
+            super.modifyEntity(link, e -> e.getPersistentData().putBoolean(NO_STUN, noStun));
         }
 
         //播动画

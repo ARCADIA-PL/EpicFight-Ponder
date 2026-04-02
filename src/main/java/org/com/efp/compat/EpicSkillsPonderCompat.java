@@ -6,7 +6,6 @@ import net.createmod.catnip.gui.ScreenOpener;
 import net.createmod.catnip.platform.CatnipClientServices;
 import net.createmod.ponder.Ponder;
 import net.createmod.ponder.enums.PonderKeybinds;
-import net.createmod.ponder.foundation.PonderTooltipHandler;
 import net.createmod.ponder.foundation.registration.PonderLocalization;
 import net.createmod.ponder.foundation.ui.PonderUI;
 import net.minecraft.ChatFormatting;
@@ -26,12 +25,10 @@ import yesman.epicfight.world.item.EpicFightItems;
 @OnlyIn(Dist.CLIENT)
 public class EpicSkillsPonderCompat {
 
+    public static final String HOLD_TO_PONDER = PonderLocalization.UI_PREFIX + "hold_to_ponder";
+    private static final LerpedFloat holdKeyProgress = LerpedFloat.linear().startWithValue(0);
     private static Skill hoveredSkillThisFrame = null;
     private static Skill trackingSkill = null;
-
-    public static final String HOLD_TO_PONDER = PonderLocalization.UI_PREFIX + "hold_to_ponder";
-
-    private static final LerpedFloat holdKeyProgress = LerpedFloat.linear().startWithValue(0);
 
     public static void setHoveredSkill(Skill skill) {
         hoveredSkillThisFrame = skill;

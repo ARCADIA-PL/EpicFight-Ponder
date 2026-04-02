@@ -596,6 +596,7 @@ public class EFPSceneUtils {
                 world.waitForCanBasicAttack(attacker);
             } else {
                 world.waitForInaction(attacker);
+                world.resetJump(attacker);
             }
         }
     }
@@ -635,6 +636,7 @@ public class EFPSceneUtils {
                     showText(builder, util, dashTextKey, 30, (int) centerX, (int) centerY - 1, (int) centerZ);
                 }
             } else if (i == jumpIndex) {
+                world.modifyEntityMovement(attacker, true);
                 updateSheathState(builder, attacker, 1);
                 world.setPosition(attacker, centerX, centerY, centerZ);
                 builder.idle(5);
@@ -656,6 +658,7 @@ public class EFPSceneUtils {
             if (isBasicAttack && !isLastBasicAttack) {
                 world.waitForCanBasicAttack(attacker);
             } else {
+                world.resetJump(attacker);
                 world.waitForInaction(attacker);
             }
         }

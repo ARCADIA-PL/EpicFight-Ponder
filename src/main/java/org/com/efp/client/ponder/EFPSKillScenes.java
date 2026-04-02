@@ -58,11 +58,11 @@ public class EFPSKillScenes {
         EFPSceneUtils.playStepSoundOnTimeline(builder, attacker);
         world.waitForInaction(attacker);
         builder.idle(5);
-        world.playAnimation(attacker, EFPAnimations.BIPED_STEP_LEFT, 0.0F);
+        world.playAnimation(attacker, EFPAnimations.BIPED_STEP_RIGHT, 0.0F);
         EFPSceneUtils.playStepSoundOnTimeline(builder, attacker);
         world.waitForInaction(attacker);
         builder.idle(5);
-        world.playAnimation(attacker, EFPAnimations.BIPED_STEP_RIGHT, 0.0F);
+        world.playAnimation(attacker, EFPAnimations.BIPED_STEP_LEFT, 0.0F);
         EFPSceneUtils.playStepSoundOnTimeline(builder, attacker);
         world.waitForInaction(attacker);
 
@@ -215,6 +215,7 @@ public class EFPSKillScenes {
         EFPSceneUtils.playInteractiveStrike(builder, attacker, jumpAttack, 0.45F, breakCallback);
 
         world.waitForInaction(attacker);
+        world.resetJump(attacker);
 
         builder.idle(40);
         builder.markAsFinished();

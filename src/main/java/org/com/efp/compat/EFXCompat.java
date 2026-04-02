@@ -205,6 +205,7 @@ public class EFXCompat {
         world.playAnimation(attacker, ExtraAnimations.TACHI_AIR_SLASH, 0.0F);
         EFPSceneUtils.playDerivationWithSlowMo(builder, attacker, EFPSceneUtils.WaitType.CAN_USE_SKILL, ExtraAnimations.RUSHING_AIR_SLASH, 0.25F, 10);
         world.waitForInaction(attacker);
+        world.resetJump(attacker);
 
         builder.idle(30);
         builder.markAsFinished();

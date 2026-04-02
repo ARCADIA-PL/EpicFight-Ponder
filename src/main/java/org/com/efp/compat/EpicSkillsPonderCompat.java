@@ -96,7 +96,7 @@ public class EpicSkillsPonderCompat {
             int total = (int) (tipWidth / charWidth);
             int current = (int) (progress * total);
 
-            String bars = ChatFormatting.GRAY + Strings.repeat("|", current)
+            String bars = ChatFormatting.DARK_AQUA + Strings.repeat("|", current)
                     + ChatFormatting.DARK_GRAY + Strings.repeat("|", Math.max(0, total - current));
             return Component.literal(bars);
         }

@@ -113,6 +113,21 @@ public class EpicFightSceneBuilder extends PonderSceneBuilder {
             });
         }
 
+        public void resetJump(ElementLink<EntityElement> link) {
+            world().modifyEntity(link, entity -> {
+                if (entity instanceof DummyPlayerEntity dummyPlayerEntity) {
+                    Vec3 currentMovement = dummyPlayerEntity.getDeltaMovement();
+                    double newX = currentMovement.x;
+                    double newZ = currentMovement.z;
+                    dummyPlayerEntity.setJumping(false);
+                    dummyPlayerEntity.setOnGround(true);
+                    dummyPlayerEntity.verticalCollision = true;
+                    dummyPlayerEntity.hasImpulse = false;
+                    dummyPlayerEntity.setDeltaMovement(newX, -1.5, newZ);
+                }
+            });
+        }
+
         public void waitForState(ElementLink<EntityElement> link, Predicate<EntityState> statePredicate) {
             addInstruction(new PonderInstruction() {
                 private boolean complete = false;

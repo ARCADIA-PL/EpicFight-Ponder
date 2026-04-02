@@ -1,7 +1,6 @@
 package org.com.efp.mixin.epicskills.client;
 
 import com.yesman.epicskills.client.gui.screen.SkillTreeScreen;
-import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 import org.com.efp.compat.EpicSkillsPonderCompat;
 import org.spongepowered.asm.mixin.Mixin;

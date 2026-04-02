@@ -18,7 +18,8 @@
     "epicskills.AccessorSkillBookScreen",
     "epicskills.client.MixinSkillInfoScreen",
     "epicskills.client.MixinSkillTreeNodeButton",
-    "ponder.MixinPonderUI"
+    "ponder.MixinPonderUI",
+    "ponder.MixinPonderUIAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

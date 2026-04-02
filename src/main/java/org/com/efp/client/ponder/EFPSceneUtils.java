@@ -5,6 +5,7 @@ import net.createmod.ponder.api.element.EntityElement;
 import net.createmod.ponder.api.scene.SceneBuilder;
 import net.createmod.ponder.api.scene.SceneBuildingUtil;
 import net.createmod.ponder.foundation.PonderScene;
+import net.createmod.ponder.foundation.ui.PonderUI;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.sounds.SoundEvent;
@@ -20,6 +21,7 @@ import org.com.efp.api.ponder.EpicFightSceneBuilder;
 import org.com.efp.client.particle.PonderEntityAfterimageParticle;
 import org.com.efp.entity.DummyEntityPatch;
 import org.com.efp.mixin.epicfight.WeaponCapabilityAccessor;
+import org.com.efp.mixin.ponder.MixinPonderUIAccessor;
 import org.com.efp.particle.EFPParticles;
 import org.com.efp.registry.EFPEntities;
 import org.joml.Vector3d;
@@ -68,7 +70,7 @@ public class EFPSceneUtils {
     /**
      * 2. 快速生成一个假人演员
      */
-    public static ElementLink<EntityElement> spawnDummyActor(EpicFightSceneBuilder builder, double x, double y, double z, float yRot, ItemStack mainHandItem, ItemStack offHandItem, Style forcedStyle) {
+    public static ElementLink<EntityElement> spawnDummyActorWithItem(EpicFightSceneBuilder builder, double x, double y, double z, float yRot, ItemStack mainHandItem, ItemStack offHandItem, Style forcedStyle) {
         return builder.world().createEntity(level -> {
             LivingEntity actor = EFPEntities.DUMMY_PLAYER.get().create(level);
             if (actor != null) {
@@ -97,12 +99,62 @@ public class EFPSceneUtils {
         });
     }
 
-    public static ElementLink<EntityElement> spawnDummyActor(EpicFightSceneBuilder builder, double x, double y, double z, float yRot, ItemStack mainHandItem, ItemStack offHandItem) {
-        return spawnDummyActor(builder, x, y, z, yRot, mainHandItem, offHandItem, null);
+    public static ElementLink<EntityElement> spawnDummyActor(EpicFightSceneBuilder builder, double x, double y, double z, float yRot, ItemStack fallbackMainHandItem, ItemStack fallbackOffHandItem, Style forcedStyle) {
+        return builder.world().createEntity(level -> {
+            LivingEntity actor = EFPEntities.DUMMY_PLAYER.get().create(level);
+            if (actor != null) {
+                actor.setPos(x, y, z);
+                actor.setYRot(yRot);
+                actor.yBodyRot = yRot;
+                actor.yHeadRot = yRot;
+
+                ItemStack mainHandToEquip = fallbackMainHandItem;
+                ItemStack offHandToEquip = fallbackOffHandItem;
+
+                ItemStack uiItem = getCurrentlyPonderedItem();
+
+                if (uiItem != null && !uiItem.isEmpty() && EpicFightCapabilities.getItemStackCapability(uiItem) instanceof WeaponCapability) {
+                    mainHandToEquip = uiItem.copy();
+
+                    if (fallbackOffHandItem != null && !fallbackOffHandItem.isEmpty() && fallbackOffHandItem.getItem() == fallbackMainHandItem.getItem()) {
+                        offHandToEquip = uiItem.copy();
+                    }
+                }
+
+                if (mainHandToEquip != null && !mainHandToEquip.isEmpty()) {
+                    actor.setItemInHand(InteractionHand.MAIN_HAND, mainHandToEquip);
+                }
+                if (offHandToEquip != null && !offHandToEquip.isEmpty()) {
+                    actor.setItemInHand(InteractionHand.OFF_HAND, offHandToEquip);
+                }
+
+                EpicFightCapabilities.getUnparameterizedEntityPatch(actor, DummyEntityPatch.class).ifPresent(patch -> {
+                    patch.setYRot(yRot);
+                    patch.setYRotO(yRot);
+                    if (forcedStyle != null) {
+                        patch.setForcedStyle(forcedStyle);
+                    }
+                    patch.updateLivingMotionsForPonder();
+                });
+            }
+            return actor;
+        });
     }
 
-    public static ElementLink<EntityElement> spawnDummyActor(EpicFightSceneBuilder builder, double x, double y, double z, float yRot, ItemStack mainHandItem) {
-        return spawnDummyActor(builder, x, y, z, yRot, mainHandItem, ItemStack.EMPTY, null);
+    public static ElementLink<EntityElement> spawnDummyActorWithItem(EpicFightSceneBuilder builder, double x, double y, double z, float yRot, ItemStack mainHandItem, ItemStack offHandItem) {
+        return spawnDummyActorWithItem(builder, x, y, z, yRot, mainHandItem, offHandItem, null);
+    }
+
+    public static ElementLink<EntityElement> spawnDummyActorWithItem(EpicFightSceneBuilder builder, double x, double y, double z, float yRot, ItemStack mainHandItem) {
+        return spawnDummyActorWithItem(builder, x, y, z, yRot, mainHandItem, ItemStack.EMPTY, null);
+    }
+
+    public static ElementLink<EntityElement> spawnDummyActor(EpicFightSceneBuilder builder, double x, double y, double z, float yRot, ItemStack fallbackMainHandItem, ItemStack fallbackOffHandItem) {
+        return spawnDummyActor(builder, x, y, z, yRot, fallbackMainHandItem, fallbackOffHandItem, null);
+    }
+
+    public static ElementLink<EntityElement> spawnDummyActor(EpicFightSceneBuilder builder, double x, double y, double z, float yRot, ItemStack fallbackMainHandItem) {
+        return spawnDummyActor(builder, x, y, z, yRot, fallbackMainHandItem, ItemStack.EMPTY, null);
     }
 
     public static ElementLink<EntityElement> spawnDummyVictim(EpicFightSceneBuilder builder, double x, double y, double z, float yRot, ItemStack mainHandItem, ItemStack offHandItem, Style forcedStyle) {
@@ -762,6 +814,13 @@ public class EFPSceneUtils {
 
     public static void showcaseUchigatanaStandardWeaponCombo(SceneBuilder baseScene, SceneBuildingUtil util, int size, String sceneId, ItemStack weapon) {
         showcaseUchigatanaStandardWeaponCombo(baseScene, util, size, sceneId, weapon, ItemStack.EMPTY, CapabilityItem.Styles.TWO_HAND, true, true);
+    }
+
+    public static ItemStack getCurrentlyPonderedItem() {
+        if (Minecraft.getInstance().screen instanceof PonderUI ponderUI) {
+            return ((MixinPonderUIAccessor) ponderUI).efp$getStack();
+        }
+        return ItemStack.EMPTY;
     }
 
     public static void changeStyleAndRefreshMotions(

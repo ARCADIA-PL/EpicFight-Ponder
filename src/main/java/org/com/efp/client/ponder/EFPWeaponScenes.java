@@ -190,7 +190,7 @@ public class EFPWeaponScenes {
         EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
 
         EFPSceneUtils.setupStandardScene(builder, 11, "heart_piercer", "epic_fight_ponder.ponder.heart_piercer.title");
-        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.DIAMOND_SPEAR.get()));
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActorWithItem(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.DIAMOND_SPEAR.get()));
         ElementLink<EntityElement> victim = EFPSceneUtils.spawnDummyVictim(builder, 5.5, 1.0, 3.5, 0, ItemStack.EMPTY, ItemStack.EMPTY);
         world.modifyEntityMovement(attacker, true);
         EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.heart_piercer.text_1", 30, 5, 1, 5);
@@ -207,7 +207,7 @@ public class EFPWeaponScenes {
         EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
 
         EFPSceneUtils.setupStandardScene(builder, 11, "sharp_stab", "epic_fight_ponder.ponder.sharp_stab.title");
-        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.IRON_LONGSWORD.get()), new ItemStack(Items.SHIELD));
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActorWithItem(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.IRON_LONGSWORD.get()), new ItemStack(Items.SHIELD));
         ElementLink<EntityElement> victim = EFPSceneUtils.spawnDummyVictim(builder, 5.5, 1.0, 3.5, 0, ItemStack.EMPTY, ItemStack.EMPTY);
         world.modifyEntityMovement(attacker, true);
         EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.sharp_stab.text_1", 30, 5, 1, 5);
@@ -224,7 +224,7 @@ public class EFPWeaponScenes {
         EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
 
         EFPSceneUtils.setupStandardScene(builder, 11, "steel_whirlwind", "epic_fight_ponder.ponder.steel_whirlwind.title");
-        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.NETHERITE_GREATSWORD.get()));
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActorWithItem(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.NETHERITE_GREATSWORD.get()));
         world.modifyEntityMovement(attacker, true);
         builder.idle(20);
 
@@ -243,7 +243,7 @@ public class EFPWeaponScenes {
         EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
 
         EFPSceneUtils.setupStandardLongScene(builder, "blade_rush", "epic_fight_ponder.ponder.blade_rush.title");
-        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 3.5, 1, 12.5, 180, new ItemStack(EpicFightItems.NETHERITE_DAGGER.get()), new ItemStack(EpicFightItems.NETHERITE_DAGGER.get()));
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActorWithItem(builder, 3.5, 1, 12.5, 180, new ItemStack(EpicFightItems.NETHERITE_DAGGER.get()), new ItemStack(EpicFightItems.NETHERITE_DAGGER.get()));
         ElementLink<EntityElement> victim = EFPSceneUtils.spawnDummyVictim(builder, 3.5, 2.5, 7, 0, ItemStack.EMPTY, ItemStack.EMPTY);
         world.modifyEntityMovement(attacker, true);
         builder.idle(10);
@@ -298,7 +298,7 @@ public class EFPWeaponScenes {
         EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
 
         EFPSceneUtils.setupStandardScene(builder, 11, "eviscerate", "epic_fight_ponder.ponder.eviscerate.title");
-        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.NETHERITE_DAGGER.get()));
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActorWithItem(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.NETHERITE_DAGGER.get()));
         ElementLink<EntityElement> victim = EFPSceneUtils.spawnDummyVictim(builder, 5.5, 1.0, 3, 0, ItemStack.EMPTY, ItemStack.EMPTY);
         world.modifyEntityMovement(attacker, true);
         builder.idle(10);
@@ -325,7 +325,7 @@ public class EFPWeaponScenes {
         EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
 
         EFPSceneUtils.setupStandardScene(builder, 11, "grasping_spire", "epic_fight_ponder.ponder.grasping_spire.title");
-        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.DIAMOND_SPEAR.get()));
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActorWithItem(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.DIAMOND_SPEAR.get()));
         ElementLink<EntityElement> victim = EFPSceneUtils.spawnDummyVictim(builder, 5.5, 1.0, 1.5, 0, ItemStack.EMPTY, ItemStack.EMPTY);
         world.modifyEntityMovement(attacker, true);
         builder.idle(10);
@@ -353,7 +353,7 @@ public class EFPWeaponScenes {
         EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
 
         EFPSceneUtils.setupStandardScene(builder, 11, "guillotine", "epic_fight_ponder.ponder.guillotine.title");
-        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(Items.GOLDEN_AXE));
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActorWithItem(builder, 5.5, 1, 5.5, 180, new ItemStack(Items.GOLDEN_AXE));
         ElementLink<EntityElement> victim = EFPSceneUtils.spawnDummyVictim(builder, 5.5, 1.0, 1.5, 0, ItemStack.EMPTY, ItemStack.EMPTY);
         world.modifyEntityMovement(attacker, true);
         builder.idle(10);
@@ -381,7 +381,7 @@ public class EFPWeaponScenes {
         EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
 
         EFPSceneUtils.setupStandardScene(builder, 11, "sweeping_edge", "epic_fight_ponder.ponder.sweeping_edge.title");
-        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(Items.DIAMOND_SWORD));
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActorWithItem(builder, 5.5, 1, 5.5, 180, new ItemStack(Items.DIAMOND_SWORD));
         ElementLink<EntityElement> victim = EFPSceneUtils.spawnDummyVictim(builder, 5.5, 1.0, 2.5, 0, ItemStack.EMPTY, ItemStack.EMPTY);
         world.modifyEntityMovement(attacker, true);
         builder.idle(10);
@@ -398,7 +398,7 @@ public class EFPWeaponScenes {
         EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
 
         EFPSceneUtils.setupStandardScene(builder, 11, "dancing_edge", "epic_fight_ponder.ponder.dancing_edge.title");
-        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(Items.DIAMOND_SWORD), new ItemStack(Items.NETHERITE_SWORD));
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActorWithItem(builder, 5.5, 1, 5.5, 180, new ItemStack(Items.DIAMOND_SWORD), new ItemStack(Items.NETHERITE_SWORD));
         ElementLink<EntityElement> victim = EFPSceneUtils.spawnDummyVictim(builder, 5.5, 1.0, 3.5, 0, ItemStack.EMPTY, ItemStack.EMPTY);
         builder.idle(10);
         EFPSceneUtils.showTextWithKeyFrame(builder, util, "epic_fight_ponder.ponder.dancing_edge.text_1", 80, 5, 1, 6);
@@ -417,7 +417,7 @@ public class EFPWeaponScenes {
         EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
 
         EFPSceneUtils.setupStandardScene(builder, 11, "tachi_rushing_tempo", "epic_fight_ponder.ponder.tachi_rushing_tempo.title");
-        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.DIAMOND_TACHI.get()));
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActorWithItem(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.DIAMOND_TACHI.get()));
         ElementLink<EntityElement> victim = EFPSceneUtils.spawnDummyVictim(builder, 5.5, 1, 3.5, 0, null);
         builder.idle(20);
 

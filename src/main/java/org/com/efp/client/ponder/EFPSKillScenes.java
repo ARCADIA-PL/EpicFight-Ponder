@@ -32,7 +32,7 @@ public class EFPSKillScenes {
         double center = size / 2.0D;
 
         EFPSceneUtils.setupStandardScene(builder, size, sceneId, "epic_fight_ponder.ponder." + sceneId + ".title");
-        ElementLink<EntityElement> dummy = EFPSceneUtils.spawnDummyActor(builder, center, 0.5, center, 180, null, null);
+        ElementLink<EntityElement> dummy = EFPSceneUtils.spawnDummyActorWithItem(builder, center, 0.5, center, 180, null, null);
 
         world.playAnimation(dummy, Animations.BIPED_SIT, 0.0F);
         builder.idle(20);
@@ -44,7 +44,7 @@ public class EFPSKillScenes {
         EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
 
         EFPSceneUtils.setupStandardScene(builder, 11, "skill_step", "epic_fight_ponder.ponder.skill_step.title");
-        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.DIAMOND_LONGSWORD.get()));
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActorWithItem(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.DIAMOND_LONGSWORD.get()));
         world.modifyEntityMovement(attacker, true);
 
         EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.skill_step.text_1", 80, 5, 1, 5);
@@ -75,7 +75,7 @@ public class EFPSKillScenes {
         EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
 
         EFPSceneUtils.setupStandardScene(builder, 11, "skill_roll", "epic_fight_ponder.ponder.skill_roll.title");
-        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.DIAMOND_LONGSWORD.get()));
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActorWithItem(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.DIAMOND_LONGSWORD.get()));
         world.modifyEntityMovement(attacker, true);
 
         EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.skill_roll.text_1", 80, 5, 1, 5);
@@ -110,7 +110,7 @@ public class EFPSKillScenes {
         ItemStack attackerWeapon = new ItemStack(EpicFightItems.UCHIGATANA.get());
 
         ElementLink<EntityElement> victim = EFPSceneUtils.spawnDummyVictim(builder, centerX, 1.0, centerZ, 180, victimWeapon, ItemStack.EMPTY, CapabilityItem.Styles.TWO_HAND);
-        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, centerX, 1.0, attackerZ, 0, attackerWeapon, ItemStack.EMPTY, CapabilityItem.Styles.TWO_HAND);
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActorWithItem(builder, centerX, 1.0, attackerZ, 0, attackerWeapon, ItemStack.EMPTY, CapabilityItem.Styles.TWO_HAND);
         world.modifyEntityMovement(victim, true);
 
         builder.idle(10);
@@ -147,7 +147,7 @@ public class EFPSKillScenes {
         ItemStack attackerWeapon = new ItemStack(EpicFightItems.DIAMOND_TACHI.get());
 
         ElementLink<EntityElement> victim = EFPSceneUtils.spawnDummyVictim(builder, centerX, 1.0, centerZ, 180, victimWeapon, ItemStack.EMPTY, CapabilityItem.Styles.TWO_HAND);
-        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, centerX, 1.0, attackerZ, 0, attackerWeapon, ItemStack.EMPTY, CapabilityItem.Styles.TWO_HAND);
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActorWithItem(builder, centerX, 1.0, attackerZ, 0, attackerWeapon, ItemStack.EMPTY, CapabilityItem.Styles.TWO_HAND);
 
         builder.idle(20);
 
@@ -184,7 +184,7 @@ public class EFPSKillScenes {
         ItemStack attackerWeapon = new ItemStack(EpicFightItems.DIAMOND_TACHI.get());
 
         ElementLink<EntityElement> victim = EFPSceneUtils.spawnDummyVictim(builder, centerX, 1.0, centerZ, 180, victimWeapon, ItemStack.EMPTY, CapabilityItem.Styles.TWO_HAND);
-        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, centerX, 1.0, attackerZ, 0, attackerWeapon, ItemStack.EMPTY, CapabilityItem.Styles.TWO_HAND);
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActorWithItem(builder, centerX, 1.0, attackerZ, 0, attackerWeapon, ItemStack.EMPTY, CapabilityItem.Styles.TWO_HAND);
 
         builder.idle(20);
 
@@ -238,7 +238,7 @@ public class EFPSKillScenes {
         ItemStack attackerWeapon = new ItemStack(EpicFightItems.NETHERITE_GREATSWORD.get());
 
         ElementLink<EntityElement> victim = EFPSceneUtils.spawnDummyVictim(builder, centerX, 1.0, centerZ, 180, victimWeapon, ItemStack.EMPTY, CapabilityItem.Styles.TWO_HAND);
-        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, centerX, 1.0, attackerZ, 0, attackerWeapon, ItemStack.EMPTY, CapabilityItem.Styles.TWO_HAND);
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActorWithItem(builder, centerX, 1.0, attackerZ, 0, attackerWeapon, ItemStack.EMPTY, CapabilityItem.Styles.TWO_HAND);
 
         builder.idle(20);
 

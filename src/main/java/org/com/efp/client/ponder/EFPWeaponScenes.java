@@ -185,6 +185,59 @@ public class EFPWeaponScenes {
                 Items.DIAMOND_AXE.getDefaultInstance());
     }
 
+    public static void showcaseHeartPiercer(SceneBuilder baseScene, SceneBuildingUtil util) {
+        EpicFightSceneBuilder builder = new EpicFightSceneBuilder(baseScene);
+        EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
+
+        EFPSceneUtils.setupStandardScene(builder, 11, "heart_piercer", "epic_fight_ponder.ponder.heart_piercer.title");
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.DIAMOND_SPEAR.get()));
+        ElementLink<EntityElement> victim = EFPSceneUtils.spawnDummyVictim(builder, 5.5, 1.0, 3.5, 0, ItemStack.EMPTY, ItemStack.EMPTY);
+        world.modifyEntityMovement(attacker, true);
+        EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.heart_piercer.text_1", 30, 5, 1, 5);
+        builder.idle(30);
+
+        world.playAnimation(attacker, Animations.HEARTPIERCER, 0.0F);
+
+        builder.idle(30);
+        builder.markAsFinished();
+    }
+
+    public static void showcaseSharpStab(SceneBuilder baseScene, SceneBuildingUtil util) {
+        EpicFightSceneBuilder builder = new EpicFightSceneBuilder(baseScene);
+        EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
+
+        EFPSceneUtils.setupStandardScene(builder, 11, "sharp_stab", "epic_fight_ponder.ponder.sharp_stab.title");
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.IRON_LONGSWORD.get()), new ItemStack(Items.SHIELD));
+        ElementLink<EntityElement> victim = EFPSceneUtils.spawnDummyVictim(builder, 5.5, 1.0, 3.5, 0, ItemStack.EMPTY, ItemStack.EMPTY);
+        world.modifyEntityMovement(attacker, true);
+        EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.sharp_stab.text_1", 30, 5, 1, 5);
+        builder.idle(30);
+
+        world.playAnimation(attacker, Animations.SHARP_STAB, 0.0F);
+
+        builder.idle(30);
+        builder.markAsFinished();
+    }
+
+    public static void showcaseSteelWhirlWind(SceneBuilder baseScene, SceneBuildingUtil util) {
+        EpicFightSceneBuilder builder = new EpicFightSceneBuilder(baseScene);
+        EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
+
+        EFPSceneUtils.setupStandardScene(builder, 11, "steel_whirlwind", "epic_fight_ponder.ponder.steel_whirlwind.title");
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.NETHERITE_GREATSWORD.get()));
+        world.modifyEntityMovement(attacker, true);
+        builder.idle(20);
+
+        world.playAnimation(attacker, Animations.STEEL_WHIRLWIND_CHARGING, 0.0F);
+        EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.steel_whirlwind.text_1", 30, 5, 1, 5);
+        builder.idle(20);
+        world.playAnimation(attacker, Animations.STEEL_WHIRLWIND, 0.0F);
+
+
+        builder.idle(30);
+        builder.markAsFinished();
+    }
+
     public static void showcaseBladeRush(SceneBuilder baseScene, SceneBuildingUtil util) {
         EpicFightSceneBuilder builder = new EpicFightSceneBuilder(baseScene);
         EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();

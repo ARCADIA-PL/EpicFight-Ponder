@@ -194,7 +194,8 @@ public class EFPPonderPlugin implements PonderPlugin {
             registerPreset(weaponHelper, "epicfight:spear",
                     EFPWeaponScenes::showcaseSpearBasicAttackCombo,
                     EFXCompat::showcaseGraspingSpire_EFX,
-                    EFPWeaponScenes::showcaseSpearBasicAttackCombo_OneHand);
+                    EFPWeaponScenes::showcaseSpearBasicAttackCombo_OneHand,
+                    EFXCompat::showcaseHeartPiercer_EFX);
             registerPreset(weaponHelper, "epicfight:axe",
                     EFPWeaponScenes::showcaseAxeBasicAttackCombo,
                     EFXCompat::showcaseGuillotine_EFX);
@@ -213,7 +214,11 @@ public class EFPPonderPlugin implements PonderPlugin {
             registerPreset(weaponHelper, "epicfight:longsword",
                     EFPWeaponScenes::showcaseLongSwordBasicAttackCombo,
                     EFXCompat::showcaseLongSwordBasicAttackCombo_Ochs_EFX,
-                    EFPWeaponScenes::showcaseLongSwordBasicAttackCombo_OneHand);
+                    EFPWeaponScenes::showcaseLongSwordBasicAttackCombo_OneHand,
+                    EFXCompat::showcaseSharpStab_EFX);
+            registerPreset(weaponHelper, "epicfight:greatsword",
+                    EFPWeaponScenes::showcaseGreatSwordBasicAttackCombo,
+                    EFXCompat::showcaseSteelWhirlWind_EFX);
         } else {
             registerPreset(weaponHelper, "epicfight:sword",
                     EFPWeaponScenes::showcaseSwordBasicAttackCombo,
@@ -229,7 +234,8 @@ public class EFPPonderPlugin implements PonderPlugin {
             registerPreset(weaponHelper, "epicfight:spear",
                     EFPWeaponScenes::showcaseSpearBasicAttackCombo,
                     EFPWeaponScenes::showcaseGraspingSpire,
-                    EFPWeaponScenes::showcaseSpearBasicAttackCombo_OneHand);
+                    EFPWeaponScenes::showcaseSpearBasicAttackCombo_OneHand,
+                    EFPWeaponScenes::showcaseHeartPiercer);
             registerPreset(weaponHelper, "epicfight:axe",
                     EFPWeaponScenes::showcaseAxeBasicAttackCombo,
                     EFPWeaponScenes::showcaseGuillotine);
@@ -248,11 +254,12 @@ public class EFPPonderPlugin implements PonderPlugin {
             registerPreset(weaponHelper, "epicfight:longsword",
                     EFPWeaponScenes::showcaseLongSwordBasicAttackCombo,
                     EFPWeaponScenes::showcaseLongSwordBasicAttackCombo_Ochs,
-                    EFPWeaponScenes::showcaseLongSwordBasicAttackCombo_OneHand);
+                    EFPWeaponScenes::showcaseLongSwordBasicAttackCombo_OneHand,
+                    EFPWeaponScenes::showcaseSharpStab);
+            registerPreset(weaponHelper, "epicfight:greatsword",
+                    EFPWeaponScenes::showcaseGreatSwordBasicAttackCombo,
+                    EFPWeaponScenes::showcaseSteelWhirlWind);
         }
-
-        registerPreset(weaponHelper, "epicfight:greatsword",
-                EFPWeaponScenes::showcaseGreatSwordBasicAttackCombo);
     }
 
     private void registerSkill(PonderSceneRegistrationHelper<String> helper, String skillId, PonderSceneMethod... scenes) {

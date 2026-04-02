@@ -61,6 +61,9 @@
   "epic_fight_ponder.ponder.greatsword_basic_attack_combo.text_2": "Greatsword Dash Attack",
   "epic_fight_ponder.ponder.greatsword_basic_attack_combo.text_3": "Greatsword Jump Attack",
 
+  "epic_fight_ponder.ponder.steel_whirlwind.header": "Greatsword Skill: Steel Whirlwind",
+  "epic_fight_ponder.ponder.steel_whirlwind.text_1": "Hold the skill key to charge. The longer the charge, the higher the damage and rotation speed.",
+
   "epic_fight_ponder.ponder.longsword_basic_attack_combo.header": "Longsword Basic Attack Combo",
   "epic_fight_ponder.ponder.longsword_basic_attack_combo.text_1": "Longsword Basic Attacks",
   "epic_fight_ponder.ponder.longsword_basic_attack_combo.text_2": "Longsword Dash Attack",
@@ -70,6 +73,9 @@
   "epic_fight_ponder.ponder.longsword_basic_attack_combo_onehand.text_1": "Longsword (Sword & Shield) Basic Attacks",
   "epic_fight_ponder.ponder.longsword_basic_attack_combo_onehand.text_2": "Longsword (Sword & Shield) Dash Attack",
   "epic_fight_ponder.ponder.longsword_basic_attack_combo_onehand.text_3": "Longsword (Sword & Shield) Jump Attack",
+
+  "epic_fight_ponder.ponder.sharp_stab.header": "Longsword Skill: Sharp Stab",
+  "epic_fight_ponder.ponder.sharp_stab.text_1": "Perform a swift forward thrust that completely ignores the target's defense.",
 
   "epic_fight_ponder.ponder.longsword_ochs.header": "Longsword (Ochs Stance) Masterstrike",
   "epic_fight_ponder.ponder.longsword_ochs.text_1": "Shift your stance... enter the [Ochs Guard].",
@@ -90,6 +96,9 @@
   "epic_fight_ponder.ponder.spear_basic_attack_combo_onehand.text_1": "Spear (Spear & Shield) Basic Attacks",
   "epic_fight_ponder.ponder.spear_basic_attack_combo_onehand.text_2": "Spear (Spear & Shield) Dash Attack",
   "epic_fight_ponder.ponder.spear_basic_attack_combo_onehand.text_3": "Spear (Spear & Shield) Jump Attack",
+
+  "epic_fight_ponder.ponder.heart_piercer.header": "Spear Skill: Heart Piercer",
+  "epic_fight_ponder.ponder.heart_piercer.text_1": "Unleash a rapid and deadly three-hit thrust combo.",
 
   "epic_fight_ponder.ponder.sword_basic_attack_combo.header": "Sword Basic Attack Combo",
   "epic_fight_ponder.ponder.sword_basic_attack_combo.text_1": "Sword Basic Attacks",

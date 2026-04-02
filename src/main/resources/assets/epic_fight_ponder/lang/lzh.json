@@ -61,6 +61,9 @@
   "epic_fight_ponder.ponder.greatsword_basic_attack_combo.text_2": "巨劍 奔襲衍化之擊",
   "epic_fight_ponder.ponder.greatsword_basic_attack_combo.text_3": "巨劍 躍空衍化之擊",
 
+  "epic_fight_ponder.ponder.steel_whirlwind.header": "巨刃武技 · 铁岚旋风",
+  "epic_fight_ponder.ponder.steel_whirlwind.text_1": "长按以蓄势。蓄之愈久，则斩击愈重、其旋愈疾。",
+
   "epic_fight_ponder.ponder.longsword_basic_attack_combo.header": "長劍 基礎連段演武",
   "epic_fight_ponder.ponder.longsword_basic_attack_combo.text_1": "長劍 常擊連段",
   "epic_fight_ponder.ponder.longsword_basic_attack_combo.text_2": "長劍 奔襲衍化之擊",
@@ -70,6 +73,9 @@
   "epic_fight_ponder.ponder.longsword_basic_attack_combo_onehand.text_1": "長劍 (劍盾) 常擊連段",
   "epic_fight_ponder.ponder.longsword_basic_attack_combo_onehand.text_2": "長劍 (劍盾) 奔襲衍化之擊",
   "epic_fight_ponder.ponder.longsword_basic_attack_combo_onehand.text_3": "長劍 (劍盾) 躍空衍化之擊",
+
+  "epic_fight_ponder.ponder.sharp_stab.header": "長劍武技 · 锐锋刺",
+  "epic_fight_ponder.ponder.sharp_stab.text_1": "挺剑疾前，破甲摧坚，视敌防镝若无物。",
 
   "epic_fight_ponder.ponder.longsword_ochs.header": "長劍 (高位護鋒式) 拼刀演武",
   "epic_fight_ponder.ponder.longsword_ochs.text_1": "變陣！劍指敵軀，結『高位護鋒』之陣……",
@@ -90,6 +96,9 @@
   "epic_fight_ponder.ponder.spear_basic_attack_combo_onehand.text_1": "長鎩 (槍盾) 常擊連段",
   "epic_fight_ponder.ponder.spear_basic_attack_combo_onehand.text_2": "長鎩 (槍盾) 奔襲衍化之擊",
   "epic_fight_ponder.ponder.spear_basic_attack_combo_onehand.text_3": "長鎩 (槍盾) 躍空衍化之擊",
+
+  "epic_fight_ponder.ponder.heart_piercer.header": "長鎩武技 · 贯心者",
+  "epic_fight_ponder.ponder.heart_piercer.text_1": "挺枪连突，于须臾间连发致命三刺。",
 
   "epic_fight_ponder.ponder.sword_basic_attack_combo.header": "佩劍 基礎連段演武",
   "epic_fight_ponder.ponder.sword_basic_attack_combo.text_1": "佩劍 常擊連段",

@@ -61,6 +61,9 @@
   "epic_fight_ponder.ponder.greatsword_basic_attack_combo.text_2": "大剑 冲刺攻击派生",
   "epic_fight_ponder.ponder.greatsword_basic_attack_combo.text_3": "大剑 跳跃攻击派生",
 
+  "epic_fight_ponder.ponder.steel_whirlwind.header": "大剑武技 · 钢铁旋风",
+  "epic_fight_ponder.ponder.steel_whirlwind.text_1": "长按技能键进行蓄力。蓄力时间越久，斩击伤害越高，回旋速度越快。",
+
   "epic_fight_ponder.ponder.longsword_basic_attack_combo.header": "长剑 基础连段演示",
   "epic_fight_ponder.ponder.longsword_basic_attack_combo.text_1": "长剑 普通攻击连段",
   "epic_fight_ponder.ponder.longsword_basic_attack_combo.text_2": "长剑 冲刺攻击派生",
@@ -70,6 +73,9 @@
   "epic_fight_ponder.ponder.longsword_basic_attack_combo_onehand.text_1": "长剑 (剑盾) 普通攻击连段",
   "epic_fight_ponder.ponder.longsword_basic_attack_combo_onehand.text_2": "长剑 (剑盾) 疾跑攻击派生",
   "epic_fight_ponder.ponder.longsword_basic_attack_combo_onehand.text_3": "长剑 (剑盾) 跳跃攻击派生",
+
+  "epic_fight_ponder.ponder.sharp_stab.header": "长剑武技 · 利刺",
+  "epic_fight_ponder.ponder.sharp_stab.text_1": "向前方发动迅捷的突刺，此击将完全无视目标的物理防御。",
 
   "epic_fight_ponder.ponder.longsword_ochs.header": "长剑 (高位护锋式) 拼刀演示",
   "epic_fight_ponder.ponder.longsword_ochs.text_1": "变阵！转入 [高位护锋式]……",
@@ -90,6 +96,9 @@
   "epic_fight_ponder.ponder.spear_basic_attack_combo_onehand.text_1": "长枪 (枪盾) 普通攻击连段",
   "epic_fight_ponder.ponder.spear_basic_attack_combo_onehand.text_2": "长枪 (枪盾) 冲刺攻击派生",
   "epic_fight_ponder.ponder.spear_basic_attack_combo_onehand.text_3": "长枪 (枪盾) 跳跃攻击派生",
+
+  "epic_fight_ponder.ponder.heart_piercer.header": "长枪武技 · 穿心者",
+  "epic_fight_ponder.ponder.heart_piercer.text_1": "向前方连续发动三次迅猛的致命突刺。",
 
   "epic_fight_ponder.ponder.sword_basic_attack_combo.header": "单手剑 基础连段演示",
   "epic_fight_ponder.ponder.sword_basic_attack_combo.text_1": "单手剑 普通攻击连段",

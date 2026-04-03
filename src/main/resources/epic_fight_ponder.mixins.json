@@ -8,6 +8,7 @@
   "mixins": [
     "epicfight.AnimationPlayerMixin",
     "epicfight.MixinCapabilityItem",
+    "epicfight.MixinLevelUtil",
     "epicfight.WeaponCapabilityAccessor",
     "epicfight.client.RenderEngineEventsMixin",
     "ponder.MixinPonderTooltipHandler",

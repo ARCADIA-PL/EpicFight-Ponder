@@ -4,7 +4,7 @@
   "package": "org.com.efp.mixin",
   "plugin": "org.com.efp.mixinloader.CompatMixinPlugin",
   "compatibilityLevel": "JAVA_17",
-  "refmap": "efp.refmap.json",
+  "refmap": "epic_fight_ponder.refmap.json",
   "mixins": [
     "epicfight.AnimationPlayerMixin",
     "epicfight.MixinCapabilityItem",

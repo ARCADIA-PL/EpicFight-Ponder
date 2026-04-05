@@ -24,6 +24,10 @@
   "epic_fight_ponder.ponder.skill_parry.text_1": "Raising your weapon to guard\ngrants a split-second [Parry Window].",
   "epic_fight_ponder.ponder.skill_parry.text_2": "Blocking an attack within this window\nperfectly deflects the blow with minimal stamina cost.",
 
+  "epic_fight_ponder.ponder.skill_parry_efn.header": "『Parry』: Absolute Deflection",
+  "epic_fight_ponder.ponder.skill_parry_efn.text_1": "A stricter parry window is the ultimate test of timing.",
+  "epic_fight_ponder.ponder.skill_parry_efn.text_2": "Yet successful deflections offer unparalleled combat feedback.\nMaster the rhythm,\nand effortlessly deflect a relentless flurry of attacks.",
+
   "epic_fight_ponder.ponder.tachi_basic_attack_combo.header": "Tachi Basic Attack Combo",
   "epic_fight_ponder.ponder.tachi_basic_attack_combo.text_1": "Tachi Basic Attacks",
   "epic_fight_ponder.ponder.tachi_basic_attack_combo.text_2": "Tachi Dash Attack",

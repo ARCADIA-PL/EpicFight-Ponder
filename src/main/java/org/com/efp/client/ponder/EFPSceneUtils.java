@@ -748,6 +748,7 @@ public class EFPSceneUtils {
         setupStandardScene(builder, size, sceneId, "epic_fight_ponder.ponder." + sceneId + ".title");
 
         ElementLink<EntityElement> attacker = spawnDummyActor(builder, center, centerY, center, 180, mainHandItem, offHandItem, showcaseStyle);
+        updateSheathState(builder, attacker, 0);
         builder.idle(10);
 
         showText(builder, util, "epic_fight_ponder.ponder." + sceneId + ".text_1", 40, (int) center, (int) centerY + 1, (int) center);

@@ -81,7 +81,6 @@ public class EpicSkillsPonderCompat {
                         fakeItem = new ItemStack(EpicFightItems.SKILLBOOK.get());
                         fakeItem.getOrCreateTag().putString("skill", trackingTarget);
                     } else {
-                        // 生成完美伪装的武器幽灵物品
                         fakeItem = new ItemStack(Items.WOODEN_SWORD);
                         fakeItem.getOrCreateTag().putString("efp_weapon_preset", trackingTarget);
                     }

@@ -28,6 +28,12 @@
   "epic_fight_ponder.ponder.skill_parry_efn.text_1": "此法極嚴，須於間不容髮之際拿捏分寸。",
   "epic_fight_ponder.ponder.skill_parry_efn.text_2": "然一旦勘破敵機，其反震之威必酣暢淋漓。\n縱敵之攻勢如狂風驟雨，\n明其律動，亦可從容化去。",
 
+  "epic_fight_ponder.ponder.skill_parry_efn_second.header": "『招架』 —— 滴水不漏",
+  "epic_fight_ponder.ponder.skill_parry_efn_second.text_1": "敌攻虽如狂风骤雨，精妙招架亦可尽数化解",
+
+  "epic_fight_ponder.ponder.skill_parry_efn_third.header": "『招架』 —— 固若金汤",
+  "epic_fight_ponder.ponder.skill_parry_efn_third.text_1": "纵使一息千击，亦难撼其分毫",
+
   "epic_fight_ponder.ponder.tachi_basic_attack_combo.header": "太刀 基礎連段演武",
   "epic_fight_ponder.ponder.tachi_basic_attack_combo.text_1": "太刀 常擊連段",
   "epic_fight_ponder.ponder.tachi_basic_attack_combo.text_2": "太刀 奔襲衍化之擊",

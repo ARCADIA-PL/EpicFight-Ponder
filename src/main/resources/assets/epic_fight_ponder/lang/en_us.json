@@ -28,6 +28,12 @@
   "epic_fight_ponder.ponder.skill_parry_efn.text_1": "A stricter parry window is the ultimate test of timing.",
   "epic_fight_ponder.ponder.skill_parry_efn.text_2": "Yet successful deflections offer unparalleled combat feedback.\nMaster the rhythm,\nand effortlessly deflect a relentless flurry of attacks.",
 
+  "epic_fight_ponder.ponder.skill_parry_efn_second.header": "Parry — Flawless",
+  "epic_fight_ponder.ponder.skill_parry_efn_second.text_1": "A flurry of rapid strikes can be completely neutralized by precise consecutive parries.",
+
+  "epic_fight_ponder.ponder.skill_parry_efn_third.header": "Parry — Impenetrable",
+  "epic_fight_ponder.ponder.skill_parry_efn_third.text_1": "Not even a thousand strikes in a split second can pierce this defense.",
+
   "epic_fight_ponder.ponder.tachi_basic_attack_combo.header": "Tachi Basic Attack Combo",
   "epic_fight_ponder.ponder.tachi_basic_attack_combo.text_1": "Tachi Basic Attacks",
   "epic_fight_ponder.ponder.tachi_basic_attack_combo.text_2": "Tachi Dash Attack",

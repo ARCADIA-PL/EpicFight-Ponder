@@ -138,11 +138,11 @@ public class EFPWeaponScenes {
                 world.waitForInaction(attacker);
                 if (frame.isJump) {
                     world.resetJump(attacker);
-                    world.playAnimation(attacker, Animations.BIPED_HOLD_LIECHTENAUER, 0);
                 }
             }
         }
 
+        world.playAnimation(attacker, Animations.BIPED_HOLD_LIECHTENAUER, 0);
         builder.idle(30);
         builder.markAsFinished();
     }
@@ -209,7 +209,7 @@ public class EFPWeaponScenes {
         EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
 
         EFPSceneUtils.setupStandardScene(builder, 11, "sharp_stab", "epic_fight_ponder.ponder.sharp_stab.title");
-        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActorWithItem(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.IRON_LONGSWORD.get()), new ItemStack(Items.SHIELD));
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.IRON_LONGSWORD.get()), new ItemStack(Items.SHIELD));
         ElementLink<EntityElement> victim = EFPSceneUtils.spawnDummyVictim(builder, 5.5, 1.0, 3.5, 0, ItemStack.EMPTY, ItemStack.EMPTY);
         world.modifyEntityMovement(attacker, true);
         EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.sharp_stab.text_1", 30, 5, 1, 5);
@@ -226,7 +226,7 @@ public class EFPWeaponScenes {
         EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
 
         EFPSceneUtils.setupStandardScene(builder, 11, "steel_whirlwind", "epic_fight_ponder.ponder.steel_whirlwind.title");
-        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActorWithItem(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.NETHERITE_GREATSWORD.get()));
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.NETHERITE_GREATSWORD.get()));
         world.modifyEntityMovement(attacker, true);
         builder.idle(20);
 

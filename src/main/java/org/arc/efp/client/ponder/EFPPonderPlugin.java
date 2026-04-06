@@ -13,6 +13,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.arc.efp.EpicFightPonder;
 import org.arc.efp.compat.EFNCompat;
+import org.arc.efp.compat.EFNxEFXCompat;
 import org.arc.efp.compat.EFPCompatManager;
 import org.arc.efp.compat.EFXCompat;
 import org.jetbrains.annotations.NotNull;
@@ -181,7 +182,18 @@ public class EFPPonderPlugin implements PonderPlugin {
 
         if (EFPCompatManager.isEFNLoaded) {
             registerSkill(skillHelper, "efn:efn_parry",
-                    EFNCompat::showcaseEFNParrySkill);
+                    EFNCompat::showcaseEFNParrySkill_First,
+                    EFNCompat::showcaseEFNParrySkill_Second);
+            registerSkill(skillHelper, "efn:efn_dodge",
+                    EFNCompat::showcaseRollSkill_EFN);
+            registerSkill(skillHelper, "efn:efn_step",
+                    EFNCompat::showcaseStepSkill_EFN);
+
+        }
+
+        if (EFPCompatManager.isEFNLoaded && EFPCompatManager.isEFXLoaded) {
+            registerSkill(skillHelper, "efn:efn_parry",
+                    EFNxEFXCompat::showcaseEFNParrySkill_Third);
         }
 
         // ==== 注册武器====

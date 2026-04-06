@@ -39,6 +39,13 @@ public class EFPAnimations {
     public static AnimationManager.AnimationAccessor<AttackAnimation> BLADE_RUSH_TRY_PONDER;
     public static AnimationManager.AnimationAccessor<ActionAnimation> BLADE_RUSH_FAILED_PONDER;
 
+    public static AnimationManager.AnimationAccessor<ActionAnimation> DODGE_ROLL_F_EFN;
+    public static AnimationManager.AnimationAccessor<ActionAnimation> DODGE_ROLL_B_EFN;
+    public static AnimationManager.AnimationAccessor<ActionAnimation> DODGE_STEP_F_EFN;
+    public static AnimationManager.AnimationAccessor<ActionAnimation> DODGE_STEP_B_EFN;
+    public static AnimationManager.AnimationAccessor<ActionAnimation> DODGE_STEP_L_EFN;
+    public static AnimationManager.AnimationAccessor<ActionAnimation> DODGE_STEP_R_EFN;
+
     public static void buildAnimations(AnimationManager.AnimationBuilder builder) {
         BIPED_ROLL_FORWARD = builder.nextAccessor("biped/skill/roll_forward", (accessor) ->
                 new ActionAnimation(0.1F, accessor, Armatures.BIPED));
@@ -52,6 +59,18 @@ public class EFPAnimations {
                 new ActionAnimation(0.1F, accessor, Armatures.BIPED));
         BIPED_STEP_RIGHT = builder.nextAccessor("biped/skill/step_right", (accessor) ->
                 new ActionAnimation(0.1F, accessor, Armatures.BIPED));
+        DODGE_ROLL_F_EFN = builder.nextAccessor("biped/skill/dodge_f", (accessor) ->
+                new ActionAnimation(0.05F, accessor, Armatures.BIPED));
+        DODGE_ROLL_B_EFN = builder.nextAccessor("biped/skill/dodge_b", (accessor) ->
+                new ActionAnimation(0.05F, accessor, Armatures.BIPED));
+        DODGE_STEP_F_EFN = builder.nextAccessor("biped/skill/step_f", (accessor) ->
+                new ActionAnimation(0.05F, accessor, Armatures.BIPED));
+        DODGE_STEP_B_EFN = builder.nextAccessor("biped/skill/step_b", (accessor) ->
+                new ActionAnimation(0.05F, accessor, Armatures.BIPED));
+        DODGE_STEP_L_EFN = builder.nextAccessor("biped/skill/step_l", (accessor) ->
+                new ActionAnimation(0.05F, accessor, Armatures.BIPED));
+        DODGE_STEP_R_EFN = builder.nextAccessor("biped/skill/step_r", (accessor) ->
+                new ActionAnimation(0.05F, accessor, Armatures.BIPED));
         BLADE_RUSH_COMBO1_PONDER = builder.nextAccessor("biped/skill/blade_rush_combo1", (accessor) ->
                 new AttackAnimation(0.1F, 0.0F, 0.15F, 0.35F, 0.85F, BIPED_BODY_COLLIDER, Armatures.BIPED.get().rootJoint, accessor, Armatures.BIPED)
                         .addProperty(AnimationProperty.AttackAnimationProperty.ATTACK_SPEED_FACTOR, 0.0F)

@@ -20,6 +20,10 @@ public class EFPCompatManager {
             MinecraftForge.EVENT_BUS.register(EFNCompat.class);
         }
 
+        if (isEFNLoaded && isEFXLoaded) {
+            MinecraftForge.EVENT_BUS.register(EFNxEFXCompat.class);
+        }
+
         isSkillTreeLoaded = ModList.get().isLoaded("epicskills");
         if (isSkillTreeLoaded) {
             MinecraftForge.EVENT_BUS.register(EpicSkillsPonderCompat.class);

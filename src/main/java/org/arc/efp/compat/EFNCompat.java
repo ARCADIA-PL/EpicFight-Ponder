@@ -1,7 +1,9 @@
 package org.arc.efp.compat;
 
 import com.hm.efn.client.sound.EFNSounds;
+import com.hm.efn.gameasset.animations.EFNScytheAnimations;
 import com.hm.efn.gameasset.animations.EFNSkillAnimations;
+import com.hm.efn.gameasset.animations.EFNSwordAnimations;
 import com.hm.efn.gameasset.animations.EFNYamatoAnimations;
 import com.hm.efn.particle.EFNParticles;
 import com.hm.efn.registries.EFNItem;
@@ -16,6 +18,7 @@ import org.arc.efp.api.event.PonderCombatEvent;
 import org.arc.efp.api.ponder.EpicFightSceneBuilder;
 import org.arc.efp.client.ponder.EFPSceneUtils;
 import org.arc.efp.entity.DummyEntityPatch;
+import org.arc.efp.gameasset.EFPAnimations;
 import org.joml.Vector3d;
 import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.types.AttackAnimation;
@@ -24,6 +27,7 @@ import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
+import yesman.epicfight.world.item.EpicFightItems;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -33,7 +37,61 @@ import static org.arc.efp.client.ponder.EFPSceneUtils.*;
 
 public class EFNCompat {
 
-    public static void showcaseEFNParrySkill(SceneBuilder baseScene, SceneBuildingUtil util) {
+    public static void showcaseStepSkill_EFN(SceneBuilder baseScene, SceneBuildingUtil util) {
+        EpicFightSceneBuilder builder = new EpicFightSceneBuilder(baseScene);
+        EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
+
+        EFPSceneUtils.setupStandardScene(builder, 11, "skill_step", "epic_fight_ponder.ponder.skill_step.title");
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.DIAMOND_LONGSWORD.get()));
+        world.modifyEntityMovement(attacker, true);
+
+        EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.skill_step.text_1", 100, 5, 1, 5);
+        builder.idle(20);
+
+        world.playAnimation(attacker, EFPAnimations.DODGE_STEP_B_EFN, 0.0F);
+        EFPSceneUtils.playStepSoundOnTimeline(builder, attacker);
+        world.waitForInaction(attacker);
+        builder.idle(5);
+        world.playAnimation(attacker, EFPAnimations.DODGE_STEP_F_EFN, 0.0F);
+        EFPSceneUtils.playStepSoundOnTimeline(builder, attacker);
+        world.waitForInaction(attacker);
+        builder.idle(5);
+        world.playAnimation(attacker, EFPAnimations.DODGE_STEP_R_EFN, 0.0F);
+        EFPSceneUtils.playStepSoundOnTimeline(builder, attacker);
+        world.waitForInaction(attacker);
+        builder.idle(5);
+        world.playAnimation(attacker, EFPAnimations.DODGE_STEP_L_EFN, 0.0F);
+        EFPSceneUtils.playStepSoundOnTimeline(builder, attacker);
+        world.waitForInaction(attacker);
+
+        builder.idle(30);
+        builder.markAsFinished();
+    }
+
+    public static void showcaseRollSkill_EFN(SceneBuilder baseScene, SceneBuildingUtil util) {
+        EpicFightSceneBuilder builder = new EpicFightSceneBuilder(baseScene);
+        EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
+
+        EFPSceneUtils.setupStandardScene(builder, 11, "skill_roll", "epic_fight_ponder.ponder.skill_roll.title");
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActor(builder, 5.5, 1, 5.5, 180, new ItemStack(EpicFightItems.DIAMOND_LONGSWORD.get()));
+        world.modifyEntityMovement(attacker, true);
+
+        EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.skill_roll.text_1", 100, 5, 1, 5);
+        builder.idle(20);
+
+        world.playAnimation(attacker, EFPAnimations.DODGE_ROLL_B_EFN, 0.0F);
+        EFPSceneUtils.playSoundOnTimeline(builder, attacker, EpicFightSounds.ROLL.get());
+        world.waitForInaction(attacker);
+        builder.idle(5);
+        world.playAnimation(attacker, EFPAnimations.DODGE_ROLL_F_EFN, 0.0F);
+        EFPSceneUtils.playSoundOnTimeline(builder, attacker, EpicFightSounds.ROLL.get());
+        world.waitForInaction(attacker);
+
+        builder.idle(30);
+        builder.markAsFinished();
+    }
+
+    public static void showcaseEFNParrySkill_First(SceneBuilder baseScene, SceneBuildingUtil util) {
         EpicFightSceneBuilder builder = new EpicFightSceneBuilder(baseScene);
         EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
 
@@ -77,6 +135,45 @@ public class EFNCompat {
                 "epic_fight_ponder.ponder.skill_parry_efn.text_1", centerX, 2, centerZ,
                 "epic_fight_ponder.ponder.skill_parry_efn.text_2", centerX, 0.5, centerZ
         );
+
+        builder.idle(30);
+        builder.markAsFinished();
+    }
+
+    public static void showcaseEFNParrySkill_Second(SceneBuilder baseScene, SceneBuildingUtil util) {
+        EpicFightSceneBuilder builder = new EpicFightSceneBuilder(baseScene);
+        EpicFightSceneBuilder.EpicFightWorldInstructions world = builder.world();
+
+        EFPSceneUtils.setupStandardScene(builder, 11, "skill_parry_efn_second", "epic_fight_ponder.ponder.skill_parry_efn_second.title");
+
+        double centerX = 5.5;
+        double centerZ = 5.5;
+        double attackerZ = centerZ - 2.0;
+
+        ItemStack victimWeapon = new ItemStack(EFNItem.SWORD_OF_PIONEER.get());
+        ItemStack attackerWeapon = new ItemStack(EFNItem.CRIMSON_MOON.get());
+
+        ElementLink<EntityElement> victim = EFPSceneUtils.spawnDummyVictim(builder, centerX, 1.0, centerZ, 180, victimWeapon, ItemStack.EMPTY);
+        ElementLink<EntityElement> attacker = EFPSceneUtils.spawnDummyActorWithItem(builder, centerX, 1.0, attackerZ, 0, attackerWeapon, ItemStack.EMPTY);
+
+        world.modifyEntityMovement(victim, false);
+
+        EFPSceneUtils.showText(builder, util, "epic_fight_ponder.ponder.skill_parry_efn_second.text_1", 80, 5, 1, 5);
+        builder.idle(20);
+
+        Consumer<PonderCombatEvent.Hit> parryCallback = createYamatoSmartParryCallback(
+                EFNSkillAnimations.EFN_GUARD_ACTIVE_HIT1.get(),
+                EFNSkillAnimations.EFN_GUARD_ACTIVE_HIT2.get()
+        );
+
+        world.playAnimation(attacker, EFNScytheAnimations.SCYTHE_HARVEST, 0.0F, parryCallback, beHit -> {});
+
+        // 3. 延迟 12 tick 的极限反应时间
+        builder.idle(12);
+
+        world.playAnimation(victim, EFNSwordAnimations.NF_SWORD_GUARD, 0.0F);
+
+        world.waitForInaction(attacker);
 
         builder.idle(30);
         builder.markAsFinished();
@@ -198,8 +295,8 @@ public class EFNCompat {
                 world.modifyEntityPlaySpeed(attacker, 1.0F);
                 world.modifyEntityPlaySpeed(victim, 1.0F);
 
-                // 6. 延迟 6 tick
-                builder.idle(6);
+                // 6. 延迟 3 tick
+                builder.idle(3);
 
                 world.modifyEntityPlaySpeed(attacker, 0.08F);
                 world.modifyEntityPlaySpeed(victim, 0.08F);
@@ -209,7 +306,7 @@ public class EFNCompat {
                     showText(builder, util, firstHitTextKey, 70, (int) firstHitTextX, (int) firstHitTextY, (int) firstHitTextZ);
                 }
 
-                builder.idle(38);
+                builder.idle(30);
 
                 world.modifyEntityPlaySpeed(attacker, 1.0F);
                 world.modifyEntityPlaySpeed(victim, 1.0F);

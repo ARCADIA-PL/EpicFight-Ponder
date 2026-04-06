@@ -38,31 +38,50 @@ public class EFPPonderPlugin implements PonderPlugin {
         MinecraftForge.EVENT_BUS.register(this);
     }
 
+    /**
+     * 快捷获取 ItemStack 对应的武器 Preset ID (如 "epicfight:uchigatana")
+     */
     @Nullable
-    public static ResourceLocation getCustomPonderId(ItemStack item) {
+    public static String getWeaponPresetId(ItemStack item) {
         if (item == null || item.isEmpty()) return null;
 
-        if (item.getItem() instanceof SkillBookItem) {
-            if (item.getTag() != null && item.hasTag() && item.getTag().contains("skill")) {
-                String skillId = item.getTag().getString("skill");
-                ResourceLocation rawRl = ResourceLocation.parse(skillId);
-                return ResourceLocation.fromNamespaceAndPath(rawRl.getNamespace(), "skill_" + rawRl.getPath());
-            }
-        }
-
+        // 1. 优先判断是否为幽灵物品注入的 NBT
         if (item.getTag() != null && item.hasTag() && item.getTag().contains("efp_weapon_preset")) {
-            String presetId = item.getTag().getString("efp_weapon_preset");
-            ResourceLocation rawRl = ResourceLocation.parse(presetId);
-            return ResourceLocation.fromNamespaceAndPath(EpicFightPonder.MOD_ID, "weapon_" + rawRl.getPath());
+            return item.getTag().getString("efp_weapon_preset");
         }
 
+        // 2. 正常物品的话，走缓存树查询
         if (!isCacheBuilt) {
             rebuildWeaponTypeCache();
         }
 
         ResourceLocation presetId = CACHED_WEAPON_TYPES.get(item.getItem());
         if (presetId != null) {
-            return ResourceLocation.fromNamespaceAndPath(EpicFightPonder.MOD_ID, "weapon_" + presetId.getPath());
+            return presetId.toString();
+        }
+
+        return null;
+    }
+
+    /**
+     * 获取 Ponder 所需的思索 ID
+     */
+    @Nullable
+    public static ResourceLocation getCustomPonderId(ItemStack item) {
+        if (item == null || item.isEmpty()) return null;
+
+        if (item.getItem() instanceof SkillBookItem) {
+            if (item.getTag() != null && item.hasTag() && item.getTag().contains("skill")) {
+                String skillId = SkillBookItem.getContainSkill(item).toString();
+                ResourceLocation rawRl = ResourceLocation.parse(skillId);
+                return ResourceLocation.fromNamespaceAndPath(rawRl.getNamespace(), "skill_" + rawRl.getPath());
+            }
+        }
+
+        String weaponPresetId = getWeaponPresetId(item);
+        if (weaponPresetId != null) {
+            ResourceLocation rawRl = ResourceLocation.parse(weaponPresetId);
+            return ResourceLocation.fromNamespaceAndPath(EpicFightPonder.MOD_ID, "weapon_" + rawRl.getPath());
         }
 
         return null;

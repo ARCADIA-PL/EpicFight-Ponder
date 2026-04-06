@@ -258,36 +258,20 @@ public class DummyEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<
         }
         this.lastCheckedAnim = playingAnim;
 
-        EntityState prevState = playingAnim.getState(this, prevTime);
-        EntityState state = playingAnim.getState(this, time);
-
-        if (state.attacking() || (prevState.getLevel() <= 2 && state.getLevel() > 2)) {
-            this.processAttackPhases(attackAnim, prevTime, time, prevState, state);
-        }
+        this.processUniversalAttackPhases(attackAnim, prevTime, time);
     }
 
-    private void processAttackPhases(AttackAnimation attackAnim, float prevTime, float time, EntityState prevState, EntityState state) {
-        List<AttackAnimation.Phase> activePhases = this.getActivePhases(attackAnim, time);
+    private void processUniversalAttackPhases(AttackAnimation attackAnim, float prevTime, float time) {
+        if (time <= prevTime) return;
 
-        for (AttackAnimation.Phase phase : activePhases) {
-            this.handleSwingSound(phase);
-            List<Entity> hits = this.calculateHitsForPhase(attackAnim, phase, prevTime, time, prevState, state);
-            this.processHitTargets(attackAnim, phase, hits, time);
-        }
-    }
+        for (AttackAnimation.Phase phase : attackAnim.phases) {
+            if (time >= phase.preDelay && prevTime <= phase.contact) {
+                this.handleSwingSound(phase);
 
-    private List<AttackAnimation.Phase> getActivePhases(AttackAnimation attackAnim, float time) {
-        List<AttackAnimation.Phase> activePhases = new ArrayList<>();
-        if (attackAnim.getClass().getSimpleName().equals("MultiPhaseAttackAnimation") ||
-                attackAnim.getClass().getName().contains("MultiPhase")) {
-            for (AttackAnimation.Phase phase : attackAnim.phases) {
-                if (time >= phase.antic && time <= phase.contact) activePhases.add(phase);
+                List<Entity> hits = this.calculateUniversalHitsForPhase(attackAnim, phase, prevTime, time);
+                this.processHitTargets(attackAnim, phase, hits, time);
             }
-        } else {
-            AttackAnimation.Phase currentPhase = attackAnim.getPhaseByTime(time);
-            if (currentPhase != null) activePhases.add(currentPhase);
         }
-        return activePhases;
     }
 
     private void handleSwingSound(AttackAnimation.Phase phase) {
@@ -299,18 +283,14 @@ public class DummyEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<
         }
     }
 
-    private List<Entity> calculateHitsForPhase(AttackAnimation attackAnim, AttackAnimation.Phase phase, float prevTime, float time, EntityState prevState, EntityState state) {
-        float prevPoseTime = prevState.attacking() ? prevTime : phase.preDelay;
-        float poseTime = state.attacking() ? time : phase.contact;
-        if (poseTime <= prevPoseTime) poseTime = prevPoseTime + 0.05F;
-
+    private List<Entity> calculateUniversalHitsForPhase(AttackAnimation attackAnim, AttackAnimation.Phase phase, float prevTime, float time) {
         float playSpeed = attackAnim.getPlaySpeed(this, attackAnim);
         List<Entity> hits = new ArrayList<>();
 
         for (AttackAnimation.JointColliderPair colliderInfo : phase.colliders) {
             Collider collider = colliderInfo.getSecond() != null ? colliderInfo.getSecond() : this.getColliderMatching(phase.hand);
             if (collider != null) {
-                hits.addAll(collider.updateAndSelectCollideEntity(this, attackAnim, prevPoseTime, poseTime, colliderInfo.getFirst(), playSpeed));
+                hits.addAll(collider.updateAndSelectCollideEntity(this, attackAnim, prevTime, time, colliderInfo.getFirst(), playSpeed));
             }
         }
         return hits;

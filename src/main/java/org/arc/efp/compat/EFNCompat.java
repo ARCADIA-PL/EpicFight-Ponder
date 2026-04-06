@@ -88,33 +88,9 @@ public class EFNCompat {
 
             @Override
             public void accept(PonderCombatEvent.Hit hit) {
-                StaticAnimation currentAnim = toggle ? anim2 : anim1;
-                toggle = !toggle;
+                StaticAnimation currentAnim = toggle ? anim2 : anim1;toggle = !toggle;
+
                 createEFNParryCallback(currentAnim, false).accept(hit);
-
-                if (hit.getAnimation() != null) {
-                    DummyEntityPatch<?> attackerPatch = EpicFightCapabilities.getEntityPatch(hit.getAttacker(), DummyEntityPatch.class);
-                    if (attackerPatch == null) return;
-
-                    AttackAnimation currentAttack = hit.getAnimation();
-
-                    if (currentAttack.equals(EFNYamatoAnimations.YAMATO_EXTEND_AUTO3.get())) {
-                        StaticAnimation nextAnim = toggle ? anim2 : anim1;
-                        toggle = !toggle;
-
-                        attackerPatch.scheduleDelayedTask(3, () -> {
-                            createEFNParryCallback(nextAnim, false).accept(hit);
-                        });
-                    }
-                    else if (currentAttack.equals(EFNYamatoAnimations.YAMATO_EXTEND_AUTO4.get())) {
-                        StaticAnimation nextAnim = toggle ? anim2 : anim1;
-                        toggle = !toggle;
-
-                        attackerPatch.scheduleDelayedTask(5, () -> {
-                            createEFNParryCallback(nextAnim, false).accept(hit);
-                        });
-                    }
-                }
             }
         };
     }
@@ -200,37 +176,47 @@ public class EFNCompat {
             Consumer<PonderCombatEvent.Hit> activeCallback = isLast ? lastCallback : normalCallback;
 
             if (isFirst) {
-                world.modifyEntityPlaySpeed(attacker, 0.3F);
-                world.modifyEntityPlaySpeed(victim, 0.3F);
-
                 world.playAnimation(attacker, currentAttack, 0.0F, activeCallback, beHit -> {});
 
-                builder.idle(6);
+                builder.idle(1);
 
                 if (defenseSetupAnim != null) {
-                    world.playAnimation(victim, defenseSetupAnim.getRealAnimation(), 0.1F);
+                    world.playAnimation(victim, defenseSetupAnim.getRealAnimation(), 0.0F);
                     if (prepareHitTextKey != null && !prepareHitTextKey.isEmpty()) {
-                        showText(builder, util, prepareHitTextKey, 50, (int) prepareHitTextX, (int) prepareHitTextY, (int) prepareHitTextZ);
+                        showText(builder, util, prepareHitTextKey, 30, (int) prepareHitTextX, (int) prepareHitTextY, (int) prepareHitTextZ);
                     }
                 }
 
-                builder.idle(17);
+                builder.idle(1);
 
+                // 4. 起手防御后立刻进入全局 0.1 倍时缓
                 world.modifyEntityPlaySpeed(attacker, 0.05F);
                 world.modifyEntityPlaySpeed(victim, 0.05F);
+                builder.idle(25);
 
+                // 5. 恢复正常速度
+                world.modifyEntityPlaySpeed(attacker, 1.0F);
+                world.modifyEntityPlaySpeed(victim, 1.0F);
+
+                // 6. 延迟 6 tick
+                builder.idle(6);
+
+                world.modifyEntityPlaySpeed(attacker, 0.08F);
+                world.modifyEntityPlaySpeed(victim, 0.08F);
+
+                // 弹出第二个文本 (招架成功提示)
                 if (firstHitTextKey != null && !firstHitTextKey.isEmpty()) {
-                    builder.idle(10);
-                    showText(builder, util, firstHitTextKey, 90, (int) firstHitTextX, (int) firstHitTextY, (int) firstHitTextZ);
+                    showText(builder, util, firstHitTextKey, 70, (int) firstHitTextX, (int) firstHitTextY, (int) firstHitTextZ);
                 }
 
-                builder.idle(20);
+                builder.idle(38);
 
                 world.modifyEntityPlaySpeed(attacker, 1.0F);
                 world.modifyEntityPlaySpeed(victim, 1.0F);
 
                 world.waitForCanBasicAttack(attacker);
             } else {
+                // 后续连段的处理保持不变
                 if (defenseSetupAnim != null) {
                     world.playAnimation(victim, defenseSetupAnim.getRealAnimation(), 0.0F);
                 }

@@ -734,7 +734,8 @@ public class EFPSceneUtils {
             }
         }
 
-        updateSheathState(builder, attacker, 1);
+        EFPSceneUtils.changeStyleAndRefreshMotions(builder, attacker, CapabilityItem.Styles.TWO_HAND);
+        updateSheathState(builder, attacker, 0);
     }
 
     public static void showcaseStandardWeaponCombo(

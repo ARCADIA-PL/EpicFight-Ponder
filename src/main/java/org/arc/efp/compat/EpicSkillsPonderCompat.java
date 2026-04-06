@@ -14,6 +14,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.TickEvent;
@@ -27,11 +28,27 @@ public class EpicSkillsPonderCompat {
 
     public static final String HOLD_TO_PONDER = PonderLocalization.UI_PREFIX + "hold_to_ponder";
     private static final LerpedFloat holdKeyProgress = LerpedFloat.linear().startWithValue(0);
-    private static Skill hoveredSkillThisFrame = null;
-    private static Skill trackingSkill = null;
+
+    public enum TargetType { SKILL, WEAPON }
+
+    private static String hoveredTargetThisFrame = null;
+    private static TargetType hoveredTargetTypeThisFrame = null;
+
+    private static String trackingTarget = null;
+    private static TargetType trackingTargetType = null;
 
     public static void setHoveredSkill(Skill skill) {
-        hoveredSkillThisFrame = skill;
+        if (skill != null) {
+            hoveredTargetThisFrame = skill.toString();
+            hoveredTargetTypeThisFrame = TargetType.SKILL;
+        }
+    }
+
+    public static void setHoveredWeapon(String presetId) {
+        if (!Strings.isNullOrEmpty(presetId)) {
+            hoveredTargetThisFrame = presetId;
+            hoveredTargetTypeThisFrame = TargetType.WEAPON;
+        }
     }
 
     @SubscribeEvent
@@ -40,16 +57,18 @@ public class EpicSkillsPonderCompat {
             Minecraft instance = Minecraft.getInstance();
             if (instance.screen == null) return;
 
-            if (hoveredSkillThisFrame == null) {
+            if (hoveredTargetThisFrame == null) {
                 holdKeyProgress.setValue(Math.max(0, holdKeyProgress.getValue() - 0.05f));
-                if (holdKeyProgress.getValue() == 0 && trackingSkill != null) {
-                    trackingSkill = null;
+                if (holdKeyProgress.getValue() == 0 && trackingTarget != null) {
+                    trackingTarget = null;
+                    trackingTargetType = null;
                 }
                 return;
             }
 
-            if (trackingSkill != hoveredSkillThisFrame) {
-                trackingSkill = hoveredSkillThisFrame;
+            if (!hoveredTargetThisFrame.equals(trackingTarget)) {
+                trackingTarget = hoveredTargetThisFrame;
+                trackingTargetType = hoveredTargetTypeThisFrame;
                 holdKeyProgress.startWithValue(0);
             }
 
@@ -57,14 +76,23 @@ public class EpicSkillsPonderCompat {
 
             if (isDown()) {
                 if (value >= 1) {
-                    ItemStack fakeBook = new ItemStack(EpicFightItems.SKILLBOOK.get());
-                    fakeBook.getOrCreateTag().putString("skill", trackingSkill.toString());
+                    ItemStack fakeItem;
+                    if (trackingTargetType == TargetType.SKILL) {
+                        fakeItem = new ItemStack(EpicFightItems.SKILLBOOK.get());
+                        fakeItem.getOrCreateTag().putString("skill", trackingTarget);
+                    } else {
+                        // 生成完美伪装的武器幽灵物品
+                        fakeItem = new ItemStack(Items.WOODEN_SWORD);
+                        fakeItem.getOrCreateTag().putString("efp_weapon_preset", trackingTarget);
+                    }
 
-                    ScreenOpener.transitionTo(PonderUI.of(fakeBook));
+                    ScreenOpener.transitionTo(PonderUI.of(fakeItem));
 
                     holdKeyProgress.startWithValue(0);
-                    hoveredSkillThisFrame = null;
-                    trackingSkill = null;
+                    hoveredTargetThisFrame = null;
+                    hoveredTargetTypeThisFrame = null;
+                    trackingTarget = null;
+                    trackingTargetType = null;
                     return;
                 }
                 holdKeyProgress.setValue(Math.min(1, value + Math.max(.25f, value) * .25f));
@@ -72,7 +100,8 @@ public class EpicSkillsPonderCompat {
                 holdKeyProgress.setValue(Math.max(0, value - .05f));
             }
 
-            hoveredSkillThisFrame = null;
+            hoveredTargetThisFrame = null;
+            hoveredTargetTypeThisFrame = null;
         }
     }
 
@@ -104,6 +133,11 @@ public class EpicSkillsPonderCompat {
     public static boolean hasPonderScene(Skill skill) {
         if (skill == null) return false;
         return EFPPonderPlugin.REGISTERED_SKILLS.contains(skill.toString());
+    }
+
+    public static boolean hasPonderScene(String presetId) {
+        if (Strings.isNullOrEmpty(presetId)) return false;
+        return EFPPonderPlugin.REGISTERED_WEAPONS.contains(presetId);
     }
 
     public static boolean isDown() {

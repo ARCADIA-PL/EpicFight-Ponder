@@ -191,6 +191,10 @@ public class EpicFightSceneBuilder extends PonderSceneBuilder {
             waitForState(link, state -> !state.inaction());
         }
 
+        public void waitForCanUpdateLivingMotion(ElementLink<EntityElement> link) {
+            waitForState(link, EntityState::updateLivingMotion);
+        }
+
         public void waitForCanBasicAttack(ElementLink<EntityElement> link) {
             waitForState(link, EntityState::canBasicAttack);
         }

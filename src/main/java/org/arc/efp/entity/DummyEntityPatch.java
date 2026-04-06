@@ -112,27 +112,59 @@ public class DummyEntityPatch<T extends PathfinderMob> extends HumanoidMobPatch<
     }
 
     public void updateLivingMotionsForPonder() {
+        if (this.getClientAnimator() == null) {
+            return;
+        }
+
         CapabilityItem mainHandCap = this.getHoldingItemCapability(InteractionHand.MAIN_HAND);
         CapabilityItem offHandCap = this.getAdvancedHoldingItemCapability(InteractionHand.OFF_HAND);
 
-        Map<LivingMotion, AssetAccessor<? extends StaticAnimation>> newLivingAnimations = new HashMap<>(mainHandCap.getLivingMotionModifier(this, InteractionHand.MAIN_HAND));
-        newLivingAnimations.putAll(offHandCap.getLivingMotionModifier(this, InteractionHand.OFF_HAND));
+        if (mainHandCap == null || offHandCap == null) {
+            return;
+        }
 
-        if (this.weaponLivingMotions != null && this.weaponLivingMotions.containsKey(mainHandCap.getWeaponCategory())) {
+        Map<LivingMotion, AssetAccessor<? extends StaticAnimation>> newLivingAnimations = new HashMap<>();
+
+        Map<LivingMotion, AnimationManager.AnimationAccessor<? extends StaticAnimation>> mainHandModifiers = mainHandCap.getLivingMotionModifier(this, InteractionHand.MAIN_HAND);
+        if (mainHandModifiers != null) {
+            newLivingAnimations.putAll(mainHandModifiers);
+        }
+
+        Map<LivingMotion, AnimationManager.AnimationAccessor<? extends StaticAnimation>> offHandModifiers = offHandCap.getLivingMotionModifier(this, InteractionHand.OFF_HAND);
+        if (offHandModifiers != null) {
+            newLivingAnimations.putAll(offHandModifiers);
+        }
+
+        if (this.weaponLivingMotions != null && mainHandCap.getWeaponCategory() != null) {
             Map<Style, Set<Pair<LivingMotion, AnimationManager.AnimationAccessor<? extends StaticAnimation>>>> byStyle = this.weaponLivingMotions.get(mainHandCap.getWeaponCategory());
-            Style style = this.forcedStyle != null ? this.forcedStyle : mainHandCap.getStyle(this);
 
-            if (byStyle.containsKey(style) || byStyle.containsKey(CapabilityItem.Styles.COMMON)) {
-                Set<Pair<LivingMotion, AnimationManager.AnimationAccessor<? extends StaticAnimation>>> animModifierSet = byStyle.getOrDefault(style, byStyle.get(CapabilityItem.Styles.COMMON));
-                for (Pair<LivingMotion, AnimationManager.AnimationAccessor<? extends StaticAnimation>> pair : animModifierSet) {
-                    newLivingAnimations.put(pair.getFirst(), pair.getSecond());
+            if (byStyle != null) {
+                Style style = this.forcedStyle != null ? this.forcedStyle : mainHandCap.getStyle(this);
+                Set<Pair<LivingMotion, AnimationManager.AnimationAccessor<? extends StaticAnimation>>> animModifierSet = null;
+
+                if (style != null && byStyle.containsKey(style)) {
+                    animModifierSet = byStyle.get(style);
+                } else if (byStyle.containsKey(CapabilityItem.Styles.COMMON)) {
+                    animModifierSet = byStyle.get(CapabilityItem.Styles.COMMON);
+                }
+
+                if (animModifierSet != null) {
+                    for (Pair<LivingMotion, AnimationManager.AnimationAccessor<? extends StaticAnimation>> pair : animModifierSet) {
+                        if (pair != null && pair.getFirst() != null && pair.getSecond() != null) {
+                            newLivingAnimations.put(pair.getFirst(), pair.getSecond());
+                        }
+                    }
                 }
             }
         }
 
         if (!newLivingAnimations.isEmpty()) {
             this.getClientAnimator().resetLivingAnimations();
-            newLivingAnimations.forEach(this.getClientAnimator()::addLivingAnimation);
+            newLivingAnimations.forEach((motion, anim) -> {
+                if (motion != null && anim != null) {
+                    this.getClientAnimator().addLivingAnimation(motion, anim);
+                }
+            });
             this.getClientAnimator().setCurrentMotionsAsDefault();
         }
     }

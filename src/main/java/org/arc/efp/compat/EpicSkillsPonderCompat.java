@@ -22,6 +22,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.arc.efp.client.ponder.EFPPonderPlugin;
 import yesman.epicfight.skill.Skill;
 import yesman.epicfight.world.item.EpicFightItems;
+import yesman.epicfight.world.item.SkillBookItem;
 
 @OnlyIn(Dist.CLIENT)
 public class EpicSkillsPonderCompat {
@@ -33,14 +34,17 @@ public class EpicSkillsPonderCompat {
 
     private static String hoveredTargetThisFrame = null;
     private static TargetType hoveredTargetTypeThisFrame = null;
+    private static ItemStack hoveredItemStackThisFrame = ItemStack.EMPTY;
 
     private static String trackingTarget = null;
     private static TargetType trackingTargetType = null;
+    private static ItemStack trackingItemStack = ItemStack.EMPTY;
 
     public static void setHoveredSkill(Skill skill) {
         if (skill != null) {
             hoveredTargetThisFrame = skill.toString();
             hoveredTargetTypeThisFrame = TargetType.SKILL;
+            hoveredItemStackThisFrame = ItemStack.EMPTY;
         }
     }
 
@@ -48,6 +52,25 @@ public class EpicSkillsPonderCompat {
         if (!Strings.isNullOrEmpty(presetId)) {
             hoveredTargetThisFrame = presetId;
             hoveredTargetTypeThisFrame = TargetType.WEAPON;
+            hoveredItemStackThisFrame = ItemStack.EMPTY;
+        }
+    }
+
+    /**
+     * 传递真实的 ItemStack 实体，
+     */
+    public static void setHoveredItem(ItemStack stack) {
+        if (stack != null && !stack.isEmpty()) {
+            String presetId = EFPPonderPlugin.getWeaponPresetId(stack);
+            if (!Strings.isNullOrEmpty(presetId)) {
+                hoveredTargetThisFrame = presetId;
+                hoveredTargetTypeThisFrame = TargetType.WEAPON;
+                hoveredItemStackThisFrame = stack;
+            } else if (stack.getItem() instanceof SkillBookItem && stack.getTag() != null && stack.getTag().contains("skill")) {
+                hoveredTargetThisFrame = SkillBookItem.getContainSkill(stack).toString();
+                hoveredTargetTypeThisFrame = TargetType.SKILL;
+                hoveredItemStackThisFrame = stack;
+            }
         }
     }
 
@@ -62,13 +85,15 @@ public class EpicSkillsPonderCompat {
                 if (holdKeyProgress.getValue() == 0 && trackingTarget != null) {
                     trackingTarget = null;
                     trackingTargetType = null;
+                    trackingItemStack = ItemStack.EMPTY;
                 }
                 return;
             }
 
-            if (!hoveredTargetThisFrame.equals(trackingTarget)) {
+            if (!hoveredTargetThisFrame.equals(trackingTarget) || !ItemStack.matches(hoveredItemStackThisFrame, trackingItemStack)) {
                 trackingTarget = hoveredTargetThisFrame;
                 trackingTargetType = hoveredTargetTypeThisFrame;
+                trackingItemStack = hoveredItemStackThisFrame.copy();
                 holdKeyProgress.startWithValue(0);
             }
 
@@ -76,22 +101,28 @@ public class EpicSkillsPonderCompat {
 
             if (isDown()) {
                 if (value >= 1) {
-                    ItemStack fakeItem;
-                    if (trackingTargetType == TargetType.SKILL) {
-                        fakeItem = new ItemStack(EpicFightItems.SKILLBOOK.get());
-                        fakeItem.getOrCreateTag().putString("skill", trackingTarget);
+                    ItemStack uiItem;
+
+                    if (!trackingItemStack.isEmpty()) {
+                        uiItem = trackingItemStack.copy();
+                    }
+                    else if (trackingTargetType == TargetType.SKILL) {
+                        uiItem = new ItemStack(EpicFightItems.SKILLBOOK.get());
+                        uiItem.getOrCreateTag().putString("skill", trackingTarget);
                     } else {
-                        fakeItem = new ItemStack(Items.WOODEN_SWORD);
-                        fakeItem.getOrCreateTag().putString("efp_weapon_preset", trackingTarget);
+                        uiItem = new ItemStack(Items.WOODEN_SWORD);
+                        uiItem.getOrCreateTag().putString("efp_weapon_preset", trackingTarget);
                     }
 
-                    ScreenOpener.transitionTo(PonderUI.of(fakeItem));
+                    ScreenOpener.transitionTo(PonderUI.of(uiItem));
 
                     holdKeyProgress.startWithValue(0);
                     hoveredTargetThisFrame = null;
                     hoveredTargetTypeThisFrame = null;
+                    hoveredItemStackThisFrame = ItemStack.EMPTY;
                     trackingTarget = null;
                     trackingTargetType = null;
+                    trackingItemStack = ItemStack.EMPTY;
                     return;
                 }
                 holdKeyProgress.setValue(Math.min(1, value + Math.max(.25f, value) * .25f));
@@ -101,6 +132,7 @@ public class EpicSkillsPonderCompat {
 
             hoveredTargetThisFrame = null;
             hoveredTargetTypeThisFrame = null;
+            hoveredItemStackThisFrame = ItemStack.EMPTY;
         }
     }
 
@@ -137,6 +169,23 @@ public class EpicSkillsPonderCompat {
     public static boolean hasPonderScene(String presetId) {
         if (Strings.isNullOrEmpty(presetId)) return false;
         return EFPPonderPlugin.REGISTERED_WEAPONS.contains(presetId);
+    }
+
+    /**
+     * 判断某个具体的 ItemStack 是否能打开思索界面
+     */
+    public static boolean hasPonderScene(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+
+        if (stack.getItem() instanceof SkillBookItem) {
+            if (stack.getTag() != null && stack.getTag().contains("skill")) {
+                return hasPonderScene(SkillBookItem.getContainSkill(stack).toString());
+            }
+            return false;
+        }
+
+        String presetId = EFPPonderPlugin.getWeaponPresetId(stack);
+        return hasPonderScene(presetId);
     }
 
     public static boolean isDown() {

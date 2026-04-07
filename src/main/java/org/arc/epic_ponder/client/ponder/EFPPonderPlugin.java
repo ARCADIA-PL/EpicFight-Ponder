@@ -1,0 +1,338 @@
+package org.arc.epic_ponder.client.ponder;
+
+import net.createmod.ponder.api.registration.PonderPlugin;
+import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper;
+import net.createmod.ponder.api.scene.SceneBuilder;
+import net.createmod.ponder.api.scene.SceneBuildingUtil;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.*;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TagsUpdatedEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.registries.ForgeRegistries;
+import org.arc.epic_ponder.EpicFightPonder;
+import org.arc.epic_ponder.compat.EFNCompat;
+import org.arc.epic_ponder.compat.EFNxEFXCompat;
+import org.arc.epic_ponder.compat.EFPCompatManager;
+import org.arc.epic_ponder.compat.EFXCompat;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import yesman.epicfight.api.data.reloader.ItemCapabilityReloadListener;
+import yesman.epicfight.world.capabilities.item.ItemKeywordReloadListener;
+import yesman.epicfight.world.item.SkillBookItem;
+
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
+public class EFPPonderPlugin implements PonderPlugin {
+
+    public static final Set<String> REGISTERED_SKILLS = ConcurrentHashMap.newKeySet();
+    public static final Set<String> REGISTERED_WEAPONS = ConcurrentHashMap.newKeySet();
+
+    private static final Map<Item, ResourceLocation> CACHED_WEAPON_TYPES = new ConcurrentHashMap<>();
+    private static boolean isCacheBuilt = false;
+
+    public EFPPonderPlugin() {
+        MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    /**
+     * 快捷获取 ItemStack 对应的武器 Preset ID (如 "epicfight:uchigatana")
+     */
+    @Nullable
+    public static String getWeaponPresetId(ItemStack item) {
+        if (item == null || item.isEmpty()) return null;
+
+        // 1. 优先判断是否为幽灵物品注入的 NBT
+        if (item.getTag() != null && item.hasTag() && item.getTag().contains("efp_weapon_preset")) {
+            return item.getTag().getString("efp_weapon_preset");
+        }
+
+        // 2. 正常物品的话，走缓存树查询
+        if (!isCacheBuilt) {
+            rebuildWeaponTypeCache();
+        }
+
+        ResourceLocation presetId = CACHED_WEAPON_TYPES.get(item.getItem());
+        if (presetId != null) {
+            return presetId.toString();
+        }
+
+        return null;
+    }
+
+    /**
+     * 获取 Ponder 所需的思索 ID
+     */
+    @Nullable
+    public static ResourceLocation getCustomPonderId(ItemStack item) {
+        if (item == null || item.isEmpty()) return null;
+
+        if (item.getItem() instanceof SkillBookItem) {
+            if (item.getTag() != null && item.hasTag() && item.getTag().contains("skill")) {
+                String skillId = SkillBookItem.getContainSkill(item).toString();
+                ResourceLocation rawRl = ResourceLocation.parse(skillId);
+                return ResourceLocation.fromNamespaceAndPath(rawRl.getNamespace(), "skill_" + rawRl.getPath());
+            }
+        }
+
+        String weaponPresetId = getWeaponPresetId(item);
+        if (weaponPresetId != null) {
+            ResourceLocation rawRl = ResourceLocation.parse(weaponPresetId);
+            return ResourceLocation.fromNamespaceAndPath(EpicFightPonder.MOD_ID, "weapon_" + rawRl.getPath());
+        }
+
+        return null;
+    }
+
+    private static synchronized void rebuildWeaponTypeCache() {
+        CACHED_WEAPON_TYPES.clear();
+
+        ItemCapabilityReloadListener.getWeaponDataStream().forEach(tag -> {
+            if (tag.contains("type")) {
+                Item item = Item.byId(tag.getInt("id"));
+                ResourceLocation presetId = ResourceLocation.parse(tag.getString("type"));
+                CACHED_WEAPON_TYPES.put(item, presetId);
+            }
+        });
+
+        Map<ResourceLocation, ItemKeywordReloadListener.ItemRegex> regexes = ItemKeywordReloadListener.getRegexes();
+
+        for (Map.Entry<ResourceKey<Item>, Item> entry : ForgeRegistries.ITEMS.getEntries()) {
+            Item item = entry.getValue();
+
+            if (CACHED_WEAPON_TYPES.containsKey(item) || item instanceof BlockItem) {
+                continue;
+            }
+
+            ResourceLocation registryName = entry.getKey().location();
+            boolean matched = false;
+
+            for (Map.Entry<ResourceLocation, ItemKeywordReloadListener.ItemRegex> regexEntry : regexes.entrySet()) {
+                if (regexEntry.getValue().matchesAny(registryName.toString())) {
+                    CACHED_WEAPON_TYPES.put(item, regexEntry.getKey());
+                    matched = true;
+                    break;
+                }
+            }
+
+            if (!matched) {
+                Class<?> clazz = item.getClass();
+                while (clazz != null) {
+                    if (SwordItem.class.equals(clazz)) {
+                        CACHED_WEAPON_TYPES.put(item, ResourceLocation.parse("epicfight:sword"));
+                        break;
+                    } else if (AxeItem.class.equals(clazz)) {
+                        CACHED_WEAPON_TYPES.put(item, ResourceLocation.parse("epicfight:axe"));
+                        break;
+                    } else if (PickaxeItem.class.equals(clazz)) {
+                        CACHED_WEAPON_TYPES.put(item, ResourceLocation.parse("epicfight:pickaxe"));
+                        break;
+                    } else if (ShovelItem.class.equals(clazz)) {
+                        CACHED_WEAPON_TYPES.put(item, ResourceLocation.parse("epicfight:shovel"));
+                        break;
+                    } else if (HoeItem.class.equals(clazz)) {
+                        CACHED_WEAPON_TYPES.put(item, ResourceLocation.parse("epicfight:hoe"));
+                        break;
+                    } else if (BowItem.class.equals(clazz)) {
+                        CACHED_WEAPON_TYPES.put(item, ResourceLocation.parse("epicfight:bow"));
+                        break;
+                    } else if (CrossbowItem.class.equals(clazz)) {
+                        CACHED_WEAPON_TYPES.put(item, ResourceLocation.parse("epicfight:crossbow"));
+                        break;
+                    } else if (ShieldItem.class.equals(clazz)) {
+                        CACHED_WEAPON_TYPES.put(item, ResourceLocation.parse("epicfight:shield"));
+                        break;
+                    }
+                    clazz = clazz.getSuperclass();
+                }
+            }
+        }
+
+        isCacheBuilt = true;
+    }
+
+    @SubscribeEvent
+    public void onTagsUpdated(TagsUpdatedEvent event) {
+        isCacheBuilt = false;
+    }
+
+    @Override
+    public @NotNull String getModId() {
+        return EpicFightPonder.MOD_ID;
+    }
+
+    @Override
+    public void registerScenes(PonderSceneRegistrationHelper<ResourceLocation> helper) {
+
+        PonderSceneRegistrationHelper<String> skillHelper = helper.withKeyFunction(
+                skillString -> {
+                    ResourceLocation rl = ResourceLocation.parse(skillString);
+                    return ResourceLocation.fromNamespaceAndPath(rl.getNamespace(), "skill_" + rl.getPath());
+                }
+        );
+
+        PonderSceneRegistrationHelper<String> weaponHelper = helper.withKeyFunction(
+                presetId -> {
+                    ResourceLocation rl = ResourceLocation.parse(presetId);
+                    return ResourceLocation.fromNamespaceAndPath(EpicFightPonder.MOD_ID, "weapon_" + rl.getPath());
+                }
+        );
+
+        // ==== 注册技能 ====
+        registerSkill(skillHelper, "epic_fight_ponder:fallback",
+                EFPSKillScenes::showcaseNoSkill);
+        registerSkill(skillHelper, "epicfight:guard",
+                EFPSKillScenes::showcaseGuardSkill,
+                EFPSKillScenes::showcaseGuardSkillBreak);
+        registerSkill(skillHelper, "epicfight:parrying",
+                EFPSKillScenes::showcaseParrySkill);
+
+        if (EFPCompatManager.isEFXLoaded) {
+            registerSkill(skillHelper, "epicfight:technician",
+                    EFXCompat::showcaseTechnicianSkill_EFX);
+            registerSkill(skillHelper, "epicfight:step",
+                    EFXCompat::showcaseStepSkill_EFX);
+            registerSkill(skillHelper, "epicfight:roll",
+                    EFXCompat::showcaseRollSkill_EFX);
+        } else {
+            registerSkill(skillHelper, "epicfight:technician",
+                    EFPSKillScenes::showcaseTechnicianSkill);
+            registerSkill(skillHelper, "epicfight:step",
+                    EFPSKillScenes::showcaseStepSkill);
+            registerSkill(skillHelper, "epicfight:roll",
+                    EFPSKillScenes::showcaseRollSkill);
+        }
+
+        if (EFPCompatManager.isEFNLoaded) {
+            registerSkill(skillHelper, "efn:efn_parry",
+                    EFNCompat::showcaseEFNParrySkill_First,
+                    EFNCompat::showcaseEFNParrySkill_Second);
+            registerSkill(skillHelper, "efn:efn_dodge",
+                    EFNCompat::showcaseRollSkill_EFN);
+            registerSkill(skillHelper, "efn:efn_step",
+                    EFNCompat::showcaseStepSkill_EFN);
+        }
+
+        if (EFPCompatManager.isEFNLoaded && EFPCompatManager.isEFXLoaded) {
+            registerSkill(skillHelper, "efn:efn_parry",
+                    EFNxEFXCompat::showcaseEFNParrySkill_Third);
+        }
+
+        // ==== 注册武器====
+        if (EFPCompatManager.isEFXLoaded) {
+            registerWeapon(weaponHelper, "epicfight:sword",
+                    EFPWeaponScenes::showcaseSwordBasicAttackCombo,
+                    EFXCompat::showcaseSweepingEdge_EFX,
+                    EFPWeaponScenes::showcaseSwordBasicAttackCombo_Dual,
+                    EFXCompat::showcaseDancingEdge_EFX);
+            registerWeapon(weaponHelper, "epicfight:dagger",
+                    EFPWeaponScenes::showcaseDaggerBasicAttackCombo,
+                    EFXCompat::showcaseEviscerate_EFX,
+                    EFPWeaponScenes::showcaseDaggerBasicAttackCombo_Dual);
+            registerWeapon(weaponHelper, "epicfight:dagger", "epicfight_showcase_long",
+                    EFXCompat::showcaseBladeRush_EFX);
+            registerWeapon(weaponHelper, "epicfight:spear",
+                    EFPWeaponScenes::showcaseSpearBasicAttackCombo,
+                    EFXCompat::showcaseGraspingSpire_EFX,
+                    EFPWeaponScenes::showcaseSpearBasicAttackCombo_OneHand,
+                    EFXCompat::showcaseHeartPiercer_EFX);
+            registerWeapon(weaponHelper, "epicfight:axe",
+                    EFPWeaponScenes::showcaseAxeBasicAttackCombo,
+                    EFXCompat::showcaseGuillotine_EFX);
+            registerWeapon(weaponHelper, "epicfight:tachi",
+                    EFPWeaponScenes::showcaseTachiBasicAttackCombo,
+                    EFXCompat::showcaseRushingTempo_EFX);
+            registerWeapon(weaponHelper, "epicfight:uchigatana",
+                    EFPWeaponScenes::showcaseUchigatanaBasicAttackCombo);
+            registerWeapon(weaponHelper, "epicfight:uchigatana", "epicfight_showcase_long",
+                    EFXCompat::showcaseUchigatanaBattojutsu_UnSheath_EFX);
+            registerWeapon(weaponHelper, "epicfight:uchigatana",
+                    EFXCompat::showcaseUchigatanaPassive_EFX,
+                    EFPWeaponScenes::showcaseUchigatanaBasicAttackCombo_Sheath);
+            registerWeapon(weaponHelper, "epicfight:uchigatana", "epicfight_showcase_long",
+                    EFXCompat::showcaseUchigatanaBattojutsu_Sheath_EFX);
+            registerWeapon(weaponHelper, "epicfight:longsword",
+                    EFPWeaponScenes::showcaseLongSwordBasicAttackCombo,
+                    EFXCompat::showcaseLongSwordBasicAttackCombo_Ochs_EFX,
+                    EFPWeaponScenes::showcaseLongSwordBasicAttackCombo_OneHand,
+                    EFXCompat::showcaseSharpStab_EFX);
+            registerWeapon(weaponHelper, "epicfight:greatsword",
+                    EFPWeaponScenes::showcaseGreatSwordBasicAttackCombo,
+                    EFXCompat::showcaseSteelWhirlWind_EFX);
+        } else {
+            registerWeapon(weaponHelper, "epicfight:sword",
+                    EFPWeaponScenes::showcaseSwordBasicAttackCombo,
+                    EFPWeaponScenes::showcaseSweepingEdge,
+                    EFPWeaponScenes::showcaseSwordBasicAttackCombo_Dual,
+                    EFPWeaponScenes::showcaseDancingEdge);
+            registerWeapon(weaponHelper, "epicfight:dagger",
+                    EFPWeaponScenes::showcaseDaggerBasicAttackCombo,
+                    EFPWeaponScenes::showcaseEviscerate,
+                    EFPWeaponScenes::showcaseDaggerBasicAttackCombo_Dual);
+            registerWeapon(weaponHelper, "epicfight:dagger", "epicfight_showcase_long",
+                    EFPWeaponScenes::showcaseBladeRush);
+            registerWeapon(weaponHelper, "epicfight:spear",
+                    EFPWeaponScenes::showcaseSpearBasicAttackCombo,
+                    EFPWeaponScenes::showcaseGraspingSpire,
+                    EFPWeaponScenes::showcaseSpearBasicAttackCombo_OneHand,
+                    EFPWeaponScenes::showcaseHeartPiercer);
+            registerWeapon(weaponHelper, "epicfight:axe",
+                    EFPWeaponScenes::showcaseAxeBasicAttackCombo,
+                    EFPWeaponScenes::showcaseGuillotine);
+            registerWeapon(weaponHelper, "epicfight:tachi",
+                    EFPWeaponScenes::showcaseTachiBasicAttackCombo,
+                    EFPWeaponScenes::showcaseRushingTempo);
+            registerWeapon(weaponHelper, "epicfight:uchigatana",
+                    EFPWeaponScenes::showcaseUchigatanaBasicAttackCombo);
+            registerWeapon(weaponHelper, "epicfight:uchigatana", "epicfight_showcase_long",
+                    EFPWeaponScenes::showcaseUchigatanaBattojutsu_UnSheath);
+            registerWeapon(weaponHelper, "epicfight:uchigatana",
+                    EFPWeaponScenes::showcaseUchigatanaPassive,
+                    EFPWeaponScenes::showcaseUchigatanaBasicAttackCombo_Sheath);
+            registerWeapon(weaponHelper, "epicfight:uchigatana", "epicfight_showcase_long",
+                    EFPWeaponScenes::showcaseUchigatanaBattojutsu_Sheath);
+            registerWeapon(weaponHelper, "epicfight:longsword",
+                    EFPWeaponScenes::showcaseLongSwordBasicAttackCombo,
+                    EFPWeaponScenes::showcaseLongSwordBasicAttackCombo_Ochs,
+                    EFPWeaponScenes::showcaseLongSwordBasicAttackCombo_OneHand,
+                    EFPWeaponScenes::showcaseSharpStab);
+            registerWeapon(weaponHelper, "epicfight:greatsword",
+                    EFPWeaponScenes::showcaseGreatSwordBasicAttackCombo,
+                    EFPWeaponScenes::showcaseSteelWhirlWind);
+        }
+    }
+
+
+    @SafeVarargs
+    private void registerSkill(PonderSceneRegistrationHelper<String> helper, String skillId, PonderSceneMethod... scenes) {
+        REGISTERED_SKILLS.add(skillId);
+        register(helper, skillId, "epicfight_showcase", scenes);
+    }
+
+    @SafeVarargs
+    private void registerWeapon(PonderSceneRegistrationHelper<String> helper, String presetId, PonderSceneMethod... scenes) {
+        REGISTERED_WEAPONS.add(presetId);
+        register(helper, presetId, "epicfight_showcase", scenes);
+    }
+
+    @SafeVarargs
+    private void registerWeapon(PonderSceneRegistrationHelper<String> helper, String presetId, String structure, PonderSceneMethod... scenes) {
+        REGISTERED_WEAPONS.add(presetId);
+        register(helper, presetId, structure, scenes);
+    }
+
+    @SafeVarargs
+    private void register(PonderSceneRegistrationHelper<String> helper, String id, String structure, PonderSceneMethod... scenes) {
+        var component = helper.forComponents(id);
+        for (PonderSceneMethod scene : scenes) {
+            component.addStoryBoard(structure, scene::build);
+        }
+    }
+
+    public interface PonderSceneMethod {
+        void build(SceneBuilder scene, SceneBuildingUtil util);
+    }
+}

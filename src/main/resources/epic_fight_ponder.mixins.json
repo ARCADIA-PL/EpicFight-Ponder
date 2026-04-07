@@ -1,8 +1,8 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "org.arc.efp.mixin",
-  "plugin": "org.arc.efp.mixinloader.CompatMixinPlugin",
+  "package": "org.arc.epic_ponder.mixin",
+  "plugin": "org.arc.epic_ponder.mixinloader.CompatMixinPlugin",
   "compatibilityLevel": "JAVA_17",
   "refmap": "epic_fight_ponder.refmap.json",
   "mixins": [

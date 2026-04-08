@@ -67,7 +67,7 @@ public class EFPSceneUtils {
      * 1. 快速搭建正方形标准场地
      */
     public static void setupStandardScene(EpicFightSceneBuilder builder, int size, String sceneId, String title) {
-        builder.title(sceneId, title);
+        builder.title(getPureSceneId(sceneId), title);
         builder.configureBasePlate(0, 0, size);
         builder.showBasePlate();
         builder.scaleSceneView(1.0F);
@@ -75,7 +75,7 @@ public class EFPSceneUtils {
     }
 
     public static void setupStandardLongScene(EpicFightSceneBuilder builder, String sceneId, String title) {
-        builder.title(sceneId, title);
+        builder.title(getPureSceneId(sceneId), title);
         builder.configureBasePlate(-5, 0, 15);
         builder.showBasePlate();
         builder.scaleSceneView(0.7F);

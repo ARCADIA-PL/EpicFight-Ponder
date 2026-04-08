@@ -49,6 +49,21 @@ import java.util.function.Function;
 public class EFPSceneUtils {
 
     /**
+     * 翻译键解析器
+     */
+    public static String getPonderLangKey(String sceneId, String suffix) {
+        if (sceneId.contains(":")) {
+            String[] parts = sceneId.split(":", 2);
+            return parts[0] + ".ponder." + parts[1] + "." + suffix;
+        }
+        return "epic_fight_ponder.ponder." + sceneId + "." + suffix;
+    }
+
+    public static String getPureSceneId(String sceneId) {
+        return sceneId.contains(":") ? sceneId.split(":")[1] : sceneId;
+    }
+
+    /**
      * 1. 快速搭建正方形标准场地
      */
     public static void setupStandardScene(EpicFightSceneBuilder builder, int size, String sceneId, String title) {
@@ -746,19 +761,20 @@ public class EFPSceneUtils {
         double center = size / 2.0D;
         double centerY = 1.0;
 
-        setupStandardScene(builder, size, sceneId, "epic_fight_ponder.ponder." + sceneId + ".title");
+        String pureSceneId = getPureSceneId(sceneId);
+        setupStandardScene(builder, size, pureSceneId, getPonderLangKey(sceneId, "title"));
 
         ElementLink<EntityElement> attacker = spawnDummyActor(builder, center, centerY, center, 180, mainHandItem, offHandItem, showcaseStyle);
         updateSheathState(builder, attacker, 0);
         builder.idle(10);
 
-        showText(builder, util, "epic_fight_ponder.ponder." + sceneId + ".text_1", 40, (int) center, (int) centerY + 1, (int) center);
+        showText(builder, util, getPonderLangKey(sceneId, "text_1"), 40, (int) center, (int) centerY + 1, (int) center);
         builder.idle(20);
 
         List<AnimationManager.AnimationAccessor<? extends AttackAnimation>> comboMotions = getSafeComboMotions(mainHandItem, showcaseStyle);
 
-        String dashText = "epic_fight_ponder.ponder." + sceneId + ".text_2";
-        String jumpText = "epic_fight_ponder.ponder." + sceneId + ".text_3";
+        String dashText = getPonderLangKey(sceneId, "text_2");
+        String jumpText = getPonderLangKey(sceneId, "text_3");
 
         playStandardCombo(builder, util, attacker, comboMotions, center, centerY, center, dashText, jumpText, enableDash, enableJump);
 
@@ -786,19 +802,20 @@ public class EFPSceneUtils {
         double center = size / 2.0D;
         double centerY = 1.0;
 
-        setupStandardScene(builder, size, sceneId, "epic_fight_ponder.ponder." + sceneId + ".title");
+        String pureSceneId = getPureSceneId(sceneId);
+        setupStandardScene(builder, size, pureSceneId, getPonderLangKey(sceneId, "title"));
 
         ElementLink<EntityElement> attacker = spawnDummyActor(builder, center, centerY, center, 180, mainHandItem, offHandItem, showcaseStyle);
         updateSheathState(builder, attacker, 1);
         builder.idle(10);
 
-        showText(builder, util, "epic_fight_ponder.ponder." + sceneId + ".text_1", 40, (int) center, (int) centerY + 1, (int) center);
+        showText(builder, util, getPonderLangKey(sceneId, "text_1"), 40, (int) center, (int) centerY + 1, (int) center);
         builder.idle(20);
 
         List<AnimationManager.AnimationAccessor<? extends AttackAnimation>> comboMotions = getSafeComboMotions(mainHandItem, showcaseStyle);
 
-        String dashText = "epic_fight_ponder.ponder." + sceneId + ".text_2";
-        String jumpText = "epic_fight_ponder.ponder." + sceneId + ".text_3";
+        String dashText = getPonderLangKey(sceneId, "text_2");
+        String jumpText = getPonderLangKey(sceneId, "text_3");
 
         playUchigatanaStandardCombo(builder, util, attacker, comboMotions, center, centerY, center, dashText, jumpText, enableDash, enableJump);
 

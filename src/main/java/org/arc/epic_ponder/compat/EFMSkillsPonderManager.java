@@ -186,7 +186,7 @@ public class EFMSkillsPonderManager {
 
         if (stack.getItem() instanceof SkillBookItem) {
             if (stack.getTag() != null && stack.getTag().contains("skill")) {
-                return hasPonderScene(SkillBookItem.getContainSkill(stack).toString());
+                return hasPonderScene(SkillBookItem.getContainSkill(stack));
             }
             return false;
         }

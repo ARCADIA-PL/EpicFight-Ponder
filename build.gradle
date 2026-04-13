@@ -83,7 +83,7 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    implementation fg.deobf("maven.modrinth:epic-fight:${epicfight_version}")
+    implementation fg.deobf("curse.maven:epic-fight-mod-405076:7919289")
     implementation fg.deobf("curse.maven:epic-fight-skill-tree-1295882:7734067")
     implementation fg.deobf("curse.maven:weapons-of-miracles-epicfight-918614:7477498")
     implementation fg.deobf("curse.maven:epic-fight-invincible-1184379:7679941")

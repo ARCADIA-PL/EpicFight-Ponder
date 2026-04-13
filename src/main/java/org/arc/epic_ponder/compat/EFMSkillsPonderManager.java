@@ -196,10 +196,10 @@ public class EFMSkillsPonderManager {
     }
 
     public static boolean isDown() {
-        return CatnipClientServices.CLIENT_HOOKS.isKeyPressed(PonderKeybinds.PONDER.getKeybind());
+        return PonderKeybinds.PONDER.isDown();
     }
 
     public static Component message() {
-        return PonderKeybinds.PONDER.getKeybind().getTranslatedKeyMessage();
+        return PonderKeybinds.PONDER.message();
     }
 }
